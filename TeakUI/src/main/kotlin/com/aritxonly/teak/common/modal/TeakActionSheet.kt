@@ -10,6 +10,8 @@ import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.IconButton
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.Close
+import com.aritxonly.teak.common.coui.TeakCouiActionSheet
+import com.aritxonly.teak.common.theme.TeakUiStyle
 
 /** 兼容旧操作入口，显示与拖拽生命周期统一交给 Deadliner Sheet。 */
 @Composable
@@ -20,6 +22,12 @@ fun TeakActionSheet(
     allowDismiss: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    // COUI 风格：换成 COUI 材质的上圆角贴底面板。
+    if (TeakUiStyle.isCoui) {
+        TeakCouiActionSheet(visible = visible, onDismiss = onDismiss, title = title,
+            allowDismiss = allowDismiss, content = content)
+        return
+    }
     MiuixBottomSheet(
         show = visible,
         title = title ?: "操作",

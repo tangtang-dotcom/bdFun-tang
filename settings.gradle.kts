@@ -20,6 +20,10 @@ rootProject.name = "bdFun"
 include(":app")
 include(":core:model")
 include(":TeakUI")
+
+// COUI（ColorOS 17 凝光视效）源码模块，MPL-2.0。
+include(":third_party:coui")
+include(":third_party:coui-icons")
 include(":danmaku-engine")
 
 // Miuix 使用本地源码构建（Apache-2.0）。

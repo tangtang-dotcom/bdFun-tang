@@ -13,18 +13,31 @@ import com.aritxonly.teak.common.theme.TeakUiStyle
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
 import com.aritxonly.bdfun.core.model.video.VideoItem
 import com.aritxonly.teak.common.interaction.blockTouches
+import com.itos.coui.backdrop.CouiBackdrop
 
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     settings: SettingsBindings, dark: Boolean, wideNavigation: Boolean, searchVisible: Boolean,
     tabItems: List<TeakFloatingTabItem>, selectedKey: String,
+    shellDestinationList: List<Destination>,
     onBarItem: (TeakFloatingTabItem) -> Unit, onSearch: () -> Unit, onOpenVideo: (VideoItem) -> Unit,
     onBottomSearch: () -> Unit,
+    couiBackdrop: CouiBackdrop? = null,
 ) {
     val visual = rememberMainBottomNavigationVisual(settings, dark, wideNavigation, searchVisible, tabItems.size)
     if (visual.tabBarAlpha > 0.01f) {
         MainBottomNavigationShade(settings, wideNavigation, visual.tabBarAlpha)
-        if (wideNavigation) {
+        if (TeakUiStyle.isCoui) {
+            // COUI：统一走 COUI 浮动底栏，宽屏与窄屏都不再区分经典贴边形态。
+            MainCouiNavigation(
+                destinations = shellDestinationList,
+                selectedKey = selectedKey,
+                visual = visual,
+                dark = dark,
+                couiBackdrop = couiBackdrop,
+                onSelect = { key -> tabItems.firstOrNull { it.key == key }?.let(onBarItem) },
+            )
+        } else if (wideNavigation) {
             if (TeakUiStyle.current.layout.edgeNavigation) {
                 // 经典样式在宽屏上也保持贴边底栏，不用悬浮胶囊和单独搜索钮。
                 ClassicTabBar(

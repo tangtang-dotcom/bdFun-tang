@@ -86,7 +86,7 @@ class SettingsMigrationTest {
             val restored = SettingsStateHolder.create(prefs, TestHistoryCodec, scope)
             assertEquals(0, restored.interfaceStyle)
             restored.interfaceStyle = 8
-            assertEquals(2, restored.interfaceStyle)
+            assertEquals(3, restored.interfaceStyle)
             restored.colorStyle = 8
             assertEquals(1, restored.colorStyle)
         } finally { scope.cancel() }

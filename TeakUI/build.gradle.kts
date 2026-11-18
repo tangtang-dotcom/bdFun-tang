@@ -43,6 +43,10 @@ dependencies {
     api(libs.miuix.icons)
     api(libs.kyant.shapes)
 
+    // COUI 适配层（弹窗/底栏/图标/材质）对外暴露 COUI 的类型，故用 api。
+    api(project(":third_party:coui"))
+    api(project(":third_party:coui-icons"))
+
     implementation(libs.coroutines.android)
     implementation(libs.androidx.activity.compose)
 }

@@ -36,7 +36,7 @@ internal class AppearanceSettingsStateHolder(
     /** 色彩风格：0 = AC 粉（B 站粉），1 = Hyper 蓝（Miuix 默认蓝）。 */
 
     private val colorStyleState = stateCell("colorStyleState", prefs.getInt("color_style", 0))
-    /** 界面风格：0 官方，1 经典，2 HyperOS 4（底部搜索）。 */
+    /** 界面风格：0 官方，1 经典，2 HyperOS 4（底部搜索），3 COUI（凝光视效）。 */
 
     private val interfaceStyleState = stateCell("interfaceStyleState", prefs.getInt("interface_style", 2))
     /** 首页卡片样式：0 = 双排小卡，1 = 大卡（动态页视频卡同款）。 */
@@ -146,7 +146,7 @@ internal class AppearanceSettingsStateHolder(
     override var interfaceStyle: Int
         get() = interfaceStyleState.value
         set(value) {
-            interfaceStyleState.value = value.coerceIn(0, 2)
+            interfaceStyleState.value = value.coerceIn(0, 3)
             prefs.edit().putInt("interface_style", interfaceStyleState.value).apply()
         }
 

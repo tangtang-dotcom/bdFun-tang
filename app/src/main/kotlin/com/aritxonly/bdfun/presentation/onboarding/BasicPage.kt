@@ -42,6 +42,7 @@ internal fun BasicPage(settings: OnboardingBasicSettings, actions: OnboardingAct
 /** 界面风格下拉的显示顺序与持久化值映射；HyperOS 4 放最上面。 */
 private data class InterfaceStyleOption(val value: Int, val label: String)
 private val INTERFACE_STYLE_OPTIONS = listOf(
+    InterfaceStyleOption(3, "COUI"),
     InterfaceStyleOption(2, "HyperOS 4"),
     InterfaceStyleOption(0, "哔哩哔哩"),
     InterfaceStyleOption(1, "经典"),

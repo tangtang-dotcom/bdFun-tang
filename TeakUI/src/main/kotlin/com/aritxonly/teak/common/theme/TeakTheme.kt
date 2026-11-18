@@ -38,6 +38,9 @@ object TeakUiStyle {
     val design: TeakDesign get() = current.design
     val isClassic: Boolean get() = design == TeakDesign.Classic
     val isHyperOs4: Boolean get() = current == TeakStyle.HyperOs4
+
+    /** COUI（ColorOS 凝光视效）风格：只换材质/动效/图标，排列沿用 HyperOS 4。 */
+    val isCoui: Boolean get() = current.isCoui
 }
 
 /**
@@ -116,7 +119,15 @@ fun TeakTheme(
         MiuixTheme(controller = controller) {
             MaterialTheme(colorScheme = materialColors) {
                 CompositionLocalProvider(LocalTeakMaterialSpec provides materialSpec) {
-                    com.aritxonly.teak.common.modal.TeakModalHost { content() }
+                    // COUI 风格下额外套一层 CouiTheme，让 COUI 组件（底栏/弹窗）读到折算过的色板；
+                    // 官方/经典/Hyper 风格完全不进这一层，零影响。
+                    if (TeakUiStyle.isCoui) {
+                        com.aritxonly.teak.common.coui.TeakCouiTheme(dark = dark) {
+                            com.aritxonly.teak.common.modal.TeakModalHost { content() }
+                        }
+                    } else {
+                        com.aritxonly.teak.common.modal.TeakModalHost { content() }
+                    }
                 }
             }
         }

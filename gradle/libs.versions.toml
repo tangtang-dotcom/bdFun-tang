@@ -16,6 +16,7 @@ media3 = "1.6.1"
 zxing = "3.5.3"
 coroutines = "1.10.2"
 kyantShapes = "1.2.0"
+androidxDynamicanimation = "1.1.0"
 material3 = "1.5.0-alpha22"
 
 [libraries]
@@ -50,6 +51,7 @@ miuix-glass-icons = { module = "top.yukonga.miuix.kmp:miuix-glass-icons", versio
 miuix-blur = { module = "top.yukonga.miuix.kmp:miuix-blur", version.ref = "miuix" }
 miuix-icons = { module = "top.yukonga.miuix.kmp:miuix-icons", version.ref = "miuix" }
 kyant-shapes = { module = "io.github.kyant0:shapes", version.ref = "kyantShapes" }
+androidx-dynamicanimation = { module = "androidx.dynamicanimation:dynamicanimation", version.ref = "androidxDynamicanimation" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-media = { module = "androidx.media:media", version = "1.7.0" }

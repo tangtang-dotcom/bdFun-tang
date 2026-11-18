@@ -10,7 +10,12 @@ import com.aritxonly.bdfun.ui.rememberTeakHaptics
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(settings: SettingsBindings, shell: MainShellState, dark: Boolean) {
+internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(
+    settings: SettingsBindings,
+    shell: MainShellState,
+    dark: Boolean,
+    couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
+) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val ui = shell.ui
     val homeFeed = shell.feeds.home
@@ -63,6 +68,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(set
     }
     MainBottomNavigation(
         settings, dark, wideNavigation, ui.showSearch, tabItems, destinations[selected].key,
+        shellDestinationList = destinations,
         onBarItem = onBarItem,
         onSearch = {
             if (TeakStyle.fromStoredValue(settings.interfaceStyle).layout.hasBottomSearch) shell.bottom.open() else {
@@ -75,6 +81,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(set
         },
         onBottomSearch = { shell.bottom.open() },
         onOpenVideo = { navigateToVideo(context, it) },
+        couiBackdrop = couiBackdrop,
     )
 
 }
