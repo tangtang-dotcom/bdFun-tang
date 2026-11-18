@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.height
 import com.aritxonly.teak.common.coui.TeakCouiBarItem
 import com.aritxonly.teak.common.coui.TeakCouiBottomBar
 import com.itos.coui.backdrop.CouiBackdrop
@@ -39,7 +40,7 @@ internal fun BoxScope.MainCouiBottomBar(
     }
     // 绘制兜底：库内 AGSL 若在个别 GPU 上抛错，只丢这一帧绘制，不让整个 App 闪退。
     // 与 SleepDown 一致：底栏本体固定 CouiDockDefaults.menuWidth，不铺满屏宽。
-    Box(
+    androidx.compose.foundation.layout.BoxWithConstraints(
         Modifier
             .align(Alignment.BottomCenter)
             .fillMaxWidth()
@@ -48,6 +49,8 @@ internal fun BoxScope.MainCouiBottomBar(
             .drawWithContent { runCatching { drawContent() } },
         contentAlignment = Alignment.BottomCenter,
     ) {
+        // 官方底栏尺寸：最大 320dp 宽 / 56dp 高，和 TeakFloatingTabBarDefaults 对齐。
+        val barWidth = minOf(320.dp, maxWidth - 88.dp)
         androidx.compose.foundation.layout.Row(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(com.itos.coui.navigation.CouiDockDefaults.plusGap),
@@ -59,7 +62,7 @@ internal fun BoxScope.MainCouiBottomBar(
                 backdrop = backdrop,
                 renderer = renderer,
                 dark = dark,
-                modifier = Modifier.width(com.itos.coui.navigation.CouiDockDefaults.menuWidth),
+                modifier = Modifier.width(barWidth).height(56.dp),
             )
             if (onSearch != null) {
                 com.itos.coui.floatingactionbutton.Fab(
