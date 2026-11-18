@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Row
-import top.yukonga.miuix.kmp.icon.extended.Search
+import com.aritxonly.teak.common.icons.Search
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBar

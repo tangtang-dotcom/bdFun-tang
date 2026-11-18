@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.chrome.TeakTopGlassButton
 import com.aritxonly.teak.common.navigation.TeakPagerTabs
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.More
-import top.yukonga.miuix.kmp.icon.extended.Search
+import com.aritxonly.teak.common.icons.More
+import com.aritxonly.teak.common.icons.Search
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 internal class SpaceChromeState {

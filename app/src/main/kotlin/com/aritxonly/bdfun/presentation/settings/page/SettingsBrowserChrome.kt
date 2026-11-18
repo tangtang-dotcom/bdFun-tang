@@ -32,8 +32,8 @@ import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
-import top.yukonga.miuix.kmp.icon.extended.Search
+import com.aritxonly.teak.common.icons.Close
+import com.aritxonly.teak.common.icons.Search
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Composable

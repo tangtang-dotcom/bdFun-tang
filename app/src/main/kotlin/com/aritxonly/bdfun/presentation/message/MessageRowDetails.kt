@@ -3,7 +3,7 @@ package com.aritxonly.bdfun.ui
 import com.aritxonly.teak.common.icons.ResourceGlyph
 
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.More
+import com.aritxonly.teak.common.icons.More
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

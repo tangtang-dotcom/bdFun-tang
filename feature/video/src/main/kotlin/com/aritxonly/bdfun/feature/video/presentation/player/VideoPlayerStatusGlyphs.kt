@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.icons.AppGlyph
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Lock
+import com.aritxonly.teak.common.icons.Lock
 import top.yukonga.miuix.kmp.icon.extended.Unlock
 
 fun describeMediaUrl(url: String?): String {

@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
+import com.aritxonly.teak.common.icons.ChevronBackward
 
 @Composable
 internal fun BoxScope.LiveChromeShade(render: LiveChromeRender) {

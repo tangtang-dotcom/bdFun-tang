@@ -23,7 +23,7 @@ import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.teak.common.material.TeakGlassRecipes
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
+import com.aritxonly.teak.common.icons.ChevronBackward
 
 /**
  * 页面级返回键：progress = 0 时只有箭头（无背景），滚出顶部后逐渐露出玻璃底。

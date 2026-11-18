@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.max
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
+import com.aritxonly.teak.common.icons.Close
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 /**

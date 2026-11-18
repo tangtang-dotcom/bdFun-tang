@@ -9,7 +9,7 @@ import com.aritxonly.teak.common.icons.LucideIcons
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.basic.*
 import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
+import com.aritxonly.teak.common.icons.ChevronBackward
 
 @Composable
 internal fun InlineBackGlyph() {

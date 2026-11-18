@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.R
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
-import top.yukonga.miuix.kmp.icon.extended.ChevronForward
+import com.aritxonly.teak.common.icons.ChevronBackward
+import com.aritxonly.teak.common.icons.ChevronForward
 
 /** 投币页的硬币箱：点击即选中这一档。 */
 @Composable

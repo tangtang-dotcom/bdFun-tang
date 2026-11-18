@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.IconButton
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
+import com.aritxonly.teak.common.icons.Close
 
 /** 兼容旧操作入口，显示与拖拽生命周期统一交给 Deadliner Sheet。 */
 @Composable

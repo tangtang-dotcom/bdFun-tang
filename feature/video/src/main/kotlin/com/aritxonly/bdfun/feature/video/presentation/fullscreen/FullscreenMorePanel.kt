@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import top.yukonga.miuix.kmp.icon.extended.SearchDevice
+import com.aritxonly.teak.common.icons.SearchDevice
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

@@ -16,6 +16,9 @@ import com.aritxonly.teak.common.search.teakSearchUnderlay
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
 import top.yukonga.miuix.kmp.blur.layerBackdrop
+import com.aritxonly.teak.common.theme.TeakStyle
+import com.itos.coui.backdrop.couiBackdrop
+import com.itos.coui.backdrop.rememberCouiBackdrop
 
 @Composable
 internal fun MainScaffold(settings: SettingsBindings, shell: MainShellState, dark: Boolean, background: Color) {
@@ -36,6 +39,8 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
     val floatingBottomSpacing = if (isWideFoldTopBar()) 0.dp else 4.dp
     val pageFloat = (tabPagerState.currentPage + tabPagerState.currentPageOffsetFraction)
         .coerceAtLeast(0f)
+    // COUI 底栏的玻璃采样源：整页内容。
+    val couiBackdrop = if (TeakStyle.fromStoredValue(settings.interfaceStyle).coui) rememberCouiBackdrop() else null
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -83,13 +88,21 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
         MainMineChrome(shell, pageFloat)
         MainFeedChrome(shell, pageFloat)
 
-        Box(Modifier.fillMaxSize().graphicsLayer {
-                val progress = shell.bottom.bottomTabBarProgress.value
-                translationY = 96.dp.toPx() * progress
-                scaleX = 1f - 0.4f * progress
-                scaleY = scaleX
-                alpha = 1f - progress
-        }) { MainShellNavigation(settings, shell, dark) }
+        if (TeakStyle.fromStoredValue(settings.interfaceStyle).coui) {
+            // COUI 风格：底栏要采样整页内容，且它按 Src patch 直接合成到窗口，
+            // 所以这一层只做 backdrop 采样源，不能套 graphicsLayer。
+            Box(Modifier.fillMaxSize().couiBackdrop(requireNotNull(couiBackdrop))) {
+                MainShellNavigation(settings, shell, dark, requireNotNull(couiBackdrop))
+            }
+        } else {
+            Box(Modifier.fillMaxSize().graphicsLayer {
+                    val progress = shell.bottom.bottomTabBarProgress.value
+                    translationY = 96.dp.toPx() * progress
+                    scaleX = 1f - 0.4f * progress
+                    scaleY = scaleX
+                    alpha = 1f - progress
+            }) { MainShellNavigation(settings, shell, dark) }
+        }
         MainBottomSearchLayer(settings, shell)
         // 换页时返回键回到"纯箭头"状态（pageKey / pageEnter 在上面声明）
 

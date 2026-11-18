@@ -33,8 +33,8 @@ import com.aritxonly.bdfun.core.model.live.LiveRoomInfo
 import com.aritxonly.teak.common.navigation.TeakMorphMenuAnchor
 import com.aritxonly.teak.common.navigation.TeakMorphMenuState
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
-import top.yukonga.miuix.kmp.icon.extended.More
+import com.aritxonly.teak.common.icons.ChevronBackward
+import com.aritxonly.teak.common.icons.More
 
 @Composable
 internal fun LiveTopBar(

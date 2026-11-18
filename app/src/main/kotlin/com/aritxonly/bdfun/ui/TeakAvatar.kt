@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ContactsCircle
+import com.aritxonly.teak.common.icons.ContactsCircle
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 /** 顶部头像：圆形裁切 + 细圈；未登录给占位图标。 */

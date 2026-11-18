@@ -27,7 +27,7 @@ import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.basic.*
 import top.yukonga.miuix.kmp.icon.extended.*
 import top.yukonga.miuix.kmp.icon.extended.Download
-import top.yukonga.miuix.kmp.icon.extended.SearchDevice
+import com.aritxonly.teak.common.icons.SearchDevice
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 internal val HALF_SPEEDS = listOf(3f, 2f, 1.5f, 1.25f, 1f)

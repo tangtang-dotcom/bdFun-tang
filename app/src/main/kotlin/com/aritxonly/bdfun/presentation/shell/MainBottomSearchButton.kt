@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Search
+import com.aritxonly.teak.common.icons.Search
 import com.itos.coui.icons.CouiIcons
 import com.aritxonly.teak.common.theme.TeakUiStyle
 

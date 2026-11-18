@@ -18,6 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
+import com.aritxonly.teak.common.coui.TeakCouiAlertDialog
+import com.aritxonly.teak.common.coui.TeakCouiDialogText
+import com.aritxonly.teak.common.coui.TeakCouiDialogTitle
+import com.aritxonly.teak.common.theme.TeakUiStyle
 
 /**
  * Deadliner 基础 AlertDialog 组件
@@ -44,6 +48,29 @@ fun AlertDialog(
     miuixSummary: String? = null,
     miuixMaxWidth: Dp = TeakModalDefaults.DialogMaxWidth,
 ) {
+    if (TeakUiStyle.isCoui) {
+        // COUI 风格走 ColorOS 悬浮卡片（32dp 圆角 / 392dp 上限 / 250ms 进 180ms 出）。
+        val couiTitle: (@Composable () -> Unit)? = when {
+            title != null -> title
+            miuixTitle != null -> ({ TeakCouiDialogTitle(miuixTitle) })
+            else -> null
+        }
+        val couiText: (@Composable () -> Unit)? = when {
+            text != null -> text
+            miuixSummary != null -> ({ TeakCouiDialogText(miuixSummary) })
+            else -> null
+        }
+        TeakCouiAlertDialog(
+            show = show,
+            onDismissRequest = onDismissRequest,
+            confirmButton = confirmButton,
+            modifier = modifier,
+            dismissButton = dismissButton,
+            title = couiTitle,
+            text = couiText,
+        )
+        return
+    }
     val showInlineTitle = title != null && miuixTitle == null
     val showInlineText = text != null && (renderTextContentInMiuix || miuixSummary == null)
     val showInlineContent = showInlineTitle || showInlineText

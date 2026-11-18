@@ -21,8 +21,8 @@ import com.aritxonly.teak.common.navigation.TeakBatchActionBar
 import com.aritxonly.teak.common.navigation.TeakMorphMenuAnchor
 import com.aritxonly.teak.common.navigation.TeakMorphMenuState
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.More
-import top.yukonga.miuix.kmp.icon.extended.Search
+import com.aritxonly.teak.common.icons.More
+import com.aritxonly.teak.common.icons.Search
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Composable

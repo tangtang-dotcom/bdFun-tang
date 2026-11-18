@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ContactsCircle
-import top.yukonga.miuix.kmp.icon.extended.Home
-import top.yukonga.miuix.kmp.icon.extended.Album
+import com.aritxonly.teak.common.icons.ContactsCircle
+import com.aritxonly.teak.common.icons.Home
+import com.aritxonly.teak.common.icons.Album
 
 internal data class Destination(
     val key: String,
@@ -16,11 +16,14 @@ internal data class Destination(
 
 @Composable
 internal fun rememberMainDestinations(): List<Destination> {
-    return remember {
+    val homeIcon = MiuixIcons.Home
+    val albumIcon = MiuixIcons.Album
+    val mineIcon = MiuixIcons.ContactsCircle
+    return remember(homeIcon, albumIcon, mineIcon) {
         listOf(
-            Destination("home", "首页", MiuixIcons.Home),
-            Destination("dynamics", "动态", MiuixIcons.Album),
-            Destination("mine", "我的", MiuixIcons.ContactsCircle),
+            Destination("home", "首页", homeIcon),
+            Destination("dynamics", "动态", albumIcon),
+            Destination("mine", "我的", mineIcon),
         )
     }
 }

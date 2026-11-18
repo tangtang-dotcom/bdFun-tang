@@ -46,9 +46,9 @@ import kotlinx.coroutines.delay
 import top.yukonga.miuix.kmp.basic.Checkbox
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
-import top.yukonga.miuix.kmp.icon.extended.ChevronForward
-import top.yukonga.miuix.kmp.icon.extended.Close
+import com.aritxonly.teak.common.icons.ChevronBackward
+import com.aritxonly.teak.common.icons.ChevronForward
+import com.aritxonly.teak.common.icons.Close
 
 /**
  * 投币页：整页浮层，布局与动效照搬 PiliPlus `lib/pages/video/pay_coins/view.dart`。

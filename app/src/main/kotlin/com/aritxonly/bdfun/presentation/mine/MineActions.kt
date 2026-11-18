@@ -27,7 +27,7 @@ import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.basic.ArrowRight
 import top.yukonga.miuix.kmp.icon.extended.Download
 import top.yukonga.miuix.kmp.icon.extended.Recent
-import top.yukonga.miuix.kmp.icon.extended.SearchDevice
+import com.aritxonly.teak.common.icons.SearchDevice
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 internal val MineBlue = Color(0xFF3C9BD9)
