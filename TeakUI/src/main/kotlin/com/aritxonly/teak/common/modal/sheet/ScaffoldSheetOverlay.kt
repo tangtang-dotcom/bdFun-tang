@@ -21,7 +21,7 @@ internal val ScaffoldSheetMaxWidth = 560.dp
 
 /** Attached sheets follow the screen edge; inset sheets retain the floating corner treatment. */
 internal fun sheetBottomCornerRadius(windowWidth: Dp, sheetWidth: Dp): Dp =
-    if (windowWidth <= sheetWidth) 2.dp else 36.dp
+    if (windowWidth <= sheetWidth) 2.dp else 32.dp
 
 /** OverlayBottomSheet's 0.9.4-rc01 popup adapter, with the Scaffold owning the whole sheet header. */
 @Composable

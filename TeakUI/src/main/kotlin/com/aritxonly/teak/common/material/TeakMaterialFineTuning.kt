@@ -11,7 +11,7 @@ data class TeakMaterialFineTuning(
     val dialogBlurRadiusDp: Float = TeakModalMaterialTuning.DialogDefaultBlurRadiusDp,
     val bottomSheetBackgroundAlpha: Float = TeakModalMaterialTuning.BottomSheetDefaultBackgroundAlpha,
     val bottomSheetBlurRadiusDp: Float = TeakModalMaterialTuning.BottomSheetDefaultBlurRadiusDp,
-    val glassBlurRadiusMultiplier: Float = 0.25f,
+    val glassBlurRadiusMultiplier: Float = 0.35f,
     val glassNoiseMultiplier: Float = 1f,
     val glassTintAlphaMultiplier: Float = 0.90f,
     val glassTintLightGray: Float = 1f,

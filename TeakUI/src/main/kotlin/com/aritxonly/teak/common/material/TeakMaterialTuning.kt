@@ -4,7 +4,7 @@ import kotlin.math.abs
 
 object TeakMaterialTuning {
     const val MinBlurRadius = 28f
-    const val DefaultBlurRadius = 92f
+    const val DefaultBlurRadius = 104f
     const val MaxBlurRadius = 256f
     fun normalizeBlurRadius(value: Float): Float = if (value.isFinite()) {
         value.coerceIn(MinBlurRadius, MaxBlurRadius)
