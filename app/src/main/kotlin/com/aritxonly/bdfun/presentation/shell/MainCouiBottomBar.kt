@@ -115,35 +115,6 @@ internal fun BoxScope.MainCouiBottomBar(
                     update = { it.updatePresentation(density, layoutDirection, render = plusVisible) },
                 )
             }
-            // 唱片与搜索钮共用同一个 56dp 槽位：下滑原地切成唱片，上滑切回搜索。
-            // 手势必须挂在这个槽位上：CouiDockBar 自己会消费拖拽，挂在外层收不到。
-            Box(
-                Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(CouiDockDefaults.plusSize)
-                    .pointerInput(discAvailable) {
-                        if (!discAvailable) return@pointerInput
-                        detectVerticalDragGestures(
-                            onDragStart = { dragDistance = 0f },
-                            onVerticalDrag = { _, delta -> dragDistance += delta },
-                            onDragEnd = {
-                                val threshold = 32.dp.toPx()
-                                if (kotlin.math.abs(dragDistance) > threshold) discRevealed = dragDistance > 0f
-                            },
-                        )
-                    }
-                    .clickable(enabled = !discVisible && onSearch != null, onClick = { onSearch?.invoke() }),
-            ) {
-                if (discVisible) {
-                    BackgroundPlayDisc(
-                        settings = settings,
-                        dependencies = AppGraph.discDependencies,
-                        modifier = Modifier.fillMaxSize(),
-                        size = CouiDockDefaults.plusSize,
-                        onOpenFallback = onOpenVideo,
-                    )
-                }
-            }
             CouiTheme(darkTheme = dark, colorScheme = scheme) {
                 val style = remember(dark, scheme.accent, scheme.onSurfaceVariant, density) {
                     CouiDockStyle.reference(
@@ -194,6 +165,35 @@ internal fun BoxScope.MainCouiBottomBar(
                     onSelection = { index -> destinations.getOrNull(index)?.let { onSelect(it.key) } },
                     onPlusClick = { onSearch?.invoke() },
                 )
+            }
+            // 唱片与搜索钮共用同一个 56dp 槽位：下滑原地切成唱片，上滑切回搜索。
+            // 手势必须挂在这个槽位上：CouiDockBar 自己会消费拖拽，挂在外层收不到。
+            Box(
+                Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(CouiDockDefaults.plusSize)
+                    .pointerInput(discAvailable) {
+                        if (!discAvailable) return@pointerInput
+                        detectVerticalDragGestures(
+                            onDragStart = { dragDistance = 0f },
+                            onVerticalDrag = { _, delta -> dragDistance += delta },
+                            onDragEnd = {
+                                val threshold = 32.dp.toPx()
+                                if (kotlin.math.abs(dragDistance) > threshold) discRevealed = dragDistance > 0f
+                            },
+                        )
+                    }
+                    .clickable(enabled = !discVisible && onSearch != null, onClick = { onSearch?.invoke() }),
+            ) {
+                if (discVisible) {
+                    BackgroundPlayDisc(
+                        settings = settings,
+                        dependencies = AppGraph.discDependencies,
+                        modifier = Modifier.fillMaxSize(),
+                        size = CouiDockDefaults.plusSize,
+                        onOpenFallback = onOpenVideo,
+                    )
+                }
             }
         }
     }
