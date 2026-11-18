@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.aritxonly.teak.common.coui.LocalTeakCouiToolbarBackdrop
 import com.aritxonly.teak.common.coui.teakCouiControlSurface
+import com.aritxonly.teak.common.coui.teakCouiMaterialSurface
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -72,11 +73,9 @@ fun TeakGlassSurface(
     // COUI 风格：胶囊/按钮表面走库的三主体浮动材质（与底栏同一套合成）；没有采样源时退回 token 实面。
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
         val surfaceBackdrop = LocalTeakCouiToolbarBackdrop.current
-        if (surfaceBackdrop != null && Build.VERSION.SDK_INT >= 34) {
-            com.aritxonly.teak.common.coui.TeakCouiFloatingSurface(
-                backdrop = surfaceBackdrop,
-                modifier = modifier,
-                capsule = true,
+        if (surfaceBackdrop != null && Build.VERSION.SDK_INT >= 31) {
+            Box(
+                modifier = modifier.teakCouiMaterialSurface(surfaceBackdrop, shape, capsule = true),
                 contentAlignment = contentAlignment,
             ) { content() }
         } else {
@@ -174,11 +173,13 @@ fun TeakGlassIconButton(
     // COUI 风格：圆形图标钮走库的三主体浮动材质（与底栏同一套合成）；无采样源时退回 token 实面。
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
         val surfaceBackdrop = LocalTeakCouiToolbarBackdrop.current
-        if (surfaceBackdrop != null && Build.VERSION.SDK_INT >= 34) {
-            com.aritxonly.teak.common.coui.TeakCouiFloatingSurface(
-                backdrop = surfaceBackdrop,
-                modifier = modifier.size(size),
-                capsule = false,
+        if (surfaceBackdrop != null && Build.VERSION.SDK_INT >= 31) {
+            Box(
+                modifier = modifier.size(size).teakCouiMaterialSurface(
+                    surfaceBackdrop,
+                    androidx.compose.foundation.shape.CircleShape,
+                    capsule = false,
+                ),
                 contentAlignment = Alignment.Center,
             ) { content() }
         } else {

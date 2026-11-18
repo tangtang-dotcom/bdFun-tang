@@ -160,9 +160,9 @@ fun NavigationBar(
     val contour = LocalCouiContourGlowEnabled.current
     val material = remember(dark, lightColor, themeTint) {
         CouiFloatingMaterial(
-            firstColor = if (dark) Color(0x80666666) else Color(0xA3666666),
+            firstColor = if (dark) Color(0x80666666) else Color(0xB3666666),
             firstBlendMode = if (dark) BlendMode.OVERLAY else BlendMode.COLOR_DODGE,
-            secondColor = if (dark) Color(0xB3262626) else Color(0x80F0F0F0),
+            secondColor = if (dark) Color(0xB3262626) else Color(0x99F5F5F5),
             edgeAlpha = if (dark) 0.8f else 0.25f,
             innerGlowAlpha = if (dark) 0.03f else 0.1f,
             lightColor = lightColor,
