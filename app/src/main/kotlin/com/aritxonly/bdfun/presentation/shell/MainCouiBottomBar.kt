@@ -112,7 +112,7 @@ internal fun BoxScope.MainCouiBottomBar(
                         selectedColor = scheme.accent,
                         unselectedColor = scheme.onSurfaceVariant.copy(alpha = 184f / 255f),
                         density = density.density,
-                        sampleBrightness = 0.5f,
+                        sampleBrightness = 1f,
                         contourGlowEnabled = contour,
                         lightFollowLightIntensity = 2f,
                         darkFollowLightIntensity = 0.3f,
@@ -158,18 +158,19 @@ internal fun BoxScope.MainCouiBottomBar(
                     .height(CouiDockDefaults.barHeight),
                 contentAlignment = Alignment.CenterEnd,
             ) {
-                if (slotWidth > 0.5.dp) {
-                    Box(
-                        modifier = Modifier
-                            .width(CouiDockDefaults.plusSize)
-                            .height(CouiDockDefaults.plusSize)
-                            .graphicsLayer {
-                                alpha = slotAlpha
-                                scaleX = slotScale
-                                scaleY = slotScale
-                            },
-                    ) {
-                        MainDockStack(
+                // 始终保持组合：收起只是把宽度/透明度收到 0，不销毁 MainDockStack，
+                // 否则重新展开时它会先回到「搜索卡」再翻成「唱片卡」，出现闪一下搜索图标的 bug。
+                Box(
+                    modifier = Modifier
+                        .width(CouiDockDefaults.plusSize)
+                        .height(CouiDockDefaults.plusSize)
+                        .graphicsLayer {
+                            alpha = slotAlpha
+                            scaleX = slotScale
+                            scaleY = slotScale
+                        },
+                ) {
+                    MainDockStack(
                             settings = settings,
                             visual = visual,
                             onSearch = onBottomSearch,
@@ -192,8 +193,7 @@ internal fun BoxScope.MainCouiBottomBar(
                                     }
                                 }
                             },
-                        )
-                    }
+                    )
                 }
             }
         }
