@@ -1,6 +1,7 @@
 package com.aritxonly.bdfun
 
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -92,6 +93,12 @@ internal fun BoxScope.MainCouiBottomBar(
 
     // 设置页（最后一个 tab）永远收起，不管有没有唱片。
     val showSlot = selectedIndex < destinations.lastIndex
+    // 槽位整体占位宽度：和库内 CouiDockBar 的 plus 槽完全同一根弹簧（68dp ↔ 0）。
+    val slotReserve by animateDpAsState(
+        targetValue = if (showSlot) CouiDockDefaults.plusSlot else 0.dp,
+        animationSpec = CouiDockDefaults.attachmentSpring(),
+        label = "CouiDockSlotReserve",
+    )
     val discAlpha by animateFloatAsState(
         targetValue = if (showSlot && discMode) 1f else 0f,
         animationSpec = CouiDockDefaults.attachmentSpring(),
@@ -114,7 +121,7 @@ internal fun BoxScope.MainCouiBottomBar(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = bottomInset + 8.dp)
                 .graphicsLayer { translationY = imeCompensation.toFloat() }
-                .width(dockWidth + CouiDockDefaults.plusSlot)
+                .width(dockWidth + slotReserve)
                 .height(CouiDockDefaults.barHeight),
         ) {
             CouiTheme(darkTheme = dark, colorScheme = scheme) {
