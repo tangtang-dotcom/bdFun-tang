@@ -125,6 +125,8 @@ fun TeakDropdownPanel(
 ) {
     var mounted by remember { mutableStateOf(false) }
     var fullHeightPx by remember { mutableStateOf(0) }
+    // COUI 风格：只换材质与进出场曲线，定位、尺寸、裁剪方向等交互保持宿主原样。
+    val coui = com.aritxonly.teak.common.theme.TeakUiStyle.isCoui
     // 和 Miuix ListPopupDefaults 完全相同的两条进度：
     // 缩放 / 裁剪展开用 spring(0.82, 362.5)，透明度进场 200ms、退场 150ms。
     val fraction = remember { Animatable(0f) }
@@ -143,11 +145,15 @@ fun TeakDropdownPanel(
                 launch {
                     fraction.animateTo(
                         targetValue = 1f,
-                        animationSpec = spring(
-                            dampingRatio = 0.82f,
-                            stiffness = 362.5f,
-                            visibilityThreshold = 0.0001f,
-                        ),
+                        animationSpec = if (coui) {
+                            tween(durationMillis = 260, easing = CouiPanelEase)
+                        } else {
+                            spring(
+                                dampingRatio = 0.82f,
+                                stiffness = 362.5f,
+                                visibilityThreshold = 0.0001f,
+                            )
+                        },
                     )
                 }
                 alpha.animateTo(1f, tween(durationMillis = 200))
@@ -157,11 +163,15 @@ fun TeakDropdownPanel(
                 launch {
                     fraction.animateTo(
                         targetValue = 0f,
-                        animationSpec = spring(
-                            dampingRatio = 0.82f,
-                            stiffness = 362.5f,
-                            visibilityThreshold = 0.0001f,
-                        ),
+                        animationSpec = if (coui) {
+                            tween(durationMillis = 180, easing = FastOutLinearInEasing)
+                        } else {
+                            spring(
+                                dampingRatio = 0.82f,
+                                stiffness = 362.5f,
+                                visibilityThreshold = 0.0001f,
+                            )
+                        },
                     )
                 }
                 alpha.animateTo(0f, tween(durationMillis = 150))
@@ -290,7 +300,7 @@ fun TeakDropdownPanel(
                         .width(fullWidth)
                         .height(finalHeight)
                         .graphicsLayer {
-                            val scale = 0.15f + 0.85f * fraction.value
+                            val scale = if (coui) 0.94f + 0.06f * fraction.value else 0.15f + 0.85f * fraction.value
                             scaleX = scale
                             scaleY = scale
                             this.alpha = shadowAlpha
@@ -310,37 +320,54 @@ fun TeakDropdownPanel(
                         .width(fullWidth)
                         .height(finalHeight)
                         .graphicsLayer {
-                            val scale = 0.15f + 0.85f * fraction.value
+                            val scale = if (coui) 0.94f + 0.06f * fraction.value else 0.15f + 0.85f * fraction.value
                             scaleX = scale
                             scaleY = scale
                             this.alpha = panelAlpha
                             this.transformOrigin = transformOrigin
                         }
-                        .dropdownClipReveal(
-                            fraction = { fraction.value },
-                            showBelow = showBelow,
-                            showAbove = showAbove,
-                            corner = 24.dp,
+                        .then(
+                            if (coui) Modifier else Modifier.dropdownClipReveal(
+                                fraction = { fraction.value },
+                                showBelow = showBelow,
+                                showAbove = showAbove,
+                                corner = 24.dp,
+                            ),
                         )
                         .clip(shape)
-                        .background(Color.White),
+                        .background(
+                            if (coui) com.itos.coui.theme.CouiTheme.colorScheme.container.copy(alpha = 0.94f)
+                            else Color.White,
+                        ),
                 ) {
-                    TeakGlassPanel(
-                        modifier = Modifier.fillMaxSize(),
-                        shape = shape,
-                        solid = backdrop == null,
-                        solidColor = colors.surface,
-                        tintAlpha = 1f,
-                        baseAlpha = 0f,
-                        materialAlpha = 1f,
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(vertical = contentPadding),
-                            verticalArrangement = Arrangement.Top,
-                            content = content,
-                        )
+                    if (coui) {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(vertical = contentPadding),
+                                verticalArrangement = Arrangement.Top,
+                                content = content,
+                            )
+                        }
+                    } else {
+                        TeakGlassPanel(
+                            modifier = Modifier.fillMaxSize(),
+                            shape = shape,
+                            solid = backdrop == null,
+                            solidColor = colors.surface,
+                            tintAlpha = 1f,
+                            baseAlpha = 0f,
+                            materialAlpha = 1f,
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(vertical = contentPadding),
+                                verticalArrangement = Arrangement.Top,
+                                content = content,
+                            )
+                        }
                     }
                 }
             }
@@ -431,3 +458,5 @@ private fun Modifier.offsetInPx(xDp: Dp, yDp: Dp) =
         },
     )
 
+/** COUI 菜单的进出场曲线：与库 Dialog/Menu 同一条 cubic-bezier。 */
+private val CouiPanelEase = androidx.compose.animation.core.CubicBezierEasing(0.3f, 0f, 0.1f, 1f)

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
+import com.aritxonly.teak.common.coui.couiTabContainer
 import com.aritxonly.teak.common.material.TeakGlassRecipes
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
@@ -57,19 +58,6 @@ fun AdaptiveScrollableTabs(
     maxVisibleItems: Int = 3,
 ) {
     if (options.isEmpty()) return
-    // COUI 风格：分段条直接用库的 SegmentedControl（材质/指示器/动效全部由库实现）。
-    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui &&
-        android.os.Build.VERSION.SDK_INT >= 34 &&
-        com.aritxonly.teak.common.coui.LocalTeakCouiToolbarBackdrop.current != null
-    ) {
-        com.aritxonly.teak.common.coui.TeakCouiSegmented(
-            labels = options,
-            selectedIndex = selected.coerceIn(options.indices),
-            onSelected = onSelect,
-            modifier = modifier,
-        )
-        return
-    }
     if (scrollable && options.size > normalizedTabLimit(maxVisibleItems)) {
         ScrollableSegment(options, selected, onSelect, modifier, itemWidth, materialAlpha, position,
             maxVisibleItems)
@@ -142,6 +130,50 @@ private fun GlassSegmentedBar(
     animIndex: Float,
 ) {
     val colors = MiuixTheme.colorScheme
+    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
+        // 只换材质：布局、滑动指示器、点击逻辑保持原样，容器换成 COUI 的胶囊底色 + 描边。
+        val scheme = com.itos.coui.theme.CouiTheme.colorScheme
+        val dark = com.itos.coui.theme.CouiTheme.isDark
+        Box(
+            modifier = modifier
+                .height(40.dp)
+                .couiTabContainer(dark)
+                .clip(com.itos.coui.shape.CouiCapsuleShape),
+        ) {
+            Box(modifier = Modifier.padding(4.dp)) {
+                Box(
+                    modifier = Modifier
+                        .offset(x = itemWidth * animIndex)
+                        .width(itemWidth)
+                        .height(32.dp)
+                        .clip(com.itos.coui.shape.CouiCapsuleShape)
+                        .background(scheme.accent),
+                )
+                Row {
+                    options.forEachIndexed { index, label ->
+                        val active = index == selected
+                        Box(
+                            modifier = Modifier
+                                .width(itemWidth)
+                                .height(32.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                ) { onSelect(index) },
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = label,
+                                color = if (active) scheme.onAccent else scheme.onSurfaceVariant,
+                                fontSize = 13.sp,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        return
+    }
     val advancedMaterial = LocalTeakMaterialSpec.current
     val recipe = TeakGlassRecipes.floatingNavigation(advancedMaterial.fineTuning)
     TeakGlassSurface(
