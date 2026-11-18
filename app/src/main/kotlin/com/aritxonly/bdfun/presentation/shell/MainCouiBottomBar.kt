@@ -2,6 +2,7 @@ package com.aritxonly.bdfun
 
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
@@ -12,11 +13,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.core.model.video.VideoItem
@@ -75,12 +82,24 @@ internal fun BoxScope.MainCouiBottomBar(
             CouiDockDefaults.menuWidth,
             (available - CouiDockDefaults.plusSlot).coerceAtLeast(120.dp),
         )
+        // 与库 plus 面同一套弹簧：宽度 56→0 + 透明度/缩放渐变，而不是硬切。
+        val showSlot = selectedIndex < destinations.lastIndex || visual.discSlot > 0.01f
+        val slotWidth by animateDpAsState(
+            targetValue = if (showSlot) CouiDockDefaults.plusSlot else 0.dp,
+            animationSpec = CouiDockDefaults.attachmentSpring(),
+            label = "couiSearchSlotWidth",
+        )
+        val slotAlpha by animateFloatAsState(
+            targetValue = if (showSlot) 1f else 0f,
+            animationSpec = CouiDockDefaults.attachmentSpring(),
+            label = "couiSearchSlotAlpha",
+        )
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = bottomInset + 8.dp),
             verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(CouiDockDefaults.plusGap),
+            horizontalArrangement = Arrangement.spacedBy(CouiDockDefaults.plusGap * slotAlpha),
         ) {
             CouiTheme(darkTheme = dark, colorScheme = scheme) {
                 val style = remember(dark, scheme.accent, scheme.onSurfaceVariant, density) {
@@ -117,9 +136,19 @@ internal fun BoxScope.MainCouiBottomBar(
                     onPlusClick = {},
                 )
             }
-            // 与 COUI plus 面一致的收起规则：我的/设置页没有搜索入口；有唱片时仍保留槽位。
-            val showSlot = selectedIndex < destinations.lastIndex || visual.discSlot > 0.01f
-            if (showSlot) MainDockStack(
+            Box(
+                modifier = Modifier
+                    .width(slotWidth)
+                    .clipToBounds()
+                    .graphicsLayer {
+                        alpha = slotAlpha
+                        val s = 0.86f + 0.14f * slotAlpha
+                        scaleX = s
+                        scaleY = s
+                        transformOrigin = TransformOrigin(0f, 0.5f)
+                    },
+            ) {
+                MainDockStack(
                 settings = settings,
                 visual = visual,
                 onSearch = onBottomSearch,
@@ -143,7 +172,8 @@ internal fun BoxScope.MainCouiBottomBar(
                         }
                     }
                 },
-            )
+                )
+            }
         }
     }
 }
