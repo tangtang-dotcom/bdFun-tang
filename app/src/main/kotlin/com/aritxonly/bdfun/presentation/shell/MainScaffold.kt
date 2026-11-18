@@ -6,12 +6,6 @@ import com.aritxonly.teak.common.chrome.isWideFoldTopBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.ui.unit.IntOffset
-import com.aritxonly.teak.common.theme.TeakStyle
-import com.itos.coui.backdrop.ProvideCouiBackdrop
-import com.itos.coui.backdrop.couiBackdrop
-import com.itos.coui.backdrop.rememberCouiBackdrop
 import androidx.compose.runtime.Composable
 import com.aritxonly.bdfun.ui.ScrollTopButton
 import androidx.compose.ui.Modifier
@@ -38,9 +32,6 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
     val dynamicFeed = shell.feeds.dynamic
     val tabPagerState = shell.navigation.pager
     val backdrop = shell.backdrops.main
-    // COUI 风格的底栏材质要采样正文内容；其余风格不创建，避免额外开销。
-    val couiBar = TeakStyle.fromStoredValue(settings.interfaceStyle).coui
-    val couiBackdrop = if (couiBar) rememberCouiBackdrop() else null
     val wideNavigation = shell.backdrops.wideNavigation
     val floatingBottomSpacing = if (isWideFoldTopBar()) 0.dp else 4.dp
     val pageFloat = (tabPagerState.currentPage + tabPagerState.currentPageOffsetFraction)
@@ -58,8 +49,7 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .layerBackdrop(backdrop)
-                    .then(if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop) else Modifier),
+                    .layerBackdrop(backdrop),
             ) {
                 // 三个 tab：横向相连的 pager（可拖拽，切换是同一套非线性动画）
                 // 外面包一层更大的触摸阈值，手指轻抖不会误翻页。
@@ -93,24 +83,13 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
         MainMineChrome(shell, pageFloat)
         MainFeedChrome(shell, pageFloat)
 
-        if (couiBackdrop != null) {
-            // COUI 底栏用 Src patch 直接混合到窗口目标，祖先一旦有 graphicsLayer 就会离屏合成、
-            // 采样不到内容而出现黑块；因此这里只用 offset 位移，不做 alpha/scale。
-            val progress = shell.bottom.bottomTabBarProgress.value
-            ProvideCouiBackdrop(couiBackdrop) {
-                Box(Modifier.fillMaxSize().offset {
-                    IntOffset(0, (96.dp.toPx() * progress).toInt())
-                }) { MainShellNavigation(settings, shell, dark, couiBackdrop) }
-            }
-        } else {
-            Box(Modifier.fillMaxSize().graphicsLayer {
-                    val progress = shell.bottom.bottomTabBarProgress.value
-                    translationY = 96.dp.toPx() * progress
-                    scaleX = 1f - 0.4f * progress
-                    scaleY = scaleX
-                    alpha = 1f - progress
-            }) { MainShellNavigation(settings, shell, dark) }
-        }
+        Box(Modifier.fillMaxSize().graphicsLayer {
+                val progress = shell.bottom.bottomTabBarProgress.value
+                translationY = 96.dp.toPx() * progress
+                scaleX = 1f - 0.4f * progress
+                scaleY = scaleX
+                alpha = 1f - progress
+        }) { MainShellNavigation(settings, shell, dark) }
         MainBottomSearchLayer(settings, shell)
         // 换页时返回键回到"纯箭头"状态（pageKey / pageEnter 在上面声明）
 

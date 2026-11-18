@@ -20,29 +20,9 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     tabItems: List<TeakFloatingTabItem>, selectedKey: String,
     onBarItem: (TeakFloatingTabItem) -> Unit, onSearch: () -> Unit, onOpenVideo: (VideoItem) -> Unit,
     onBottomSearch: () -> Unit,
-    destinations: List<Destination> = emptyList(),
-    couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
 ) {
     val visual = rememberMainBottomNavigationVisual(settings, dark, wideNavigation, searchVisible, tabItems.size)
     if (visual.tabBarAlpha > 0.01f) {
-        // COUI 风格：整条底栏交给 COUI-Kit 渲染（材质/动效由库负责），其余风格不受影响。
-        if (TeakUiStyle.current.coui && couiBackdrop != null &&
-            android.os.Build.VERSION.SDK_INT >= 34
-        ) {
-            MainCouiBottomBar(
-                destinations = destinations,
-                selectedKey = selectedKey,
-                dark = dark,
-                backdrop = couiBackdrop,
-                covered = visual.tabBarCovered,
-                onSelect = { key -> destinations.firstOrNull { it.key == key }?.let { d ->
-                    tabItems.firstOrNull { it.key == d.key }?.let(onBarItem)
-                } },
-                onSearch = onBottomSearch,
-            )
-            if (visual.discSlot > 0.01f) MainNavigationDisc(settings, visual, onOpenVideo)
-            return
-        }
         MainBottomNavigationShade(settings, wideNavigation, visual.tabBarAlpha)
         if (wideNavigation) {
             if (TeakUiStyle.current.layout.edgeNavigation) {
