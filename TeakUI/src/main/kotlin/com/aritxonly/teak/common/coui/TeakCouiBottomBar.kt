@@ -78,7 +78,7 @@ fun TeakCouiBottomBar(
 
 /** 把宿主的 Material3 色板折成 COUI 的 12 个角色（COUI 默认是官方蓝，必须映射）。 */
 @Composable
-internal fun teakCouiColorScheme(): CouiColorScheme {
+fun teakCouiColorScheme(): CouiColorScheme {
     val m = MaterialTheme.colorScheme
     return CouiColorScheme(
         accent = m.primary,

@@ -25,7 +25,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
 ) {
     val visual = rememberMainBottomNavigationVisual(settings, dark, wideNavigation, searchVisible, tabItems.size)
     val couiOn = TeakUiStyle.current.coui
-    if (couiOn && couiBackdrop != null) {
+    if (couiOn && couiBackdrop != null && android.os.Build.VERSION.SDK_INT >= 34) {
         // COUI 风格：底栏交给 COUI-Kit 的 NavigationBar（材质 + 融球 + 跟手形变都是库自带的）。
         MainCouiBottomBar(
             destinations = destinations,
