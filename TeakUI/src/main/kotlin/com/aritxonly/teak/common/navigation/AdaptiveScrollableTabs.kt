@@ -176,6 +176,7 @@ private fun GlassSegmentedBar(
                 material = com.itos.coui.segmentbutton.CouiSegmentedControlDefaults.material(dark),
                 shadow = com.aritxonly.teak.common.coui.TeakCouiNoShadow,
                 modifier = modifier.height(40.dp).clip(com.itos.coui.shape.CouiCapsuleShape),
+                tint = com.itos.coui.segmentbutton.CouiSegmentedControlDefaults.containerColor(dark),
             ) { segmentedContent() }
         } else {
             Box(

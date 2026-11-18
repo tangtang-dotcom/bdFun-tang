@@ -88,6 +88,8 @@ fun TeakCouiFloatingBackground(
     modifier: Modifier = Modifier,
     dark: Boolean = com.itos.coui.theme.CouiTheme.isDark,
     contourGlowEnabled: Boolean = false,
+    /** 材质之上再叠一层原厂容器色（分段条要 0x0F000000 那层灰，否则白底上像纯白）。 */
+    tint: Color? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
     if (android.os.Build.VERSION.SDK_INT < 34) {
@@ -98,7 +100,7 @@ fun TeakCouiFloatingBackground(
         ) { content() }
         return
     }
-    TeakCouiFloatingBackgroundApi34(backdrop, shape, material, shadow, modifier, contourGlowEnabled, content)
+    TeakCouiFloatingBackgroundApi34(backdrop, shape, material, shadow, modifier, contourGlowEnabled, tint, content)
 }
 
 @androidx.annotation.RequiresApi(34)
@@ -110,6 +112,7 @@ private fun TeakCouiFloatingBackgroundApi34(
     shadow: CouiFloatingShadow,
     modifier: Modifier,
     contourGlowEnabled: Boolean,
+    tint: Color?,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val renderer = remember { CouiFloatingRenderer.standalone() }
@@ -136,6 +139,9 @@ private fun TeakCouiFloatingBackgroundApi34(
                         },
                     ),
             )
+        }
+        if (tint != null) {
+            Spacer(Modifier.matchParentSize().background(tint, shape))
         }
         content()
     }
