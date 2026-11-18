@@ -136,21 +136,7 @@ private fun GlassSegmentedBar(
         val scheme = com.itos.coui.theme.CouiTheme.colorScheme
         val dark = com.itos.coui.theme.CouiTheme.isDark
         val couiBackdrop = com.aritxonly.teak.common.coui.LocalTeakCouiBackdrop.current
-        val containerModifier = if (couiBackdrop != null) {
-            Modifier.teakCouiGlassSurface(
-                backdrop = couiBackdrop,
-                shape = com.itos.coui.shape.CouiCapsuleShape,
-                dark = dark,
-            )
-        } else {
-            Modifier.couiTabContainer(dark)
-        }
-        Box(
-            modifier = modifier
-                .height(40.dp)
-                .then(containerModifier)
-                .clip(com.itos.coui.shape.CouiCapsuleShape),
-        ) {
+        val segmentedContent: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit = {
             Box(modifier = Modifier.padding(4.dp)) {
                 Box(
                     modifier = Modifier
@@ -182,6 +168,22 @@ private fun GlassSegmentedBar(
                     }
                 }
             }
+        }
+        if (couiBackdrop != null) {
+            com.aritxonly.teak.common.coui.TeakCouiFloatingBackground(
+                backdrop = couiBackdrop,
+                shape = com.itos.coui.shape.CouiCapsuleShape,
+                material = com.itos.coui.segmentbutton.CouiSegmentedControlDefaults.material(dark),
+                shadow = com.aritxonly.teak.common.coui.TeakCouiNoShadow,
+                modifier = modifier.height(40.dp).clip(com.itos.coui.shape.CouiCapsuleShape),
+            ) { segmentedContent() }
+        } else {
+            Box(
+                modifier = modifier
+                    .height(40.dp)
+                    .then(Modifier.couiTabContainer(dark))
+                    .clip(com.itos.coui.shape.CouiCapsuleShape),
+            ) { segmentedContent() }
         }
         return
     }

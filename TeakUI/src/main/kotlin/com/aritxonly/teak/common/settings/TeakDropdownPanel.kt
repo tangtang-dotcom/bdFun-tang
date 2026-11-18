@@ -337,31 +337,57 @@ fun TeakDropdownPanel(
                         )
                         .clip(shape)
                         .then(
-                            if (coui) {
-                                val couiBackdrop = com.aritxonly.teak.common.coui.LocalTeakCouiBackdrop.current
-                                if (couiBackdrop != null) {
-                                    Modifier.teakCouiGlassSurface(
-                                        backdrop = couiBackdrop,
-                                        shape = shape,
-                                        dark = com.itos.coui.theme.CouiTheme.isDark,
-                                        blurRadius = 25.dp,
-                                        surfaceAlpha = 0.78f,
-                                    )
-                                } else {
-                                    Modifier.background(com.itos.coui.theme.CouiTheme.colorScheme.container.copy(alpha = 0.94f))
-                                }
-                            } else Modifier.background(Color.White),
+                            if (coui) Modifier
+                            else Modifier.background(Color.White),
                         ),
                 ) {
                     if (coui) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(vertical = contentPadding),
-                                verticalArrangement = Arrangement.Top,
-                                content = content,
-                            )
+                        val couiBackdrop = com.aritxonly.teak.common.coui.LocalTeakCouiBackdrop.current
+                        val menuMaterial = com.itos.coui.effect.CouiFloatingMaterial(
+                            firstColor = if (com.itos.coui.theme.CouiTheme.isDark) androidx.compose.ui.graphics.Color(0x99262626)
+                            else androidx.compose.ui.graphics.Color(0x99CDCDCD),
+                            firstBlendMode = if (com.itos.coui.theme.CouiTheme.isDark) android.graphics.BlendMode.OVERLAY
+                            else android.graphics.BlendMode.COLOR_DODGE,
+                            secondColor = if (com.itos.coui.theme.CouiTheme.isDark) androidx.compose.ui.graphics.Color(0x99262626)
+                            else androidx.compose.ui.graphics.Color(0xBFEEEEEE),
+                            secondBlendMode = android.graphics.BlendMode.LUMINOSITY,
+                            blurRadius = 25f,
+                            edgeAlpha = if (com.itos.coui.theme.CouiTheme.isDark) 0.8f else 0.28f,
+                            innerGlowAlpha = if (com.itos.coui.theme.CouiTheme.isDark) 0.03f else 0.12f,
+                        )
+                        val menuShadow = com.itos.coui.effect.CouiFloatingShadow(
+                            elevation = 18f * density.density,
+                            color = androidx.compose.ui.graphics.Color.Black.copy(alpha = if (com.itos.coui.theme.CouiTheme.isDark) 0.45f else 0.18f),
+                            lightY = -6f * density.density, lightZ = 120f * density.density, lightRadius = 60f * density.density,
+                            causticColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.10f),
+                            layout = androidx.compose.ui.geometry.Rect(0f, 0f, 0f, 2f * density.density),
+                            sdf = 8f * density.density,
+                        )
+                        if (couiBackdrop != null) {
+                            com.aritxonly.teak.common.coui.TeakCouiFloatingBackground(
+                                backdrop = couiBackdrop,
+                                shape = shape,
+                                material = menuMaterial,
+                                shadow = menuShadow,
+                                modifier = Modifier.fillMaxSize(),
+                                contourGlowEnabled = true,
+                            ) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize().padding(vertical = contentPadding),
+                                    verticalArrangement = Arrangement.Top,
+                                    content = content,
+                                )
+                            }
+                        } else {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(vertical = contentPadding),
+                                    verticalArrangement = Arrangement.Top,
+                                    content = content,
+                                )
+                            }
                         }
                     } else {
                         TeakGlassPanel(
