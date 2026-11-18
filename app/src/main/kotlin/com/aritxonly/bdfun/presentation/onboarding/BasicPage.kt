@@ -43,6 +43,7 @@ internal fun BasicPage(settings: OnboardingBasicSettings, actions: OnboardingAct
 private data class InterfaceStyleOption(val value: Int, val label: String)
 private val INTERFACE_STYLE_OPTIONS = listOf(
     InterfaceStyleOption(2, "HyperOS 4"),
+    InterfaceStyleOption(3, "COUI"),
     InterfaceStyleOption(0, "哔哩哔哩"),
     InterfaceStyleOption(1, "经典"),
 )

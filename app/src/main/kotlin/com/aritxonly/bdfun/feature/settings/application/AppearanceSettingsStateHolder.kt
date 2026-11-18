@@ -146,7 +146,7 @@ internal class AppearanceSettingsStateHolder(
     override var interfaceStyle: Int
         get() = interfaceStyleState.value
         set(value) {
-            interfaceStyleState.value = value.coerceIn(0, 2)
+            interfaceStyleState.value = value.coerceIn(0, 3)
             prefs.edit().putInt("interface_style", interfaceStyleState.value).apply()
         }
 

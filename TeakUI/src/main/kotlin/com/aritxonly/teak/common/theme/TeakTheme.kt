@@ -33,11 +33,12 @@ import top.yukonga.miuix.kmp.theme.ThemeController
 object TeakUiStyle {
     var style by mutableStateOf(0)
 
-    /** 0 = 官方，1 = 经典，2 = HyperOS 4（新底栏 + 搜索一镜到底）。 */
+    /** 0 = 官方，1 = 经典，2 = HyperOS 4（新底栏 + 搜索一镜到底），3 = COUI（仅底栏）。 */
     val current: TeakStyle get() = TeakStyle.fromStoredValue(style)
     val design: TeakDesign get() = current.design
     val isClassic: Boolean get() = design == TeakDesign.Classic
     val isHyperOs4: Boolean get() = current == TeakStyle.HyperOs4
+    val isCoui: Boolean get() = current == TeakStyle.Coui
 }
 
 /**

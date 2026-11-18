@@ -9,12 +9,14 @@ import androidx.compose.ui.unit.dp
 enum class TeakStyle(val design: TeakDesign, val layout: TeakLayout) {
     Official(TeakDesign.Modern, TeakLayout.Floating),
     Classic(TeakDesign.Classic, TeakLayout.Edge),
-    HyperOs4(TeakDesign.Modern, TeakLayout.BottomSearch);
+    HyperOs4(TeakDesign.Modern, TeakLayout.BottomSearch),
+    Coui(TeakDesign.Modern, TeakLayout.Floating);
 
     companion object {
         fun fromStoredValue(value: Int): TeakStyle = when (value) {
             1 -> Classic
             2 -> HyperOs4
+            3 -> Coui
             else -> Official
         }
     }

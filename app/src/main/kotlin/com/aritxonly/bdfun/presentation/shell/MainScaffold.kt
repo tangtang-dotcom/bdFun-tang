@@ -16,6 +16,9 @@ import com.aritxonly.teak.common.search.teakSearchUnderlay
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
 import top.yukonga.miuix.kmp.blur.layerBackdrop
+import com.aritxonly.teak.common.theme.TeakUiStyle
+import com.itos.coui.backdrop.couiBackdrop
+import com.itos.coui.backdrop.rememberCouiBackdrop
 
 @Composable
 internal fun MainScaffold(settings: SettingsBindings, shell: MainShellState, dark: Boolean, background: Color) {
@@ -36,6 +39,8 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
     val floatingBottomSpacing = if (isWideFoldTopBar()) 0.dp else 4.dp
     val pageFloat = (tabPagerState.currentPage + tabPagerState.currentPageOffsetFraction)
         .coerceAtLeast(0f)
+    // COUI 底栏的玻璃采样源：整页内容。
+    val couiBackdrop = if (TeakUiStyle.isCoui) rememberCouiBackdrop() else null
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -49,7 +54,10 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .layerBackdrop(backdrop),
+                    .layerBackdrop(backdrop)
+                    .then(if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop) else Modifier)
+                    // COUI 要求采样源自身有真实不透明底色，这一层放在 couiBackdrop 之后 = 在录制层内部绘制。
+                    .background(background),
             ) {
                 // 三个 tab：横向相连的 pager（可拖拽，切换是同一套非线性动画）
                 // 外面包一层更大的触摸阈值，手指轻抖不会误翻页。
@@ -83,13 +91,18 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
         MainMineChrome(shell, pageFloat)
         MainFeedChrome(shell, pageFloat)
 
-        Box(Modifier.fillMaxSize().graphicsLayer {
-                val progress = shell.bottom.bottomTabBarProgress.value
-                translationY = 96.dp.toPx() * progress
-                scaleX = 1f - 0.4f * progress
-                scaleY = scaleX
-                alpha = 1f - progress
-        }) { MainShellNavigation(settings, shell, dark) }
+        if (couiBackdrop != null) {
+            // COUI 底栏按 Src patch 直接合成到窗口，自身不能套 graphicsLayer，且必须与采样源同级。
+            MainShellNavigation(settings, shell, dark, couiBackdrop)
+        } else {
+            Box(Modifier.fillMaxSize().graphicsLayer {
+                    val progress = shell.bottom.bottomTabBarProgress.value
+                    translationY = 96.dp.toPx() * progress
+                    scaleX = 1f - 0.4f * progress
+                    scaleY = scaleX
+                    alpha = 1f - progress
+            }) { MainShellNavigation(settings, shell, dark) }
+        }
         MainBottomSearchLayer(settings, shell)
         // 换页时返回键回到"纯箭头"状态（pageKey / pageEnter 在上面声明）
 
