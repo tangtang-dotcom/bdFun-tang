@@ -90,7 +90,7 @@ import io.github.suqi8.coui.kmp.basic.Surface
 import io.github.suqi8.coui.kmp.glass.GlassDropdownPreference
 import io.github.suqi8.coui.kmp.theme.COUITheme
 
-private val CardShape = TeakContinuousCornerShape(22.dp)
+private val CardShape = TeakContinuousCornerShape(26.dp)
 
 /**
  * 设置页外壳：滚动大标题 + 返回键进度 + 统一列表间距。

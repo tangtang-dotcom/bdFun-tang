@@ -108,7 +108,7 @@ object TeakChromeDefaults {
     val SmallTitleLift: Dp = 3.dp
 
     /** 顶栏背景渐变模糊参数。参数参考 HyperIsland，代码为 Teak 实现；记录见 docs/CREDITS.md。 */
-    const val BarBlurRadius = 16f
+    const val BarBlurRadius = 22f
     const val BarTintAlpha = 0.66f
     const val BarBlurStartFraction = 0.62f
     const val BarBlurEndFraction = 1f
