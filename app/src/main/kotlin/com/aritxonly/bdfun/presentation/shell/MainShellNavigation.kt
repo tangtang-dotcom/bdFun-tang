@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(
     settings: SettingsBindings, shell: MainShellState, dark: Boolean,
     couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
+    couiRenderer: com.itos.coui.effect.CouiFloatingRenderer? = null,
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val ui = shell.ui
@@ -80,6 +81,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(
         onOpenVideo = { navigateToVideo(context, it) },
         destinations = destinations,
         couiBackdrop = couiBackdrop,
+        couiRenderer = couiRenderer,
     )
 
 }

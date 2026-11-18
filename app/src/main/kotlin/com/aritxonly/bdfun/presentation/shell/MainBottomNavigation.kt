@@ -22,18 +22,10 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     onBottomSearch: () -> Unit,
     destinations: List<Destination> = emptyList(),
     couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
+    couiRenderer: com.itos.coui.effect.CouiFloatingRenderer? = null,
 ) {
     val visual = rememberMainBottomNavigationVisual(settings, dark, wideNavigation, searchVisible, tabItems.size)
     val couiOn = TeakUiStyle.current.coui
-    // 绘制器会现场编译 AGSL 着色器；个别 GPU 编译失败会抛异常，这里先建、失败则整条回落到普通底栏，
-    // 避免启动即闪退（库本身也建议宿主先创建并处理失败再显式传入）。
-    val couiRenderer = if (couiOn && android.os.Build.VERSION.SDK_INT >= 34) {
-        androidx.compose.runtime.remember {
-            runCatching { com.itos.coui.effect.CouiFloatingRenderer() }.getOrNull()
-        }
-    } else {
-        null
-    }
     if (couiOn && couiBackdrop != null && couiRenderer != null) {
         // COUI 风格：底栏交给 COUI-Kit 的 NavigationBar（材质 + 融球 + 跟手形变都是库自带的）。
         MainCouiBottomBar(

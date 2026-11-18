@@ -40,7 +40,17 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
     val pageFloat = (tabPagerState.currentPage + tabPagerState.currentPageOffsetFraction)
         .coerceAtLeast(0f)
     // COUI 底栏的玻璃采样源：整页内容。
-    val couiBackdrop = if (TeakStyle.fromStoredValue(settings.interfaceStyle).coui) rememberCouiBackdrop() else null
+    // COUI 底栏要现场编译 AGSL 着色器；不支持的 GPU 会抛异常。这里先试建绘制器，
+    // 失败就整块回落到普通底栏（连 backdrop 采样层都不挂），保证不会启动即闪退。
+    val couiStyle = TeakStyle.fromStoredValue(settings.interfaceStyle).coui
+    val couiRenderer = if (couiStyle && android.os.Build.VERSION.SDK_INT >= 34) {
+        androidx.compose.runtime.remember {
+            runCatching { com.itos.coui.effect.CouiFloatingRenderer() }.getOrNull()
+        }
+    } else {
+        null
+    }
+    val couiBackdrop = if (couiRenderer != null) rememberCouiBackdrop() else null
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -54,7 +64,12 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .layerBackdrop(backdrop),
+                    .layerBackdrop(backdrop)
+                    // COUI 底栏的采样源就是这一层「整页内容」；底栏本身必须画在它外面，
+                    // 否则底栏会采样到自己（自我录制）导致黑块甚至递归崩溃。
+                    .then(
+                        if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop) else Modifier,
+                    ),
             ) {
                 // 三个 tab：横向相连的 pager（可拖拽，切换是同一套非线性动画）
                 // 外面包一层更大的触摸阈值，手指轻抖不会误翻页。
@@ -88,12 +103,10 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
         MainMineChrome(shell, pageFloat)
         MainFeedChrome(shell, pageFloat)
 
-        if (TeakStyle.fromStoredValue(settings.interfaceStyle).coui) {
-            // COUI 风格：底栏要采样整页内容，且它按 Src patch 直接合成到窗口，
-            // 所以这一层只做 backdrop 采样源，不能套 graphicsLayer。
-            Box(Modifier.fillMaxSize().couiBackdrop(requireNotNull(couiBackdrop))) {
-                MainShellNavigation(settings, shell, dark, requireNotNull(couiBackdrop))
-            }
+        if (couiRenderer != null && couiBackdrop != null) {
+            // COUI 风格：底栏按 Src patch 直接合成到窗口，自身不能套 graphicsLayer，
+            // 且必须与上面的采样源同级（不能包进采样层里）。
+            MainShellNavigation(settings, shell, dark, couiBackdrop, couiRenderer)
         } else {
             Box(Modifier.fillMaxSize().graphicsLayer {
                     val progress = shell.bottom.bottomTabBarProgress.value
