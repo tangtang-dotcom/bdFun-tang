@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
 import com.aritxonly.teak.common.coui.couiTabContainer
 import com.aritxonly.teak.common.coui.teakCouiGlassSurface
+import com.aritxonly.teak.common.coui.couiSegmentedTrack
 import com.aritxonly.teak.common.material.TeakGlassRecipes
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
@@ -169,23 +171,16 @@ private fun GlassSegmentedBar(
                 }
             }
         }
-        if (couiBackdrop != null) {
-            com.aritxonly.teak.common.coui.TeakCouiFloatingBackground(
-                backdrop = couiBackdrop,
-                shape = com.itos.coui.shape.CouiCapsuleShape,
-                material = com.itos.coui.segmentbutton.CouiSegmentedControlDefaults.material(dark),
-                shadow = com.aritxonly.teak.common.coui.TeakCouiNoShadow,
-                modifier = modifier.height(40.dp).clip(com.itos.coui.shape.CouiCapsuleShape),
-                tint = com.itos.coui.segmentbutton.CouiSegmentedControlDefaults.containerColor(dark),
-            ) { segmentedContent() }
-        } else {
-            Box(
-                modifier = modifier
-                    .height(40.dp)
-                    .then(Modifier.couiTabContainer(dark))
-                    .clip(com.itos.coui.shape.CouiCapsuleShape),
-            ) { segmentedContent() }
-        }
+        // 顶栏自带采样层（TopAppBarSurface 内部 couiBackdrop），库的 Src patch 在这里
+        // 合成不到窗口，浮动材质会被整层擦掉。所以轨道直接用库的原厂 containerColor +
+        // 内高光 + 亮边 + 柔阴影画，视觉等价，且不依赖采样。
+        Box(
+            modifier = modifier
+                .height(40.dp)
+                .shadow(6.dp, com.itos.coui.shape.CouiCapsuleShape, clip = false)
+                .then(Modifier.couiSegmentedTrack(dark))
+                .clip(com.itos.coui.shape.CouiCapsuleShape),
+        ) { segmentedContent() }
         return
     }
     val advancedMaterial = LocalTeakMaterialSpec.current

@@ -153,3 +153,21 @@ val TeakCouiNoShadow: CouiFloatingShadow
         elevation = 0f, color = Color.Transparent, lightY = 0f, lightZ = 0f, lightRadius = 0f,
         causticColor = Color.Transparent, layout = Rect.Zero, sdf = 0f,
     )
+
+
+/** 分段条轨道：库 CouiSegmentedControlDefaults.containerColor 的两个色阶 + 顶部内高光 + 亮边。 */
+fun Modifier.couiSegmentedTrack(dark: Boolean): Modifier = this
+    .background(
+        brush = Brush.verticalGradient(
+            listOf(
+                if (dark) Color(0x33FFFFFF) else Color(0x1F000000),
+                if (dark) Color(0x1FFFFFFF) else Color(0x0D000000),
+            ),
+        ),
+        shape = com.itos.coui.shape.CouiCapsuleShape,
+    )
+    .border(
+        width = 0.75.dp,
+        color = if (dark) Color.White.copy(alpha = 0.18f) else Color.White.copy(alpha = 0.55f),
+        shape = com.itos.coui.shape.CouiCapsuleShape,
+    )
