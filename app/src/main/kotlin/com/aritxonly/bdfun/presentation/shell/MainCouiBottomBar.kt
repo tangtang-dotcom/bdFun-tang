@@ -115,18 +115,7 @@ internal fun BoxScope.MainCouiBottomBar(
                 .padding(bottom = bottomInset + 8.dp)
                 .graphicsLayer { translationY = imeCompensation.toFloat() }
                 .width(dockWidth + CouiDockDefaults.plusSlot)
-                .height(CouiDockDefaults.barHeight)
-                .pointerInput(discMode) {
-                    var total = 0f
-                    detectVerticalDragGestures(
-                        onDragStart = { total = 0f },
-                        onDragEnd = {
-                            if (abs(total) > 20.dp.toPx()) manualDisc = !discMode
-                            total = 0f
-                        },
-                        onVerticalDrag = { _, delta -> total += delta },
-                    )
-                },
+                .height(CouiDockDefaults.barHeight),
         ) {
             CouiTheme(darkTheme = dark, colorScheme = scheme) {
                 val style = remember(dark, scheme.accent, scheme.onSurfaceVariant, contour, density.density) {
@@ -161,9 +150,7 @@ internal fun BoxScope.MainCouiBottomBar(
                     }
                 }
                 CouiDockBar(
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .width(dockWidth),
+                    modifier = Modifier.align(Alignment.CenterStart),
                     backdrop = backdrop,
                     renderer = renderer,
                     items = items,
@@ -182,7 +169,7 @@ internal fun BoxScope.MainCouiBottomBar(
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .offset(x = dockWidth + CouiDockDefaults.plusGap)
+                    .offset(x = dockWidth + CouiDockDefaults.plusGap - DiscShadowRoom)
                     .size(CouiDockDefaults.plusSize + DiscShadowRoom * 2)
                     .graphicsLayer {
                         alpha = discAlpha
@@ -211,6 +198,31 @@ internal fun BoxScope.MainCouiBottomBar(
                             },
                     )
                 }
+            }
+            // 槽位手势层：只覆盖 56dp 搜索/唱片区域，点击和下滑都在这里处理。
+            if (showSlot) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .offset(x = dockWidth + CouiDockDefaults.plusGap)
+                        .size(CouiDockDefaults.plusSize)
+                        .pointerInput(discMode) {
+                            var total = 0f
+                            detectVerticalDragGestures(
+                                onDragStart = { total = 0f },
+                                onDragEnd = {
+                                    if (abs(total) > 20.dp.toPx()) manualDisc = !discMode
+                                    total = 0f
+                                },
+                                onVerticalDrag = { _, delta -> total += delta },
+                            )
+                        }
+                        .pointerInput(discMode) {
+                            detectTapGestures {
+                                if (discMode) BackgroundPlayback.video?.let(onOpenVideo) else onBottomSearch()
+                            }
+                        },
+                )
             }
         }
     }
