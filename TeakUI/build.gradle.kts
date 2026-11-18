@@ -42,6 +42,8 @@ dependencies {
     api(libs.miuix.blur)
     api(libs.miuix.icons)
     api(libs.kyant.shapes)
+    api(project(":third_party:coui"))
+    api(project(":third_party:coui-icons"))
 
     implementation(libs.coroutines.android)
     implementation(libs.androidx.activity.compose)
