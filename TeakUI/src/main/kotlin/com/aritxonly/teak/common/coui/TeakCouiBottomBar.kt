@@ -75,7 +75,7 @@ fun TeakCouiBottomBar(
     Row(
         modifier = modifier
             .height(56.dp)
-            .shadow(elevation = 12.dp, shape = shape, clip = false)
+            .shadow(elevation = 14.dp, shape = shape, clip = false)
             .drawCouiBackdrop(
                 backdrop = backdrop,
                 shape = { shape },
@@ -92,7 +92,7 @@ fun TeakCouiBottomBar(
                 },
             )
             .border(width = 0.75.dp, color = Color.White.copy(alpha = if (dark) 0.14f else 0.55f), shape = shape)
-            .padding(horizontal = 6.dp),
+            .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         items.forEach { item ->
@@ -102,40 +102,35 @@ fun TeakCouiBottomBar(
                 animationSpec = tween(durationMillis = 280, easing = CouiBarEasing),
                 label = "couiBarSelection",
             )
-            Box(
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .padding(vertical = 6.dp)
+                    .height(44.dp)
                     .background(
                         color = scheme.accent.copy(alpha = 0.14f * progress),
                         shape = CouiCapsuleShape,
                     )
-                    .clickable { onSelect(item.key) },
-                contentAlignment = Alignment.Center,
+                    .clickable { onSelect(item.key) }
+                    .padding(horizontal = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = if (selected) item.selectedIcon else item.icon,
-                        contentDescription = item.label,
-                        modifier = Modifier.size(24.dp),
-                        tint = lerpColor(scheme.onSurfaceVariant, scheme.accent, progress),
-                    )
-                    if (progress > 0.02f) {
-                        Spacer(Modifier.width(4.dp * progress))
-                        Text(
-                            text = item.label,
-                            color = lerpColor(scheme.onSurfaceVariant, scheme.accent, progress),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Medium,
-                            maxLines = 1,
-                        )
-                    }
-                }
+                Icon(
+                    imageVector = if (selected) item.selectedIcon else item.icon,
+                    contentDescription = item.label,
+                    modifier = Modifier.size(24.dp),
+                    tint = lerpColor(scheme.onSurfaceVariant, scheme.accent, progress),
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    text = item.label,
+                    color = lerpColor(scheme.onSurfaceVariant, scheme.accent, progress),
+                    fontSize = 11.sp,
+                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
+                    maxLines = 1,
+                )
             }
         }
         if (onSearch != null) {
-            Spacer(Modifier.width(4.dp))
+            Spacer(Modifier.width(6.dp))
             Box(
                 modifier = Modifier
                     .size(44.dp)

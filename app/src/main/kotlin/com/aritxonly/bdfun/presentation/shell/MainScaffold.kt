@@ -55,11 +55,11 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .layerBackdrop(backdrop)
-                    // COUI 底栏的采样源就是这一层「整页内容」；底栏本身必须画在它外面，
-                    // 否则底栏会采样到自己（自我录制）导致黑块甚至递归崩溃。
+                    // 采样源只挂一套：COUI 风格用 couiBackdrop，其它风格用 Miuix layerBackdrop。
+                    // 两套同时挂会互相抢采样，底栏材质会打架。
                     .then(
-                        if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop) else Modifier,
+                        if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop)
+                        else Modifier.layerBackdrop(backdrop),
                     ),
             ) {
                 // 三个 tab：横向相连的 pager（可拖拽，切换是同一套非线性动画）

@@ -3,6 +3,9 @@ package com.aritxonly.bdfun
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +39,10 @@ internal fun BoxScope.MainCouiBottomBar(
         Modifier
             .align(Alignment.BottomCenter)
             .fillMaxWidth()
+            .navigationBarsPadding()
+            .padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
             .drawWithContent { runCatching { drawContent() } },
+        contentAlignment = Alignment.BottomCenter,
     ) {
         TeakCouiBottomBar(
             items = items,
