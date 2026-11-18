@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.aritxonly.teak.common.coui.teakCouiControlSurface
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -65,6 +66,16 @@ fun TeakGlassSurface(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val advancedMaterial = LocalTeakMaterialSpec.current
+    // COUI 风格：胶囊/按钮表面换用 COUI 材质 token 画的实面（内容永远在材质之上）。
+    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
+        Box(
+            modifier = modifier.teakCouiControlSurface(shape),
+            contentAlignment = contentAlignment,
+        ) {
+            content()
+        }
+        return
+    }
     // 经典样式不使用玻璃：所有玻璃表面退化为平面容器，保留调用方指定的形状。
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) {
         Box(
@@ -150,6 +161,15 @@ fun TeakGlassIconButton(
     neutralTintProgress: Float = 0f,
     content: @Composable () -> Unit,
 ) {
+    // COUI 风格：圆形图标钮用 COUI 材质实面，图标画在最上层。
+    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
+        Box(
+            modifier = modifier.size(size).teakCouiControlSurface(androidx.compose.foundation.shape.CircleShape),
+            contentAlignment = Alignment.Center,
+        ) { content() }
+        return
+    }
+
     // 经典样式：顶栏按钮只保留图标，不再画圆底。
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) {
         Box(
