@@ -265,6 +265,19 @@ fun TeakSettingsDropdownRow(
     closedValue: String? = null,
 ) {
     if (options.isEmpty()) return
+    // COUI 风格：整段照搬 COUI 库自带的设置下拉（Menu + CouiMenuAnchor + CouiMenuMotion），
+    // 展开动画与凝光材质都由库负责，宿主不介入。
+    if (TeakUiStyle.isCoui) {
+        com.aritxonly.teak.common.coui.CouiDropdownPreference(
+            modifier = modifier,
+            title = title,
+            items = options,
+            selectedIndex = selected.coerceIn(0, options.lastIndex),
+            onSelectedIndexChange = onSelected,
+            summary = description.takeIf { it.isNotBlank() },
+        )
+        return
+    }
     // 经典样式使用 Miuix 的普通 Overlay 下拉，平面菜单不带玻璃和圆角浮层。
     if (TeakUiStyle.isClassic) {
         top.yukonga.miuix.kmp.preference.OverlayDropdownPreference(

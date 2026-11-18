@@ -1,8 +1,11 @@
 package com.aritxonly.teak.common.theme
 
 import android.os.Build
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -117,7 +120,23 @@ fun TeakTheme(
         MiuixTheme(controller = controller) {
             MaterialTheme(colorScheme = materialColors) {
                 CompositionLocalProvider(LocalTeakMaterialSpec provides materialSpec) {
-                    com.aritxonly.teak.common.modal.TeakModalHost { content() }
+                    val inner: @Composable () -> Unit = {
+                        com.aritxonly.teak.common.modal.TeakModalHost { content() }
+                    }
+                    if (TeakUiStyle.isCoui) {
+                        // COUI 的菜单材质要整窗采样源；包在 CouiTheme 内部、盖住全部内容，
+                        // 否则 LocalCouiMenuBackdrop 拿不到背景，菜单会变成纯白/透明。
+                        com.itos.coui.theme.CouiTheme(
+                            darkTheme = dark,
+                            colorScheme = com.aritxonly.teak.common.coui.teakCouiColorScheme(),
+                        ) {
+                            com.itos.coui.menu.ProvideCouiMenuBackdrop(isolateContent = false) { windowSource ->
+                                Box(Modifier.fillMaxSize().then(windowSource)) { inner() }
+                            }
+                        }
+                    } else {
+                        inner()
+                    }
                 }
             }
         }
