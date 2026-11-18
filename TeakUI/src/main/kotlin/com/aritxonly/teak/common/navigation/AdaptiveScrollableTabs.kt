@@ -57,6 +57,19 @@ fun AdaptiveScrollableTabs(
     maxVisibleItems: Int = 3,
 ) {
     if (options.isEmpty()) return
+    // COUI 风格：分段条直接用库的 SegmentedControl（材质/指示器/动效全部由库实现）。
+    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui &&
+        android.os.Build.VERSION.SDK_INT >= 34 &&
+        com.aritxonly.teak.common.coui.LocalTeakCouiToolbarBackdrop.current != null
+    ) {
+        com.aritxonly.teak.common.coui.TeakCouiSegmented(
+            labels = options,
+            selectedIndex = selected.coerceIn(options.indices),
+            onSelected = onSelect,
+            modifier = modifier,
+        )
+        return
+    }
     if (scrollable && options.size > normalizedTabLimit(maxVisibleItems)) {
         ScrollableSegment(options, selected, onSelect, modifier, itemWidth, materialAlpha, position,
             maxVisibleItems)

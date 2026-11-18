@@ -126,6 +126,9 @@ fun TeakSettingsPage(
         drawRect(settingsBackground)
         drawContent()
     }
+    // COUI 菜单的材质需要整页的采样源；菜单弹窗本身在窗口之外，不会自我采样。
+    val couiMenu = TeakUiStyle.isCoui
+    val page: @Composable (Modifier) -> Unit = { menuModifier ->
     CompositionLocalProvider(LocalTeakBackdrop provides settingsBackdrop) {
         Scaffold(
             containerColor = Color.Transparent,
@@ -135,6 +138,7 @@ fun TeakSettingsPage(
                 state = listState,
                 modifier = modifier
                     .fillMaxSize()
+                    .then(menuModifier)
                     .layerBackdrop(settingsBackdrop),
                 contentPadding = PaddingValues(
                     start = contentPadding.calculateLeftPadding(androidx.compose.ui.platform.LocalLayoutDirection.current),
@@ -154,6 +158,12 @@ fun TeakSettingsPage(
                 content()
             }
         }
+    }
+    }
+    if (couiMenu) {
+        com.itos.coui.menu.ProvideCouiMenuBackdrop { menuModifier -> page(menuModifier) }
+    } else {
+        page(Modifier)
     }
 }
 
