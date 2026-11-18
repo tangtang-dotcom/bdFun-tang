@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -51,7 +52,7 @@ private fun RelationPageContent(controller: RelationFeedStateHolder, order: Rela
         slots = ActivityPageSlots(
             topBarActions = {
             TeakTopGlassButton(onClick = { scope.launch { controller.fetch(reset = true) } }) {
-                Icon(MiuixIcons.Refresh, contentDescription = "刷新$title", tint = MiuixTheme.colorScheme.onBackground,
+                Icon(TeakCouiIcons.Refresh, contentDescription = "刷新$title", tint = MiuixTheme.colorScheme.onBackground,
                     modifier = Modifier.size(20.dp))
             }
         },

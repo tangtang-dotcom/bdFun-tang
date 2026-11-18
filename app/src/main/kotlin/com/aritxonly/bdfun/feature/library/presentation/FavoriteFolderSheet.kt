@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.feature.library.presentation
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -69,7 +70,7 @@ internal fun FavoriteFolderSheet(
     MiuixBottomSheet(
         show = show, title = displayed.title, onDismissRequest = onDismiss, allowDismiss = !busy,
         startAction = {
-            IconButton(onClick = onDismiss, enabled = !busy) { Icon(MiuixIcons.Close, "关闭") }
+            IconButton(onClick = onDismiss, enabled = !busy) { Icon(TeakCouiIcons.Close, "关闭") }
         },
         bottomBar = {
             Button(onClick = onDismiss, enabled = !busy,
@@ -116,7 +117,7 @@ private fun FolderRow(folder: FavoriteFolderOption, pending: Boolean, enabled: B
     Row(Modifier.fillMaxWidth().squircleSurface(colors.surface.copy(alpha = 0.65f), 24.dp)
         .then(input).heightIn(min = 80.dp).padding(18.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-        Icon(MiuixIcons.Folder, null, Modifier.size(28.dp), tint = if (selected) colors.primary else colors.onSurfaceVariantSummary)
+        Icon(TeakCouiIcons.Folder, null, Modifier.size(28.dp), tint = if (selected) colors.primary else colors.onSurfaceVariantSummary)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(folder.title, color = colors.onSurfaceContainer, fontWeight = FontWeight.Medium,
                 maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -133,7 +134,7 @@ private fun FolderRow(folder: FavoriteFolderOption, pending: Boolean, enabled: B
 private fun FolderPlaceholder(message: String) {
     Column(Modifier.fillMaxWidth().padding(vertical = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Icon(MiuixIcons.Folder, null, Modifier.size(40.dp), tint = MiuixTheme.colorScheme.onSurfaceVariantSummary)
+        Icon(TeakCouiIcons.Folder, null, Modifier.size(40.dp), tint = MiuixTheme.colorScheme.onSurfaceVariantSummary)
         Text(message, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
     }
 }

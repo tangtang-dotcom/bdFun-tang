@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,7 +49,7 @@ internal fun CommentCopySheet(item: CommentItem?, onDismiss: () -> Unit) {
         title = "自由复制",
         onDismissRequest = onDismiss,
         startAction = {
-            IconButton(onClick = onDismiss) { Icon(MiuixIcons.Close, "关闭") }
+            IconButton(onClick = onDismiss) { Icon(TeakCouiIcons.Close, "关闭") }
         },
         bottomBar = {
             Button(

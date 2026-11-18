@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -57,7 +58,7 @@ internal fun LibrarySearchBackButton(onBack: () -> Unit) {
             .clickable(interactionSource = null, indication = null, onClick = onBack),
         contentAlignment = Alignment.Center,
     ) {
-        AppGlyph(MiuixIcons.ChevronBackward, colors.onBackground, size = 18.dp)
+        AppGlyph(TeakCouiIcons.ChevronBackward, colors.onBackground, size = 18.dp)
     }
 }
 
@@ -83,7 +84,7 @@ internal fun androidx.compose.foundation.layout.RowScope.LibrarySearchField(titl
 @Composable
 internal fun LibrarySearchMagnifier() {
     val colors = MiuixTheme.colorScheme
-    AppGlyph(MiuixIcons.Search, colors.onBackgroundVariant, size = 16.dp)
+    AppGlyph(TeakCouiIcons.Search, colors.onBackgroundVariant, size = 16.dp)
 }
 
 @Composable

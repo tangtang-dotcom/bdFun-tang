@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import com.aritxonly.teak.common.modal.TeakActionSheet
 import com.aritxonly.teak.common.modal.AlertDialog
 import com.aritxonly.teak.common.modal.TextButton
@@ -55,7 +56,7 @@ internal fun MessageSessionSheets(
     )
     TeakActionSheet(menu.confirmClear, onDismiss = { if (!busy) menu.confirmClear = false }, title = "清空列表") {
         Text("清空后所有消息将被删除，无法恢复。", Modifier.padding(18.dp), color = colors.onBackgroundVariant)
-        ActionSheetRow("确认清空", !busy && !loading, MiuixIcons.Delete) { onClearList() }
+        ActionSheetRow("确认清空", !busy && !loading, TeakCouiIcons.Delete) { onClearList() }
     }
     TeakActionSheet(menu.selected != null, onDismiss = { if (!busy) menu.selected = null }, title = menu.selected?.name) {
         val target = menu.selected
@@ -63,7 +64,7 @@ internal fun MessageSessionSheets(
             val enabled = !busy && !loading
             if (menu.confirmDelete) {
                 Text("删除会话后，可通过对方的个人空间重新发起私信。", Modifier.padding(18.dp), color = colors.onBackgroundVariant)
-                ActionSheetRow("确认删除会话", enabled, MiuixIcons.Delete) { onMutate(SessionAction.Delete) }
+                ActionSheetRow("确认删除会话", enabled, TeakCouiIcons.Delete) { onMutate(SessionAction.Delete) }
                 ActionSheetRow("取消", enabled) { menu.confirmDelete = false }
             } else {
                 ActionSheetRow(if (target.pinned) "取消置顶" else "置顶会话", enabled) {
@@ -75,7 +76,7 @@ internal fun MessageSessionSheets(
                 if (target.talkerId > 0) ActionSheetRow("标为已读", enabled && (target.unread > 0 || target.preferences.unreadDot)) {
                     onMutate(SessionAction.Read)
                 }
-                if (target.talkerId > 0) ActionSheetRow("删除会话", enabled, MiuixIcons.Delete) { menu.confirmDelete = true }
+                if (target.talkerId > 0) ActionSheetRow("删除会话", enabled, TeakCouiIcons.Delete) { menu.confirmDelete = true }
             }
         }
     }

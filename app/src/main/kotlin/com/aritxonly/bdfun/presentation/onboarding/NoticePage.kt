@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -68,7 +69,7 @@ private fun NoticeHeading() {
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            imageVector = MiuixIcons.Info,
+            imageVector = TeakCouiIcons.Info,
             contentDescription = null,
             modifier = Modifier.size(64.dp),
             tint = colors.primary,

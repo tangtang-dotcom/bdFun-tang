@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -44,16 +45,16 @@ internal fun MineQuickActions(cardShape: androidx.compose.ui.graphics.Shape, nav
         verticalAlignment = Alignment.CenterVertically,
     ) {
         QuickAction("离线缓存", Modifier.weight(1f), onClick = navigation.onOpenCache) {
-            androidx.compose.material3.Icon(MiuixIcons.Download, null, Modifier.size(26.dp), tint = MineBlue)
+            androidx.compose.material3.Icon(TeakCouiIcons.Download, null, Modifier.size(26.dp), tint = MineBlue)
         }
         QuickAction("历史记录", Modifier.weight(1f), onClick = navigation.onOpenHistory) {
-            androidx.compose.material3.Icon(MiuixIcons.Recent, null, Modifier.size(26.dp), tint = MineBlue)
+            androidx.compose.material3.Icon(TeakCouiIcons.Recent, null, Modifier.size(26.dp), tint = MineBlue)
         }
         QuickAction("我的收藏", Modifier.weight(1f), onClick = navigation.onOpenLibrary) {
             ResourceGlyph(res = TeakIcon.Star, tint = MineBlue, size = 26.dp)
         }
         QuickAction("稍后再看", Modifier.weight(1f), onClick = navigation.onOpenWatchLater) {
-            androidx.compose.material3.Icon(MiuixIcons.SearchDevice, null, Modifier.size(26.dp), tint = MineBlue)
+            androidx.compose.material3.Icon(TeakCouiIcons.SearchDevice, null, Modifier.size(26.dp), tint = MineBlue)
         }
     }
 }

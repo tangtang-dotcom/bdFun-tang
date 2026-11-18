@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import com.aritxonly.teak.common.modal.TeakActionSheet
 
 import top.yukonga.miuix.kmp.icon.MiuixIcons
@@ -50,7 +51,7 @@ internal fun MessageFeedSheet(
                 if (kind == MessageFeedKind.Like) androidx.compose.material3.Text(
                     "删除后，有新的点赞时这条通知会重新出现在列表。",
                     color = top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onBackgroundVariant)
-                ActionSheetRow("确认删除这条通知", enabled, MiuixIcons.Delete) {
+                ActionSheetRow("确认删除这条通知", enabled, TeakCouiIcons.Delete) {
                     onMutate(true)
                 }
                 ActionSheetRow("取消", enabled) { menu.confirmDelete = false }
@@ -58,7 +59,7 @@ internal fun MessageFeedSheet(
                 if (kind == MessageFeedKind.Like) ActionSheetRow(if (target.second.noticeState == 0) "不再通知" else "接收通知", enabled) {
                     if (target.second.noticeState == 0) menu.confirmMute = true else onMutate(false)
                 }
-                ActionSheetRow("删除通知", enabled, MiuixIcons.Delete) { menu.confirmDelete = true }
+                ActionSheetRow("删除通知", enabled, TeakCouiIcons.Delete) { menu.confirmDelete = true }
             }
         }
     }

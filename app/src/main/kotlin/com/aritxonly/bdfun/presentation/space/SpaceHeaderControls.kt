@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,7 +40,7 @@ internal fun MessageCircleButton(onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            imageVector = MiuixIcons.Messages,
+            imageVector = TeakCouiIcons.Messages,
             contentDescription = "私信",
             tint = BrandPink,
             modifier = Modifier.size(18.dp),

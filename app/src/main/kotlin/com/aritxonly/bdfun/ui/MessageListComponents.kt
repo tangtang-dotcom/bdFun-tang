@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -74,7 +75,7 @@ internal fun SystemNotificationRow(item: MessageItem, onMore: () -> Unit) {
     Column(Modifier.fillMaxWidth().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(item.title, Modifier.weight(1f), color = colors.onSurfaceContainer, fontSize = 16.sp)
-            AppGlyph(MiuixIcons.More, size = 18.dp, modifier = Modifier.clickable(onClick = onMore).padding(12.dp), tint = colors.onBackgroundVariant)
+            AppGlyph(TeakCouiIcons.More, size = 18.dp, modifier = Modifier.clickable(onClick = onMore).padding(12.dp), tint = colors.onBackgroundVariant)
         }
         // Notification bodies contain HTML links. Render text and links, never a WebView or script.
         androidx.compose.ui.viewinterop.AndroidView(

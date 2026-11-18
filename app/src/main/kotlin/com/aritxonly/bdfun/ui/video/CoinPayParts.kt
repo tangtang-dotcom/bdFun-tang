@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -70,7 +71,7 @@ internal fun CoinArrow(
     onClick: () -> Unit,
 ) {
     Icon(
-        imageVector = if (forward) MiuixIcons.ChevronForward else MiuixIcons.ChevronBackward,
+        imageVector = if (forward) TeakCouiIcons.ChevronForward else TeakCouiIcons.ChevronBackward,
         contentDescription = if (forward) "下一档" else "上一档",
         tint = Color.White.copy(alpha = if (enabled) 0.92f else 0.30f),
         modifier = modifier

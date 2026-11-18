@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -46,5 +47,5 @@ internal fun DanmakuPanelReset(runtime: DanmakuPanelRuntime) {
 
 @Composable
 internal fun ResetGlyph() {
-    AppGlyph(MiuixIcons.Reset, DmSecondary, size = 13.dp)
+    AppGlyph(TeakCouiIcons.Reset, DmSecondary, size = 13.dp)
 }

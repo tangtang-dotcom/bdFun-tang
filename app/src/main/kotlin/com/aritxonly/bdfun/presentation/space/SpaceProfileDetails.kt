@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -116,7 +117,7 @@ internal fun SpaceOfficialProfile(
     if (verify.isNotBlank()) {
         Spacer(Modifier.height(10.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            AppGlyph(MiuixIcons.Ok, size = 11.dp, tint = Color(0xFF3B82F6))
+            AppGlyph(TeakCouiIcons.Ok, size = 11.dp, tint = Color(0xFF3B82F6))
             Spacer(Modifier.width(4.dp))
             Text(
                 text = verify,

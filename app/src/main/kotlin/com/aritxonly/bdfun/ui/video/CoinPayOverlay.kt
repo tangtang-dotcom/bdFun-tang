@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -339,7 +340,7 @@ private fun CoinBottomRow(
             )
         }
         Icon(
-            imageVector = MiuixIcons.Close,
+            imageVector = TeakCouiIcons.Close,
             contentDescription = "关闭",
             tint = Color.White,
             modifier = Modifier

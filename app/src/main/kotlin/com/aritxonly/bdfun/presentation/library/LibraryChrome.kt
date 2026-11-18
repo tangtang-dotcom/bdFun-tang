@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -101,7 +102,7 @@ fun LibraryBatchOverlay() {
 @Composable
 internal fun LibrarySearchGlyph() {
     top.yukonga.miuix.kmp.basic.Icon(
-        imageVector = top.yukonga.miuix.kmp.icon.MiuixIcons.Search,
+        imageVector = TeakCouiIcons.Search,
         contentDescription = "搜索",
         tint = teakGlassGlyphColor(),
         modifier = Modifier.size(22.dp),
@@ -111,7 +112,7 @@ internal fun LibrarySearchGlyph() {
 @Composable
 internal fun LibraryThreeDotsGlyph() {
     top.yukonga.miuix.kmp.basic.Icon(
-        imageVector = top.yukonga.miuix.kmp.icon.MiuixIcons.More,
+        imageVector = TeakCouiIcons.More,
         contentDescription = "更多",
         tint = teakGlassGlyphColor(),
         modifier = Modifier.size(22.dp),

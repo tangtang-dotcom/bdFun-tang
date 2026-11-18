@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
@@ -176,7 +177,7 @@ private fun PhotoViewerTopBar(onDismiss: () -> Unit) {
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = MiuixIcons.Close,
+                imageVector = TeakCouiIcons.Close,
                 contentDescription = "关闭",
                 tint = Color.White,
                 modifier = Modifier.size(buttonSize * 0.552f),

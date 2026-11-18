@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -11,5 +12,5 @@ import top.yukonga.miuix.kmp.icon.extended.*
 
 @Composable
 internal fun CommentGlyph(tint: Color, size: Dp) {
-    AppGlyph(MiuixIcons.Reply, tint, size = size)
+    AppGlyph(TeakCouiIcons.Reply, tint, size = size)
 }

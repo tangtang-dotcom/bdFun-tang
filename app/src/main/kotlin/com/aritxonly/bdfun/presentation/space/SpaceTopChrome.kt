@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import com.aritxonly.bdfun.ui.findHostActivity
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -57,10 +58,10 @@ internal fun SpaceTopChrome(state: SpaceChromeState, onBack: () -> Unit) {
     }
     val actions: @Composable androidx.compose.foundation.layout.RowScope.(Color) -> Unit = { tint ->
         TeakTopGlassButton(onClick = {}) {
-            Icon(MiuixIcons.Search, contentDescription = "搜索", tint = tint, modifier = Modifier.size(20.dp))
+            Icon(TeakCouiIcons.Search, contentDescription = "搜索", tint = tint, modifier = Modifier.size(20.dp))
         }
         TeakTopGlassButton(onClick = {}) {
-            Icon(MiuixIcons.More, contentDescription = "更多", tint = tint, modifier = Modifier.size(20.dp))
+            Icon(TeakCouiIcons.More, contentDescription = "更多", tint = tint, modifier = Modifier.size(20.dp))
         }
     }
     val tabs: @Composable (Dp) -> Unit = { itemWidth ->

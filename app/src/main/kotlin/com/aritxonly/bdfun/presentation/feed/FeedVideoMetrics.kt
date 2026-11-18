@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -68,7 +69,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.FeedVideoMetrics(video:
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = if (muted) MiuixIcons.VolumeOff else MiuixIcons.VolumeUp,
+                imageVector = if (muted) TeakCouiIcons.VolumeOff else TeakCouiIcons.VolumeUp,
                 contentDescription = if (muted) "静音" else "声音",
                 tint = Color.White,
                 modifier = Modifier.size(19.dp),

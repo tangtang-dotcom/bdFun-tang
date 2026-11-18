@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import com.aritxonly.teak.common.icons.ResourceGlyph
 
 import com.aritxonly.bdfun.navigateToMessageFeed
@@ -43,7 +44,7 @@ internal fun MessageShortcutGroup(unread: Map<String, Int>, events: MessageScree
             modifier = Modifier.weight(1f),
             onClick = events.onOpenReplies,
             unread = unread.replyAndMentionUnread(),
-        ) { androidx.compose.material3.Icon(MiuixIcons.Messages, null, Modifier.size(ShortcutGlyphSize), tint = MessageGreen) }
+        ) { androidx.compose.material3.Icon(TeakCouiIcons.Messages, null, Modifier.size(ShortcutGlyphSize), tint = MessageGreen) }
         MessageShortcut(
             label = "收到喜欢",
             modifier = Modifier.weight(1f),
@@ -53,7 +54,7 @@ internal fun MessageShortcutGroup(unread: Map<String, Int>, events: MessageScree
         MessageShortcut(label = "系统通知", modifier = Modifier.weight(1f),
             unread = unread["sys_msg"] ?: 0,
             onClick = { navigation?.feed?.invoke(MessageFeedKind.System, 0) ?: navigateToMessageFeed(context, "system") }) {
-            androidx.compose.material3.Icon(MiuixIcons.Promotions, null, Modifier.size(ShortcutGlyphSize), tint = colors.primary)
+            androidx.compose.material3.Icon(TeakCouiIcons.Promotions, null, Modifier.size(ShortcutGlyphSize), tint = colors.primary)
         }
     }
 }

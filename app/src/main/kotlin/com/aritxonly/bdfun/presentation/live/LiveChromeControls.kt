@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import com.aritxonly.teak.common.icons.ResourceGlyph
 
 import com.aritxonly.teak.common.player.PlayGlyph
@@ -76,7 +77,7 @@ internal fun LiveChromeRender.LiveChromePrimaryControls() {
                         },
                     ) {
                         Icon(
-                            imageVector = MiuixIcons.Refresh,
+                            imageVector = TeakCouiIcons.Refresh,
                             contentDescription = "直播重载",
                             tint = Color.White,
                             modifier = Modifier.size(21.dp),

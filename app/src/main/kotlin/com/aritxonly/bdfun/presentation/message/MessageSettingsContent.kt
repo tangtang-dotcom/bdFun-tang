@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
@@ -54,7 +55,7 @@ internal fun MessageSettingRow(setting: ImSetting, busy: Boolean, onSet: (Boolea
             ) {
                 Box(Modifier.width(24.dp)) {
                     if (choice.selected) {
-                        AppGlyph(MiuixIcons.Ok, colors.primary, size = 18.dp)
+                        AppGlyph(TeakCouiIcons.Ok, colors.primary, size = 18.dp)
                     }
                 }
                 Text(choice.text, color = if (choice.selected) colors.primary else colors.onBackground)

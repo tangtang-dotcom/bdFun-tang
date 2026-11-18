@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import top.yukonga.miuix.kmp.icon.extended.More
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,7 +28,7 @@ internal fun CommentRowMore(onMore: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         top.yukonga.miuix.kmp.basic.Icon(
-            imageVector = top.yukonga.miuix.kmp.icon.MiuixIcons.More,
+            imageVector = TeakCouiIcons.More,
             contentDescription = "更多",
             tint = colors.onBackgroundVariant,
             modifier = Modifier.size(17.5.dp),

@@ -1,6 +1,7 @@
 package com.aritxonly.bdfun.ui
 
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.HomeSearchContents(sear
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = MiuixIcons.Search,
+            imageVector = TeakCouiIcons.Search,
             contentDescription = "搜索",
             tint = MiuixTheme.colorScheme.onBackgroundVariant,
             modifier = Modifier.size(16.dp),

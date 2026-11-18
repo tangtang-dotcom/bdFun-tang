@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -21,7 +22,7 @@ internal fun MineSettingsCard(onSettings: () -> Unit) {
         colors = CardDefaults.defaultColors(color = colors.surfaceContainer, contentColor = colors.onSurfaceContainer)) {
         ArrowPreference(title = "设置", onClick = { haptics.tap(); onSettings() },
             startAction = {
-                Icon(MiuixIcons.Settings, contentDescription = null,
+                Icon(TeakCouiIcons.Settings, contentDescription = null,
                     tint = MiuixTheme.colorScheme.onSurfaceContainer, modifier = Modifier.size(22.dp))
             })
     }

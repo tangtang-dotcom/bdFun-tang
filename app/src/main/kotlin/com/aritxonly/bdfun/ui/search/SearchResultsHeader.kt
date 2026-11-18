@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -86,7 +87,7 @@ internal fun ResultsTabHeader(
 
 @Composable
 internal fun FunnelGlyph() {
-    AppGlyph(MiuixIcons.Filter, MiuixTheme.colorScheme.onBackgroundVariant, size = 17.dp)
+    AppGlyph(TeakCouiIcons.Filter, MiuixTheme.colorScheme.onBackgroundVariant, size = 17.dp)
 }
 
 internal class SearchFilterAnchorStateHolder {

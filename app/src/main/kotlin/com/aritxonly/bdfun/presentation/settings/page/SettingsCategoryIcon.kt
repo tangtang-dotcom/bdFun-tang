@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,13 +17,13 @@ import top.yukonga.miuix.kmp.icon.extended.*
 @Composable
 internal fun SettingsCategoryIcon(entry: SettingsEntry) {
     val icon = when (entry.icon) {
-        "Background" -> MiuixIcons.Background
-        "Play" -> MiuixIcons.Play
-        "Messages" -> MiuixIcons.Messages
-        "Home" -> MiuixIcons.Home
-        "ContactsCircle" -> MiuixIcons.ContactsBook
-        "Info" -> MiuixIcons.Info
-        else -> MiuixIcons.Settings
+        "Background" -> TeakCouiIcons.Background
+        "Play" -> TeakCouiIcons.Play
+        "Messages" -> TeakCouiIcons.Messages
+        "Home" -> TeakCouiIcons.Home
+        "ContactsCircle" -> TeakCouiIcons.ContactsBook
+        "Info" -> TeakCouiIcons.Info
+        else -> TeakCouiIcons.Settings
     }
     Box(Modifier.padding(end = 16.dp).size(32.dp)
         .background(Color(0xFF000000 or entry.color.removePrefix("#").toLong(16)), RoundedCornerShape(9.dp)),

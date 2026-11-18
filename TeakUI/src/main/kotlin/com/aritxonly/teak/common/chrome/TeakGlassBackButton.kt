@@ -1,5 +1,6 @@
 package com.aritxonly.teak.common.chrome
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -77,7 +78,7 @@ fun TeakGlassBackButton(
         }
         // 统一使用 Miuix 的 ChevronBackward 图标，替代原来手画的折线。
         Icon(
-            imageVector = MiuixIcons.ChevronBackward,
+            imageVector = TeakCouiIcons.ChevronBackward,
             contentDescription = "返回",
             tint = glyph,
             modifier = Modifier

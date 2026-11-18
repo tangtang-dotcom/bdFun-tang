@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,14 +28,14 @@ internal fun FeedViewerTopBar(dismissAnimated: () -> Unit) {
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AppGlyph(MiuixIcons.Close, size = 26.dp, tint = Color.White,
+        AppGlyph(TeakCouiIcons.Close, size = 26.dp, tint = Color.White,
 
             modifier = Modifier
                 .clip(CircleShape)
                 .clickable(interactionSource = null, indication = null, onClick = dismissAnimated)
                 .padding(6.dp))
         Spacer(Modifier.weight(1f))
-        AppGlyph(MiuixIcons.More, size = 22.dp, tint = Color.White,
+        AppGlyph(TeakCouiIcons.More, size = 22.dp, tint = Color.White,
 
             modifier = Modifier.padding(6.dp))
     }

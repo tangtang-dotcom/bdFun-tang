@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import com.aritxonly.teak.common.icons.ResourceGlyph
 
 import top.yukonga.miuix.kmp.icon.MiuixIcons
@@ -87,7 +88,7 @@ internal fun MessageMoreDots(onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         top.yukonga.miuix.kmp.basic.Icon(
-            imageVector = MiuixIcons.More,
+            imageVector = TeakCouiIcons.More,
             contentDescription = "更多",
             tint = colors.onBackgroundVariant,
             modifier = Modifier.size(22.dp),

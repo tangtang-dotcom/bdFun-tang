@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import com.aritxonly.teak.common.icons.AppGlyph
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.Image
@@ -47,7 +48,7 @@ fun ComposerIconButton(
         if (kind == ComposerIcon.Send) {
             AppGlyph(TeakIcon.Send, color, size = 19.dp)
         } else {
-            AppGlyph(MiuixIcons.Image, color, size = 19.dp)
+            AppGlyph(TeakCouiIcons.Image, color, size = 19.dp)
         }
     }
 }

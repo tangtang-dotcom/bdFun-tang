@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
@@ -37,13 +38,13 @@ internal fun MineTopAppBar(showSettings: Boolean, onSettings: () -> Unit) {
                         },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(MiuixIcons.Settings, "设置", tint = MiuixTheme.colorScheme.primary,
+                    Icon(TeakCouiIcons.Settings, "设置", tint = MiuixTheme.colorScheme.primary,
                         modifier = Modifier.size(20.dp))
                 }
             } else {
                 TeakGlassIconButton(onClick = { haptics.tap(); onSettings() }, size = 40.dp, recipe = recipe,
                     backdrop = LocalTeakBackdrop.current, materialAlpha = 1f) {
-                    Icon(MiuixIcons.Settings, "设置", tint = MiuixTheme.colorScheme.onSurfaceContainer,
+                    Icon(TeakCouiIcons.Settings, "设置", tint = MiuixTheme.colorScheme.onSurfaceContainer,
                         modifier = Modifier.size(20.dp))
                 }
             }

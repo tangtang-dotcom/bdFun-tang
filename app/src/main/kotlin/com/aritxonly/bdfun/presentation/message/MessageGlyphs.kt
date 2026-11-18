@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -16,10 +17,10 @@ internal val ShortcutGlyphSize = 28.dp
 
 @Composable
 internal fun MarkReadGlyph() {
-    AppGlyph(MiuixIcons.Community, teakGlassGlyphColor(), size = 21.dp)
+    AppGlyph(TeakCouiIcons.Community, teakGlassGlyphColor(), size = 21.dp)
 }
 
 @Composable
 internal fun ThreeDotsGlyph() {
-    AppGlyph(MiuixIcons.More, teakGlassGlyphColor(), size = 21.dp)
+    AppGlyph(TeakCouiIcons.More, teakGlassGlyphColor(), size = 21.dp)
 }

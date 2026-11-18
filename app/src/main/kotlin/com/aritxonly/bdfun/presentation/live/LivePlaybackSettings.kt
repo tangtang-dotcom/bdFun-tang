@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -195,11 +196,11 @@ internal fun LiveSettingsContent(
 
 @Composable
 internal fun LiveCloseGlyph(tint: Color = Color.White.copy(alpha = 0.7f)) {
-    AppGlyph(MiuixIcons.Close, tint, size = 18.dp)
+    AppGlyph(TeakCouiIcons.Close, tint, size = 18.dp)
 }
 
 
 @Composable
 internal fun LiveCheckGlyph(tint: Color = Color.White) {
-    AppGlyph(MiuixIcons.Ok, tint, size = 15.dp)
+    AppGlyph(TeakCouiIcons.Ok, tint, size = 15.dp)
 }

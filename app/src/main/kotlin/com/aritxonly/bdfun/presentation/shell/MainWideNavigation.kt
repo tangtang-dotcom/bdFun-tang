@@ -1,6 +1,7 @@
 package com.aritxonly.bdfun
 
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -47,7 +48,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainWideNavigation(
             onClick = onSearch,
             size = TeakFloatingTabBarDefaults.CurrentHeight,
         ) {
-            Icon(top.yukonga.miuix.kmp.icon.MiuixIcons.Search,
+            Icon(TeakCouiIcons.Search,
                 contentDescription = "搜索", tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(TeakFloatingTabBarDefaults.DetachedIconSize))
         }

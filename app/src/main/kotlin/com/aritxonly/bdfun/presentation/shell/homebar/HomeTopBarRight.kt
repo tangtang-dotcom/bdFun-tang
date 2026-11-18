@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -31,7 +32,7 @@ internal fun HomeTopBarRight(content: HomeTopBarContent, search: HomeTopBarSearc
                     .clickable(interactionSource = null, indication = null, onClick = onOpenMessages),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(MiuixIcons.Messages, contentDescription = "消息", tint = BrandPink,
+                Icon(TeakCouiIcons.Messages, contentDescription = "消息", tint = BrandPink,
                     modifier = Modifier.size(19.dp))
             }
         }
@@ -42,7 +43,7 @@ internal fun HomeTopBarRight(content: HomeTopBarContent, search: HomeTopBarSearc
                 flatBackgroundAlpha = com.aritxonly.teak.common.material.TeakGlassDefaults.flatBackgroundAlpha(),
                 onClick = onOpenMessages, size = 40.dp, recipe = recipe, backdrop = backdrop,
             ) {
-                Icon(MiuixIcons.Messages, contentDescription = "消息", tint = BrandPink,
+                Icon(TeakCouiIcons.Messages, contentDescription = "消息", tint = BrandPink,
                     modifier = Modifier.size(19.dp))
             }
         }

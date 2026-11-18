@@ -1,5 +1,6 @@
 package com.aritxonly.teak.common.modal
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -27,7 +28,7 @@ fun TeakActionSheet(
         allowDismiss = allowDismiss,
         startAction = {
             IconButton(onClick = onDismiss, enabled = allowDismiss) {
-                Icon(MiuixIcons.Close, contentDescription = "关闭")
+                Icon(TeakCouiIcons.Close, contentDescription = "关闭")
             }
         },
     ) { padding ->

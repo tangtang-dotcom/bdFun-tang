@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -57,7 +58,7 @@ internal fun AllFeedAvatar(selected: Boolean, onClick: () -> Unit) {
                     ),
                 contentAlignment = Alignment.Center,
             ) {
-                AppGlyph(MiuixIcons.All, Color.White, size = 20.dp)
+                AppGlyph(TeakCouiIcons.All, Color.White, size = 20.dp)
             }
             if (ring > 0.01f) {
                 Box(

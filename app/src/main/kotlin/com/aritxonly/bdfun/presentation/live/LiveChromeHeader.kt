@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -124,7 +125,7 @@ internal fun BoxScope.LiveChromeLandscapeHeader(render: LiveChromeRender) {
                             contentAlignment = Alignment.Center,
                         ) {
                             Icon(
-                                imageVector = MiuixIcons.ChevronBackward,
+                                imageVector = TeakCouiIcons.ChevronBackward,
                                 contentDescription = "返回",
                                 tint = Color.White,
                                 modifier = Modifier.size(23.5.dp),

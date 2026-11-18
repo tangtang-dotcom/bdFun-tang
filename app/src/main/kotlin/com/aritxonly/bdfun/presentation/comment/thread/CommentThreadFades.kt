@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -74,7 +75,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.CommentThreadFades(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = MiuixIcons.Close,
+                imageVector = TeakCouiIcons.Close,
                 contentDescription = "关闭",
                 tint = colors.onBackgroundVariant,
                 modifier = Modifier.size(22.dp),

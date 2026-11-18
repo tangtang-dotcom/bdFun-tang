@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
@@ -40,7 +41,7 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 internal fun SettingsCategorySearchButton(onSearch: () -> Unit) {
     // 和页面左上角返回键同尺寸的圆形钮；经典样式由 TeakGlassIconButton 自动退化为平面圆底。
     TeakGlassIconButton(onClick = onSearch, size = 40.dp) {
-        Icon(MiuixIcons.Search, "搜索当前分类", tint = MiuixTheme.colorScheme.onSurface, modifier = Modifier.size(22.dp))
+        Icon(TeakCouiIcons.Search, "搜索当前分类", tint = MiuixTheme.colorScheme.onSurface, modifier = Modifier.size(22.dp))
     }
 }
 
@@ -59,14 +60,14 @@ internal fun BoxScope.SettingsSearchDock(session: SettingsBrowserSession) {
                     .then(if (!searching) Modifier.clickable(role = Role.Button) { session.browser.search() } else Modifier)
                     .padding(horizontal = 4.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(MiuixIcons.Search, null, tint = colors.onSurface, modifier = Modifier.size(20.dp))
+                    Icon(TeakCouiIcons.Search, null, tint = colors.onSurface, modifier = Modifier.size(20.dp))
                     if (searching) SettingsSearchInput(session)
                     else Text("搜索设置", color = colors.onSurfaceVariantSummary)
                 }
                 AnimatedVisibility(searching, enter = fadeIn() + expandHorizontally(), exit = fadeOut() + shrinkHorizontally()) {
                     Box(Modifier.size(40.dp).clickable(role = Role.Button, onClick = session.browser::closeSearch),
                         contentAlignment = Alignment.Center) {
-                        Icon(MiuixIcons.Close, "关闭搜索", tint = colors.onSurface, modifier = Modifier.size(20.dp))
+                        Icon(TeakCouiIcons.Close, "关闭搜索", tint = colors.onSurface, modifier = Modifier.size(20.dp))
                     }
                 }
             }
@@ -80,14 +81,14 @@ internal fun BoxScope.SettingsSearchDock(session: SettingsBrowserSession) {
             .then(if (!searching) Modifier.clickable(role = Role.Button) { session.browser.search() } else Modifier)) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(MiuixIcons.Search, null, tint = MiuixTheme.colorScheme.onSurface, modifier = Modifier.size(20.dp))
+                Icon(TeakCouiIcons.Search, null, tint = MiuixTheme.colorScheme.onSurface, modifier = Modifier.size(20.dp))
                 if (searching) SettingsSearchInput(session)
                 else Text("搜索设置", color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
             }
         }
         AnimatedVisibility(searching, enter = fadeIn() + expandHorizontally(), exit = fadeOut() + shrinkHorizontally()) {
             TeakGlassIconButton(onClick = session.browser::closeSearch, size = 48.dp) {
-                Icon(MiuixIcons.Close, "关闭搜索", tint = MiuixTheme.colorScheme.onSurface, modifier = Modifier.size(22.dp))
+                Icon(TeakCouiIcons.Close, "关闭搜索", tint = MiuixTheme.colorScheme.onSurface, modifier = Modifier.size(22.dp))
             }
         }
     }

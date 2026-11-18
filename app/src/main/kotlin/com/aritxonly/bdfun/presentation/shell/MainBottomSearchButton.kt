@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -16,7 +17,7 @@ import top.yukonga.miuix.kmp.icon.extended.Search
 internal fun MainBottomSearchButton(alpha: Float, onClick: () -> Unit) {
     TeakGlassIconButton(onClick = onClick, size = TeakFloatingTabBarDefaults.CurrentHeight,
         modifier = Modifier.graphicsLayer { this.alpha = alpha }) {
-        Icon(MiuixIcons.Search, contentDescription = "搜索", tint = MaterialTheme.colorScheme.onSurface,
+        Icon(TeakCouiIcons.Search, contentDescription = "搜索", tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(TeakFloatingTabBarDefaults.DetachedIconSize))
     }
 }

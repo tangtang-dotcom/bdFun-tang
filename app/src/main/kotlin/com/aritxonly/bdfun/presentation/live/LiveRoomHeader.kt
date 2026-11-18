@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -65,7 +66,7 @@ internal fun LiveTopBar(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = MiuixIcons.ChevronBackward,
+                imageVector = TeakCouiIcons.ChevronBackward,
                 contentDescription = "返回",
                 tint = Color.White,
                 // 和收藏页等页面一致：38dp 热区 + 22dp 图标
@@ -100,7 +101,7 @@ internal fun LiveTopBar(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    imageVector = MiuixIcons.More,
+                    imageVector = TeakCouiIcons.More,
                     contentDescription = "更多",
                     tint = Color.White,
                     modifier = Modifier.size(21.dp),

@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import com.aritxonly.teak.common.coui.TeakCouiIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -35,7 +36,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.GridCoverSelection(sele
                     contentAlignment = Alignment.Center,
                 ) {
                     if (selected) {
-                        AppGlyph(MiuixIcons.Ok, size = 13.dp, tint = Color.White)
+                        AppGlyph(TeakCouiIcons.Ok, size = 13.dp, tint = Color.White)
                     }
                 }
             }
