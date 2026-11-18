@@ -20,6 +20,8 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     tabItems: List<TeakFloatingTabItem>, selectedKey: String,
     onBarItem: (TeakFloatingTabItem) -> Unit, onSearch: () -> Unit, onOpenVideo: (VideoItem) -> Unit,
     onBottomSearch: () -> Unit,
+    destinations: List<Destination> = emptyList(),
+    couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
 ) {
     val visual = rememberMainBottomNavigationVisual(settings, dark, wideNavigation, searchVisible, tabItems.size)
     if (visual.tabBarAlpha > 0.01f) {
@@ -62,6 +64,21 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
                     .blockTouches(visual.tabBarCovered)
                     .navigationBarsPadding(),
             )
+        } else if (couiBackdrop != null && couiGlassNavigationSupported()) {
+            // API 34+ 走 COUI-Kit 的多层悬浮材质底栏（BiliCO 同款），低版本保留原玻璃底栏。
+            if (android.os.Build.VERSION.SDK_INT >= 34) {
+                MainCouiGlassNavigation(
+                    destinations = destinations,
+                    tabItems = tabItems,
+                    selectedKey = selectedKey,
+                    dark = dark,
+                    alpha = visual.tabBarAlpha,
+                    covered = visual.tabBarCovered,
+                    backdrop = couiBackdrop,
+                    onBarItem = onBarItem,
+                    onSearch = onSearch,
+                )
+            }
         } else {
             MainFloatingNavigation(settings, tabItems, selectedKey, onBarItem, visual, onBottomSearch)
         }

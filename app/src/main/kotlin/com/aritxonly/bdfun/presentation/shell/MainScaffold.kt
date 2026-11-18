@@ -16,6 +16,9 @@ import com.aritxonly.teak.common.search.teakSearchUnderlay
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
 import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import com.itos.coui.backdrop.couiBackdrop
+import com.itos.coui.backdrop.rememberCouiBackdrop
+import com.itos.coui.backdrop.ProvideCouiBackdrop
 
 @Composable
 internal fun MainScaffold(settings: SettingsBindings, shell: MainShellState, dark: Boolean, background: Color) {
@@ -32,6 +35,8 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
     val dynamicFeed = shell.feeds.dynamic
     val tabPagerState = shell.navigation.pager
     val backdrop = shell.backdrops.main
+    // COUI 底栏的采样源：和 Miuix 玻璃一样挂在正文层，但这是 COUI-Kit 自己的 backdrop 节点。
+    val couiBackdrop = rememberCouiBackdrop()
     val wideNavigation = shell.backdrops.wideNavigation
     val floatingBottomSpacing = if (isWideFoldTopBar()) 0.dp else 4.dp
     val pageFloat = (tabPagerState.currentPage + tabPagerState.currentPageOffsetFraction)
@@ -49,7 +54,8 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .layerBackdrop(backdrop),
+                    .layerBackdrop(backdrop)
+                    .couiBackdrop(couiBackdrop),
             ) {
                 // 三个 tab：横向相连的 pager（可拖拽，切换是同一套非线性动画）
                 // 外面包一层更大的触摸阈值，手指轻抖不会误翻页。
@@ -89,7 +95,9 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
                 scaleX = 1f - 0.4f * progress
                 scaleY = scaleX
                 alpha = 1f - progress
-        }) { MainShellNavigation(settings, shell, dark) }
+        }) {
+            ProvideCouiBackdrop(couiBackdrop) { MainShellNavigation(settings, shell, dark, couiBackdrop) }
+        }
         MainBottomSearchLayer(settings, shell)
         // 换页时返回键回到"纯箭头"状态（pageKey / pageEnter 在上面声明）
 

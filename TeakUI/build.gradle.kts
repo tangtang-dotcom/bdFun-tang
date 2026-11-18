@@ -36,6 +36,8 @@ dependencies {
     api(libs.compose.animation)
     api(libs.compose.material3)
     api(project(":third_party:teak-glass"))
+    api(project(":third_party:coui"))
+    api(project(":third_party:coui-icons"))
     api(libs.coui.ui)
     api(libs.coui.preference)
     api(libs.coui.nav)
