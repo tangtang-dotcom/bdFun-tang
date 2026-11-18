@@ -1,6 +1,5 @@
 package com.aritxonly.bdfun
 
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,22 +10,19 @@ import androidx.compose.ui.draw.drawWithContent
 import com.aritxonly.teak.common.coui.TeakCouiBarItem
 import com.aritxonly.teak.common.coui.TeakCouiBottomBar
 import com.itos.coui.backdrop.CouiBackdrop
-import com.itos.coui.effect.CouiFloatingRenderer
 
 /**
  * COUI 风格底栏。
  *
- * 布局、材质、动效全部由 COUI-Kit 的 NavigationBar 提供；这里只负责把 bdFun 的
- * Destination 翻译成库需要的 item（图标换 COUI 图标集）。
+ * 材质由 COUI 的背景采样 + 模糊管线提供（见 TeakCouiBottomBar），这里只负责把
+ * bdFun 的 Destination 翻译成底栏 item（图标换 COUI 图标集）。
  */
-@RequiresApi(34)
 @Composable
 internal fun BoxScope.MainCouiBottomBar(
     destinations: List<Destination>,
     selectedKey: String,
     dark: Boolean,
     backdrop: CouiBackdrop,
-    renderer: CouiFloatingRenderer,
     onSelect: (String) -> Unit,
     onSearch: (() -> Unit)?,
 ) {
@@ -47,7 +43,6 @@ internal fun BoxScope.MainCouiBottomBar(
             selectedKey = selectedKey,
             onSelect = onSelect,
             backdrop = backdrop,
-            renderer = renderer,
             dark = dark,
             onSearch = onSearch,
         )

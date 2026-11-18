@@ -22,18 +22,16 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     onBottomSearch: () -> Unit,
     destinations: List<Destination> = emptyList(),
     couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
-    couiRenderer: com.itos.coui.effect.CouiFloatingRenderer? = null,
 ) {
     val visual = rememberMainBottomNavigationVisual(settings, dark, wideNavigation, searchVisible, tabItems.size)
     val couiOn = TeakUiStyle.current.coui
-    if (couiOn && couiBackdrop != null && couiRenderer != null) {
+    if (couiOn && couiBackdrop != null) {
         // COUI 风格：底栏交给 COUI-Kit 的 NavigationBar（材质 + 融球 + 跟手形变都是库自带的）。
         MainCouiBottomBar(
             destinations = destinations,
             selectedKey = selectedKey,
             dark = dark,
             backdrop = couiBackdrop,
-            renderer = couiRenderer,
             onSelect = { key -> tabItems.firstOrNull { it.key == key }?.let(onBarItem) },
             onSearch = onBottomSearch,
         )

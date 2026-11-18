@@ -40,17 +40,8 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
     val pageFloat = (tabPagerState.currentPage + tabPagerState.currentPageOffsetFraction)
         .coerceAtLeast(0f)
     // COUI 底栏的玻璃采样源：整页内容。
-    // COUI 底栏要现场编译 AGSL 着色器；不支持的 GPU 会抛异常。这里先试建绘制器，
-    // 失败就整块回落到普通底栏（连 backdrop 采样层都不挂），保证不会启动即闪退。
     val couiStyle = TeakStyle.fromStoredValue(settings.interfaceStyle).coui
-    val couiRenderer = if (couiStyle && android.os.Build.VERSION.SDK_INT >= 34) {
-        androidx.compose.runtime.remember {
-            runCatching { com.itos.coui.effect.CouiFloatingRenderer() }.getOrNull()
-        }
-    } else {
-        null
-    }
-    val couiBackdrop = if (couiRenderer != null) rememberCouiBackdrop() else null
+    val couiBackdrop = if (couiStyle) rememberCouiBackdrop() else null
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -103,10 +94,10 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
         MainMineChrome(shell, pageFloat)
         MainFeedChrome(shell, pageFloat)
 
-        if (couiRenderer != null && couiBackdrop != null) {
+        if (couiBackdrop != null) {
             // COUI 风格：底栏按 Src patch 直接合成到窗口，自身不能套 graphicsLayer，
             // 且必须与上面的采样源同级（不能包进采样层里）。
-            MainShellNavigation(settings, shell, dark, couiBackdrop, couiRenderer)
+            MainShellNavigation(settings, shell, dark, couiBackdrop)
         } else {
             Box(Modifier.fillMaxSize().graphicsLayer {
                     val progress = shell.bottom.bottomTabBarProgress.value
