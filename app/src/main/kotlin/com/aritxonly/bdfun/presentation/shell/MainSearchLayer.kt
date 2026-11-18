@@ -22,6 +22,10 @@ internal fun MainSearchLayer(settings: SettingsBindings, shell: MainShellState, 
     val searchBackdrop = shell.backdrops.search
     val searchReveal = input.reveal
     // 搜索页：搜索框保持不动，下面整块换成纯白页（搜索记录 + 热搜 / 结果）
+    // 搜索层是覆盖层不是路由，返回手势必须在它自己组合时注册，否则会直接退出 Activity。
+    androidx.activity.compose.BackHandler(enabled = input.active) {
+        if (input.submitted != null) input.changeSubmitted(null) else input.close()
+    }
     if (input.active || searchReveal > 0.01f) {
         // 搜索页复刻首页结构：内容先录进 searchBackdrop，
         // 顶栏的渐变模糊和筛选菜单都采样同一块。

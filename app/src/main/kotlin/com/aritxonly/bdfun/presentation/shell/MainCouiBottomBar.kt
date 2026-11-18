@@ -44,6 +44,7 @@ import com.itos.coui.navigation.CouiDockItem
 import com.itos.coui.navigation.CouiDockPlusStyle
 import com.itos.coui.navigation.CouiDockStyle
 import com.itos.coui.theme.CouiTheme
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.ui.input.pointer.pointerInput
 
@@ -95,17 +96,6 @@ internal fun BoxScope.MainCouiBottomBar(
         Modifier
             .align(Alignment.BottomCenter)
             .fillMaxWidth()
-            .pointerInput(discAvailable) {
-                if (!discAvailable) return@pointerInput
-                detectVerticalDragGestures(
-                    onDragStart = { dragDistance = 0f },
-                    onVerticalDrag = { _, delta -> dragDistance += delta },
-                    onDragEnd = {
-                        val threshold = 32.dp.toPx()
-                        if (kotlin.math.abs(dragDistance) > threshold) discRevealed = dragDistance > 0f
-                    },
-                )
-            }
             .drawWithContent { runCatching { drawContent() } },
     ) {
         val available = (maxWidth - 36.dp).coerceAtLeast(0.dp)
@@ -126,14 +116,33 @@ internal fun BoxScope.MainCouiBottomBar(
                 )
             }
             // 唱片与搜索钮共用同一个 56dp 槽位：下滑原地切成唱片，上滑切回搜索。
-            if (discVisible) {
-                BackgroundPlayDisc(
-                    settings = settings,
-                    dependencies = AppGraph.discDependencies,
-                    modifier = Modifier.align(Alignment.CenterEnd).size(CouiDockDefaults.plusSize),
-                    size = CouiDockDefaults.plusSize,
-                    onOpenFallback = onOpenVideo,
-                )
+            // 手势必须挂在这个槽位上：CouiDockBar 自己会消费拖拽，挂在外层收不到。
+            Box(
+                Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(CouiDockDefaults.plusSize)
+                    .pointerInput(discAvailable) {
+                        if (!discAvailable) return@pointerInput
+                        detectVerticalDragGestures(
+                            onDragStart = { dragDistance = 0f },
+                            onVerticalDrag = { _, delta -> dragDistance += delta },
+                            onDragEnd = {
+                                val threshold = 32.dp.toPx()
+                                if (kotlin.math.abs(dragDistance) > threshold) discRevealed = dragDistance > 0f
+                            },
+                        )
+                    }
+                    .clickable(enabled = !discVisible && onSearch != null, onClick = { onSearch?.invoke() }),
+            ) {
+                if (discVisible) {
+                    BackgroundPlayDisc(
+                        settings = settings,
+                        dependencies = AppGraph.discDependencies,
+                        modifier = Modifier.fillMaxSize(),
+                        size = CouiDockDefaults.plusSize,
+                        onOpenFallback = onOpenVideo,
+                    )
+                }
             }
             CouiTheme(darkTheme = dark, colorScheme = scheme) {
                 val style = remember(dark, scheme.accent, scheme.onSurfaceVariant, density) {
