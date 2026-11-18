@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -75,7 +74,8 @@ internal fun BoxScope.MainCouiBottomBar(
     val imeCompensation = (WindowInsets.ime.getBottom(density) - systemBottomPx).coerceAtLeast(0)
 
     // 与库内 CouiDockBar 的 plus 面完全相同的收起规则与弹簧。
-    val showSlot = selectedIndex < destinations.lastIndex || visual.discSlot > 0.01f
+    // 设置页（最后一个 tab）永远收起，不管有没有唱片在播。
+    val showSlot = selectedIndex < destinations.lastIndex
     val slotWidth by animateDpAsState(
         targetValue = if (showSlot) CouiDockDefaults.plusSlot else 0.dp,
         animationSpec = CouiDockDefaults.attachmentSpring(),
@@ -155,8 +155,7 @@ internal fun BoxScope.MainCouiBottomBar(
             Box(
                 modifier = Modifier
                     .width(slotWidth)
-                    .height(CouiDockDefaults.barHeight)
-                    .clipToBounds(),
+                    .height(CouiDockDefaults.barHeight),
                 contentAlignment = Alignment.CenterEnd,
             ) {
                 if (slotWidth > 0.5.dp) {
