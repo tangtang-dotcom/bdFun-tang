@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.itos.coui.backdrop.CouiBackdrop
 import com.itos.coui.icons.CouiIcons
+import com.itos.coui.effect.CouiFloatingRenderer
 import com.itos.coui.navigation.CouiNavigationItem
 import com.itos.coui.navigation.NavigationBar
 import com.itos.coui.theme.CouiColorScheme
@@ -36,6 +37,7 @@ fun TeakCouiBottomBar(
     selectedKey: String,
     onSelect: (String) -> Unit,
     backdrop: CouiBackdrop,
+    renderer: CouiFloatingRenderer,
     modifier: Modifier = Modifier,
     dark: Boolean = CouiTheme.isDark,
     onSearch: (() -> Unit)? = null,
@@ -46,6 +48,7 @@ fun TeakCouiBottomBar(
         NavigationBar(
             modifier = modifier,
             backdrop = backdrop,
+            renderer = renderer,
             items = items.map { CouiNavigationItem(it.label, it.icon, it.selectedIcon) },
             selectedIndex = selectedIndex,
             rightIcon = if (onSearch != null) CouiIcons.Outlined.Search else null,
