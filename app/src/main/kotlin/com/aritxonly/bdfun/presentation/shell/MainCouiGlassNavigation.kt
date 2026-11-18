@@ -3,12 +3,10 @@ package com.aritxonly.bdfun
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import com.aritxonly.teak.common.interaction.blockTouches
 import com.aritxonly.teak.common.navigation.TeakFloatingTabItem
 import com.itos.coui.backdrop.CouiBackdrop
@@ -16,8 +14,7 @@ import com.itos.coui.navigation.CouiNavigationItem
 import com.itos.coui.navigation.NavigationBar
 import com.itos.coui.theme.CouiColorScheme
 import com.itos.coui.theme.CouiTheme
-import io.github.suqi8.coui.kmp.icon.COUIIcons
-import io.github.suqi8.coui.kmp.icon.extended.Search
+import com.itos.coui.icons.CouiIcons
 
 /**
  * COUI（ColorOS 凝光）底栏：直接用 COUI-Kit 的 NavigationBar，
@@ -55,18 +52,24 @@ internal fun BoxScope.MainCouiGlassNavigation(
         card = material.surfaceContainer,
     )
     val selectedIndex = destinations.indexOfFirst { it.key == selectedKey }.coerceAtLeast(0)
-    val items = destinations.map { CouiNavigationItem(title = it.label, icon = it.icon, selectedIcon = it.icon) }
+    val items = destinations.map {
+        val icon = when (it.key) {
+            "home" -> CouiIcons.Filled.Grid
+            "dynamics" -> CouiIcons.Filled.Album
+            "mine" -> CouiIcons.Filled.UserCircle
+            else -> it.icon
+        }
+        CouiNavigationItem(title = it.label, icon = icon, selectedIcon = icon)
+    }
     CouiTheme(darkTheme = dark, colorScheme = scheme) {
         NavigationBar(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .graphicsLayer { this.alpha = alpha }
                 .blockTouches(covered),
             backdrop = backdrop,
             items = items,
             selectedIndex = selectedIndex,
-            rightIcon = COUIIcons.Search,
+            rightIcon = CouiIcons.Outlined.Search,
             rightDescription = "搜索",
             rightVisible = true,
             onRightClick = onSearch,

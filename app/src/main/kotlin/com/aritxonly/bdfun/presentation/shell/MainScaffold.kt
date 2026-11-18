@@ -6,6 +6,8 @@ import com.aritxonly.teak.common.chrome.isWideFoldTopBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.runtime.Composable
 import com.aritxonly.bdfun.ui.ScrollTopButton
 import androidx.compose.ui.Modifier
@@ -89,13 +91,25 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
         MainMineChrome(shell, pageFloat)
         MainFeedChrome(shell, pageFloat)
 
-        Box(Modifier.fillMaxSize().graphicsLayer {
+        // COUI 底栏的材质是直接混合到窗口目标的（Src patch），祖先节点一旦带 graphicsLayer
+        // 就会被离屏合成，材质采样不到页面内容而画成黑块。所以 COUI 风格只用 offset 位移，
+        // 不用 alpha/scale 的离屏动画。
+        val couiBar = couiGlassNavigationSupported()
+        val barModifier = if (couiBar) {
+            Modifier.fillMaxSize().offset {
+                val progress = shell.bottom.bottomTabBarProgress.value
+                IntOffset(0, (96.dp.toPx() * progress).toInt())
+            }
+        } else {
+            Modifier.fillMaxSize().graphicsLayer {
                 val progress = shell.bottom.bottomTabBarProgress.value
                 translationY = 96.dp.toPx() * progress
                 scaleX = 1f - 0.4f * progress
                 scaleY = scaleX
                 alpha = 1f - progress
-        }) {
+            }
+        }
+        Box(barModifier) {
             ProvideCouiBackdrop(couiBackdrop) { MainShellNavigation(settings, shell, dark, couiBackdrop) }
         }
         MainBottomSearchLayer(settings, shell)
