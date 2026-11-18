@@ -33,7 +33,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
             dark = dark,
             backdrop = couiBackdrop,
             onSelect = { key -> tabItems.firstOrNull { it.key == key }?.let(onBarItem) },
-            onSearch = onBottomSearch,
+            onSearch = if (searchVisible) onBottomSearch else null,
         )
         return
     }
