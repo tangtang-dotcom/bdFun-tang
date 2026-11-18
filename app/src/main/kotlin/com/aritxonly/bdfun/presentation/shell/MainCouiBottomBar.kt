@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +31,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import kotlin.math.roundToInt
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.aritxonly.bdfun.ui.BackgroundPlayDisc
 import com.aritxonly.bdfun.presentation.shell.transition.LiveTransitionSourceView
 import com.aritxonly.bdfun.presentation.shell.transition.findHostActivity
 import com.aritxonly.teak.common.coui.teakCouiColorScheme
@@ -39,6 +44,8 @@ import com.itos.coui.navigation.CouiDockItem
 import com.itos.coui.navigation.CouiDockPlusStyle
 import com.itos.coui.navigation.CouiDockStyle
 import com.itos.coui.theme.CouiTheme
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.ui.input.pointer.pointerInput
 
 /**
  * COUI 风格底栏：完全照 SleepDown 的 CouiHomeDockChrome 写法。
@@ -56,6 +63,9 @@ internal fun BoxScope.MainCouiBottomBar(
     backdrop: CouiBackdrop,
     onSelect: (String) -> Unit,
     onSearch: (() -> Unit)?,
+    settings: com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings,
+    discAvailable: Boolean,
+    onOpenVideo: (com.aritxonly.bdfun.core.model.video.VideoItem) -> Unit,
 ) {
     if (destinations.isEmpty()) return
     val renderer = remember { runCatching { CouiFloatingRenderer.pair() }.getOrNull() } ?: return
@@ -74,13 +84,28 @@ internal fun BoxScope.MainCouiBottomBar(
         activity?.let { LiveTransitionSourceView(it, liveLayer, density, layoutDirection, plusRadiusPx) }
     }
     val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    // 搜索钮与正在播放的唱片共用右下角这一个 56dp 槽位：在这颗按钮上竖划切换。
+    var dragDistance by remember { mutableStateOf(0f) }
+    var discRevealed by remember { mutableStateOf(false) }
+    val discVisible = discAvailable && discRevealed
     // SleepDown 的 CouiHomeDockChrome：plusVisible = selectedIndex < 2（最后一个 tab 收起）。
-    val plusVisible = onSearch != null && selectedIndex < destinations.lastIndex
+    val plusVisible = onSearch != null && selectedIndex < destinations.lastIndex && !discVisible && !discVisible
 
     BoxWithConstraints(
         Modifier
             .align(Alignment.BottomCenter)
             .fillMaxWidth()
+            .pointerInput(discAvailable) {
+                if (!discAvailable) return@pointerInput
+                detectVerticalDragGestures(
+                    onDragStart = { dragDistance = 0f },
+                    onVerticalDrag = { _, delta -> dragDistance += delta },
+                    onDragEnd = {
+                        val threshold = 32.dp.toPx()
+                        if (kotlin.math.abs(dragDistance) > threshold) discRevealed = dragDistance > 0f
+                    },
+                )
+            }
             .drawWithContent { runCatching { drawContent() } },
     ) {
         val available = (maxWidth - 36.dp).coerceAtLeast(0.dp)
@@ -98,6 +123,16 @@ internal fun BoxScope.MainCouiBottomBar(
                     factory = { plusView },
                     modifier = Modifier.align(Alignment.CenterEnd).size(CouiDockDefaults.plusSize),
                     update = { it.updatePresentation(density, layoutDirection, render = plusVisible) },
+                )
+            }
+            // 唱片与搜索钮共用同一个 56dp 槽位：下滑原地切成唱片，上滑切回搜索。
+            if (discVisible) {
+                BackgroundPlayDisc(
+                    settings = settings,
+                    dependencies = AppGraph.discDependencies,
+                    modifier = Modifier.align(Alignment.CenterEnd).size(CouiDockDefaults.plusSize),
+                    size = CouiDockDefaults.plusSize,
+                    onOpenFallback = onOpenVideo,
                 )
             }
             CouiTheme(darkTheme = dark, colorScheme = scheme) {

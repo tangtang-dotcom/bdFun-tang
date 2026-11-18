@@ -67,6 +67,8 @@ internal fun libraryModeContent(
 @Composable
 internal fun LibrarySearchOverlay(runtime: LibraryRuntime, data: LibraryUiState, ui: LibraryInteractionState) {
     val interaction = runtime.interaction
+    // 搜索是覆盖层不是独立页面，系统返回手势要先关搜索，否则会直接退回桌面。
+    androidx.activity.compose.BackHandler { interaction.closeSearch() }
     val results = when(runtime.currentMode) {
         0 -> interaction.visibleVideos(data.favorites.videos)
         1 -> interaction.visibleEntries(data.history.entries).map { it.toVideoItem() }
