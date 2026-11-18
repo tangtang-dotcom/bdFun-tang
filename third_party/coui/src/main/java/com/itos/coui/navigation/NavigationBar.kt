@@ -134,6 +134,8 @@ fun NavigationBar(
     selectedColor: Color = (if (dark) Color.White else Color.Black).copy(alpha = 230f / 255f),
     unselectedColor: Color = (if (dark) Color.White else Color.Black).copy(alpha = 184f / 255f),
     onSelection: (Int) -> Unit,
+    // 宿主补丁：为 true 时材质用 SrcOver 只叠前景，避免 Src 把矩形区域擦成透明（非校准机型上会露出黑底）。
+    foregroundComposition: Boolean = true,
 ) {
     require(items.isNotEmpty() && selectedIndex in items.indices)
     require(!leftVisible || (leftIcon != null && leftDescription != null)) {
@@ -252,7 +254,8 @@ fun NavigationBar(
             Row(
                 modifier = Modifier.fillMaxWidth().height(56.dp)
                     .onGloballyPositioned { rowCoordinates = it }
-                    .couiFloatingSurfaces(backdrop, renderer, materials, shadows, shapes, contentLayers, contour) {
+                    .couiFloatingSurfaces(backdrop, renderer, materials, shadows, shapes, contentLayers, contour,
+                    foregroundComposition = foregroundComposition) {
                         val left = leftSurface()
                         val menu = menuSurface()
                         val right = rightSurface()

@@ -159,12 +159,15 @@ fun Modifier.couiFloatingSurfaces(
     shapes: List<Shape>,
     contentLayers: List<GraphicsLayer>,
     contourGlowEnabled: Boolean,
+    // 宿主补丁：透传前景合成开关，供非校准机型避免 Src 擦出透明黑底。
+    foregroundComposition: Boolean = false,
     surfaces: () -> List<CouiFloatingSurface>,
 ): Modifier {
     require(renderer.surfaceCount == 3)
     require(materials.size == 3 && shadows.size == 3 && shapes.size == 3 && contentLayers.size == 3)
     require(materials.map { it.index }.sorted() == listOf(1, 2, 2))
-    return floatingSurfaces(backdrop, renderer, materials, shadows, shapes, contentLayers, contourGlowEnabled, surfaces = surfaces)
+    return floatingSurfaces(backdrop, renderer, materials, shadows, shapes, contentLayers, contourGlowEnabled,
+        foregroundComposition = foregroundComposition, surfaces = surfaces)
 }
 
 /** 双主体的采样、融球和光效；顺序与 material.index 必须分别为 1、2。 */
