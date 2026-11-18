@@ -48,3 +48,12 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.androidx.activity.compose)
 }
+
+// release 打包时 TeakUI 自己的 kotlin_module 会与合并结果重复，显式排除。
+android {
+    packaging {
+        resources {
+            excludes += "META-INF/TeakUI.kotlin_module"
+        }
+    }
+}
