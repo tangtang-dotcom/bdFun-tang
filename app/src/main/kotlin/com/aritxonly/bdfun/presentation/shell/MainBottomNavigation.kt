@@ -33,9 +33,6 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
             backdrop = couiBackdrop,
             onSelect = { key -> tabItems.firstOrNull { it.key == key }?.let(onBarItem) },
             onSearch = onBottomSearch,
-            settings = settings,
-            discAvailable = visual.discSlot > 0.01f,
-            onOpenVideo = onOpenVideo,
         )
         return
     }
