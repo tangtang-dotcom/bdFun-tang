@@ -165,19 +165,18 @@ fun TeakGlassIconButton(
     neutralTintProgress: Float = 0f,
     content: @Composable () -> Unit,
 ) {
-    // COUI 风格：圆形图标钮走库的三主体浮动材质（与底栏同一套合成）；无采样源时退回 token 实面。
-    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
-        val surfaceBackdrop = LocalTeakCouiToolbarBackdrop.current
-        if (surfaceBackdrop != null && Build.VERSION.SDK_INT >= 31) {
-            Box(
-                modifier = modifier.size(size).teakCouiMaterialSurface(
-                    surfaceBackdrop,
-                    androidx.compose.foundation.shape.CircleShape,
-                    capsule = false,
-                ),
-                contentAlignment = Alignment.Center,
-            ) { content() }
-        }
+    // COUI 风格：顶栏内的图标按钮直接交给库的 TopAppBarButton——
+    // 材质、阴影、聚光、跟手形变、按压反馈全部由库组件自己实现，这里不猜任何参数。
+    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui &&
+        LocalTeakCouiToolbarBackdrop.current != null && Build.VERSION.SDK_INT >= 34
+    ) {
+        com.itos.coui.topappbar.TopAppBarButton(
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enabled,
+            style = com.itos.coui.topappbar.CouiTopAppBarButtonDefaults.style(),
+        ) { content() }
+        return
     }
 
     // 经典样式：顶栏按钮只保留图标，不再画圆底。

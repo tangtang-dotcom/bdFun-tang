@@ -1,5 +1,6 @@
 package com.aritxonly.teak.common.settings
 
+import com.itos.coui.menu.couiMenuAnchor
 import com.aritxonly.teak.common.theme.TeakUiStyle
 
 import androidx.compose.foundation.background
@@ -276,6 +277,43 @@ fun TeakSettingsDropdownRow(
             showValue = true,
             renderInRootScaffold = true,
             onSelectedIndexChange = onSelected,
+        )
+        return
+    }
+    // COUI 风格：下拉菜单完全交给库的 Menu（材质、阴影、聚光、进出场动效均由库实现），
+    // 触发行继续用宿主设置页的 BasicComponent，只负责打开菜单。
+    if (TeakUiStyle.isCoui) {
+        var expanded by remember { mutableStateOf(false) }
+        val anchor = com.itos.coui.menu.rememberCouiMenuAnchor()
+        Box(modifier = modifier.then(Modifier.couiMenuAnchor(anchor)).clickable { expanded = true }) {
+            top.yukonga.miuix.kmp.basic.BasicComponent(
+                title = title,
+                summary = description.takeIf { it.isNotBlank() },
+                endActions = {
+                    top.yukonga.miuix.kmp.basic.Text(
+                        text = closedValue ?: options.getOrElse(selected.coerceIn(0, options.lastIndex)) { "" },
+                        color = MiuixTheme.colorScheme.onSurfaceVariantActions,
+                        fontSize = 14.sp,
+                    )
+                },
+            )
+        }
+        com.itos.coui.menu.Menu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            items = options.mapIndexed { index, option ->
+                com.itos.coui.menu.CouiMenuItem(
+                    value = index,
+                    text = option,
+                    selected = index == selected,
+                    checked = if (index == selected) true else null,
+                )
+            },
+            onItemClick = { item ->
+                expanded = false
+                onSelected(item.value)
+            },
+            anchor = anchor,
         )
         return
     }

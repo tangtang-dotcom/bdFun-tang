@@ -74,7 +74,7 @@ fun TeakCouiAlertDialog(
                     }
                     .background(
                         color = MaterialTheme.colorScheme.surfaceContainer,
-                        shape = RoundedCornerShape(32.dp),
+                        shape = com.itos.coui.dialog.CouiDialogDefaults.shape,
                     )
                     .padding(horizontal = 22.dp, vertical = 22.dp),
             ) {

@@ -3,6 +3,7 @@ package com.aritxonly.bdfun.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -43,6 +44,26 @@ internal fun androidx.compose.foundation.layout.RowScope.HomeSearchSurface(searc
             contentAlignment = Alignment.CenterStart,
         ) {
             HomeSearchContents(search, actions, material)
+        }
+        return
+    }
+    // COUI 风格：搜索胶囊直接用库的 TopAppBarButton（text + search 配方），材质与动效不再自绘。
+    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui &&
+        android.os.Build.VERSION.SDK_INT >= 34 &&
+        com.aritxonly.teak.common.coui.LocalTeakCouiToolbarBackdrop.current != null
+    ) {
+        com.aritxonly.teak.common.coui.TeakCouiSearchCapsule(
+            onClick = onSearch,
+            modifier = Modifier
+                .then(if (wide) Modifier.width(searchWidth) else Modifier.weight(1f))
+                .height(40.dp),
+        ) {
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                HomeSearchContents(search, actions, material)
+            }
         }
         return
     }

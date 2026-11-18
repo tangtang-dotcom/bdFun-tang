@@ -117,7 +117,14 @@ fun TeakTheme(
         MiuixTheme(controller = controller) {
             MaterialTheme(colorScheme = materialColors) {
                 CompositionLocalProvider(LocalTeakMaterialSpec provides materialSpec) {
-                    com.aritxonly.teak.common.modal.TeakModalHost { content() }
+                    // COUI 风格下整套组件树都要在库主题作用域内，否则库组件会退回自带官方蓝。
+                    if (TeakUiStyle.isCoui) {
+                        com.aritxonly.teak.common.coui.TeakCouiTheme(dark) {
+                            com.aritxonly.teak.common.modal.TeakModalHost { content() }
+                        }
+                    } else {
+                        com.aritxonly.teak.common.modal.TeakModalHost { content() }
+                    }
                 }
             }
         }

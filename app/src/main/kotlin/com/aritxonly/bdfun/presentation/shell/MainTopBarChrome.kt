@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import com.aritxonly.teak.common.chrome.LocalTopBarScrollProgress
+import com.aritxonly.teak.common.coui.LocalTeakCouiToolbarBackdrop
 import com.aritxonly.teak.common.chrome.ProgressiveTopBarMaterial
 import com.aritxonly.teak.common.chrome.TeakPageScrollState
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
@@ -67,24 +68,42 @@ internal fun BoxScope.MainTopBarChrome(
         },
     ) {
         val chromeAlpha = pageAlpha * (1f - bottom.bottomTopBarAlpha.value) * searchFade
+        val chromeModifier = Modifier
+            .align(Alignment.TopCenter)
+            .graphicsLayer { alpha = chromeAlpha }
+        val chromeContent: @Composable () -> Unit = {
+            Box(
+                modifier = Modifier.graphicsLayer {
+                    val searchScale = 1f - 0.1f * bottom.bottomSearchProgress.value
+                    scaleX = searchScale
+                    scaleY = searchScale
+                    translationX = -(pageFloat - pageIndex) * size.width * 0.92f
+                },
+            ) {
+                content()
+            }
+        }
 
+        if (couiBackdrop != null) {
+            // COUI 风格：顶栏材质交给库的 TopAppBarSurface（渐进模糊 + 渐变遮罩），
+            // 同时把采样源提供给栏内的库按钮（TopAppBarButton 会读它）。
+            TopAppBarSurface(
+                modifier = chromeModifier,
+                backdrop = couiBackdrop,
+                dark = CouiTheme.isDark,
+            ) {
+                CompositionLocalProvider(LocalTeakCouiToolbarBackdrop provides couiBackdrop) {
+                    chromeContent()
+                }
+            }
+        } else {
             ProgressiveTopBarMaterial(
                 underlayLiftPx = liftPx,
                 underlayBlurPx = underlayBlurPx,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .graphicsLayer { alpha = chromeAlpha },
+                modifier = chromeModifier,
             ) {
-                Box(
-                    modifier = Modifier.graphicsLayer {
-                        val searchScale = 1f - 0.1f * bottom.bottomSearchProgress.value
-                        scaleX = searchScale
-                        scaleY = searchScale
-                        translationX = -(pageFloat - pageIndex) * size.width * 0.92f
-                    },
-                ) {
-                    content()
-                }
+                chromeContent()
             }
+        }
     }
 }

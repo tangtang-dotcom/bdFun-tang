@@ -60,14 +60,7 @@ fun TeakCouiBottomBar(
             rightDescription = if (onSearch != null) "搜索" else null,
             rightVisible = onSearch != null,
             onRightClick = onSearch,
-            rightContainerColor = teakCouiColorScheme().accent,
-            // 宿主色板：选中用强调色、未选中用次要前景，避免默认黑白在浅底上差 18% 看不出来。
-            selectedColor = teakCouiColorScheme().accent,
-            unselectedColor = teakCouiColorScheme().onSurfaceVariant.copy(alpha = 0.75f),
             dark = dark,
-            lightColor = Color.White,
-            circleShape = CouiShape(999.dp, cornerWeight = 2f),
-            capsuleShape = CouiCapsuleShape,
             onSelection = { index -> items.getOrNull(index)?.let { onSelect(it.key) } },
         )
     }
