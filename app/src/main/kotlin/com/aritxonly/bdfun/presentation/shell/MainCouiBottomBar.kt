@@ -1,45 +1,37 @@
 package com.aritxonly.bdfun
 
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.ClipOp
-import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.graphics.rememberGraphicsLayer
-import androidx.compose.ui.layout.boundsInRoot
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.aritxonly.bdfun.core.model.video.VideoItem
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
-import com.aritxonly.bdfun.presentation.shell.transition.LiveTransitionSourceView
-import com.aritxonly.bdfun.presentation.shell.transition.findHostActivity
-import com.aritxonly.bdfun.ui.BackgroundPlayDisc
 import com.aritxonly.teak.common.coui.teakCouiColorScheme
 import com.itos.coui.backdrop.CouiBackdrop
 import com.itos.coui.effect.CouiFloatingRenderer
 import com.itos.coui.effect.LocalCouiContourGlowEnabled
 import com.itos.coui.floatingactionbutton.CouiFabDefaults
+import com.itos.coui.floatingactionbutton.Fab
 import com.itos.coui.icons.CouiIcons
 import com.itos.coui.navigation.CouiDockBar
 import com.itos.coui.navigation.CouiDockDefaults
@@ -47,18 +39,13 @@ import com.itos.coui.navigation.CouiDockItem
 import com.itos.coui.navigation.CouiDockPlusStyle
 import com.itos.coui.navigation.CouiDockStyle
 import com.itos.coui.theme.CouiTheme
-import kotlin.math.roundToInt
 
 /**
- * COUI 风格底栏：与 SleepDown-Schedule 的 CouiHomeDockChrome 逐项对齐。
+ * COUI 风格底栏：菜单胶囊 = CouiDockBar（库原生材质/描边/阴影/跟手形变），
+ * 右侧 56dp 槽位 = 上游 MainDockStack（搜索↔唱片两张卡，下滑切换、后台播放自动翻面）。
  *
- * 对齐点（全部照抄原实现，不做「近似」）：
- *  - CouiDockStyle.reference：sampleBrightness / lightFollowLightIntensity 2f / darkFollowLightIntensity 0.3f / spotLightColor
- *  - CouiDockPlusStyle：lightFollowLightIntensity 1.2f / darkFollowLightIntensity 0.5f + CouiFabDefaults.translucentMaterial
- *  - WindowInsets.navigationBarsIgnoringVisibility + WindowInsets.ime 补偿
- *  - LiveTransitionSourceView + AndroidView + liveLayer 裁剪（plus 用真实 View 呈现）
- *  - plusInputModifier = onGloballyPositioned + 按压态
- * 额外：播放时唱片占同一个 56dp 槽位（由 plusVisible 让位，BackgroundPlayDisc 淡入）。
+ * 槽位收起：完全复刻 CouiDockBar 内部 plus 的动画参数 —— 宽度 68dp→0、alpha 1→0、scale 1→0.5，
+ * 全部走 CouiDockDefaults.attachmentSpring()，因此和库自带 plus 面的收起手感一致。
  */
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi(34)
@@ -71,7 +58,7 @@ internal fun BoxScope.MainCouiBottomBar(
     dark: Boolean,
     backdrop: CouiBackdrop,
     onSelect: (String) -> Unit,
-    onSearch: (() -> Unit)?,
+    onBottomSearch: () -> Unit,
     onOpenVideo: (VideoItem) -> Unit,
 ) {
     if (destinations.isEmpty()) return
@@ -83,53 +70,27 @@ internal fun BoxScope.MainCouiBottomBar(
     val scheme = teakCouiColorScheme()
     val density = LocalDensity.current
     val contour = LocalCouiContourGlowEnabled.current
-    val selectedColor = scheme.accent
-    val unselectedColor = scheme.onSurfaceVariant.copy(alpha = 184f / 255f)
-    val sampleBrightness = 0.5f
-    val dockStyle = remember(dark, selectedColor, unselectedColor, sampleBrightness, contour, density.density) {
-        CouiDockStyle.reference(
-            dark = dark,
-            selectedColor = selectedColor,
-            unselectedColor = unselectedColor,
-            density = density.density,
-            sampleBrightness = sampleBrightness,
-            contourGlowEnabled = contour,
-            lightFollowLightIntensity = 2f,
-            darkFollowLightIntensity = 0.3f,
-            spotLightColor = selectedColor,
-        )
-    }
-    val plusStyle = remember(dark, selectedColor, density, contour) {
-        CouiDockPlusStyle.reference(
-            accent = selectedColor,
-            dark = dark,
-            density = density.density,
-            contourGlowEnabled = contour,
-            icon = CouiIcons.Search,
-            iconDescription = "搜索",
-            lightFollowLightIntensity = 1.2f,
-            darkFollowLightIntensity = 0.5f,
-        ).let { base ->
-            base.copy(
-                material = CouiFabDefaults.translucentMaterial(
-                    selectedColor, dark, base.material.extension,
-                ),
-            )
-        }
-    }
-    // SleepDown：plusVisible = selectedIndex < 2（最后一个 tab 收起）；COUI 里再让位给唱片。
-    val discActive = visual.discSlot > 0.01f
-    val plusVisible = onSearch != null && selectedIndex < destinations.lastIndex && !discActive
-    val plusEnabled = plusVisible
     val systemBottomPx = WindowInsets.navigationBarsIgnoringVisibility.getBottom(density)
     val bottomInset = with(density) { systemBottomPx.toDp() }
     val imeCompensation = (WindowInsets.ime.getBottom(density) - systemBottomPx).coerceAtLeast(0)
-    val activity = LocalContext.current.findHostActivity()
-    val layoutDirection = LocalLayoutDirection.current
-    val liveLayer = rememberGraphicsLayer()
-    val plusView = remember(activity, liveLayer, density, layoutDirection) {
-        activity?.let { LiveTransitionSourceView(it, liveLayer, density, layoutDirection) }
-    }
+
+    // 与库内 CouiDockBar 的 plus 面完全相同的收起规则与弹簧。
+    val showSlot = selectedIndex < destinations.lastIndex || visual.discSlot > 0.01f
+    val slotWidth by animateDpAsState(
+        targetValue = if (showSlot) CouiDockDefaults.plusSlot else 0.dp,
+        animationSpec = CouiDockDefaults.attachmentSpring(),
+        label = "CouiDockStackSlot",
+    )
+    val slotAlpha by animateFloatAsState(
+        targetValue = if (showSlot) 1f else 0f,
+        animationSpec = CouiDockDefaults.attachmentSpring(),
+        label = "CouiDockStackAlpha",
+    )
+    val slotScale by animateFloatAsState(
+        targetValue = if (showSlot) 1f else 0.5f,
+        animationSpec = CouiDockDefaults.attachmentSpring(),
+        label = "CouiDockStackScale",
+    )
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val available = (maxWidth - 36.dp).coerceAtLeast(0.dp)
@@ -137,71 +98,104 @@ internal fun BoxScope.MainCouiBottomBar(
             CouiDockDefaults.menuWidth,
             (available - CouiDockDefaults.plusSlot).coerceAtLeast(120.dp),
         )
-        Box(
-            Modifier
+        Row(
+            modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = bottomInset + 8.dp)
                 .graphicsLayer { translationY = imeCompensation.toFloat() },
+            verticalAlignment = Alignment.Bottom,
         ) {
-            if (plusView != null && (plusVisible || discActive)) {
-                AndroidView(
-                    factory = { plusView },
-                    modifier = Modifier.align(Alignment.CenterEnd).size(CouiDockDefaults.plusSize),
-                    update = { it.updatePresentation(density, layoutDirection, render = plusVisible) },
-                )
-            }
             CouiTheme(darkTheme = dark, colorScheme = scheme) {
+                val style = remember(dark, scheme.accent, scheme.onSurfaceVariant, contour, density.density) {
+                    CouiDockStyle.reference(
+                        dark = dark,
+                        selectedColor = scheme.accent,
+                        unselectedColor = scheme.onSurfaceVariant.copy(alpha = 184f / 255f),
+                        density = density.density,
+                        sampleBrightness = 0.5f,
+                        contourGlowEnabled = contour,
+                        lightFollowLightIntensity = 2f,
+                        darkFollowLightIntensity = 0.3f,
+                        spotLightColor = scheme.accent,
+                    )
+                }
+                val plusStyle = remember(dark, scheme.accent, contour, density.density) {
+                    CouiDockPlusStyle.reference(
+                        accent = scheme.accent,
+                        dark = dark,
+                        density = density.density,
+                        contourGlowEnabled = contour,
+                        icon = CouiIcons.Search,
+                        iconDescription = "搜索",
+                        lightFollowLightIntensity = 1.2f,
+                        darkFollowLightIntensity = 0.5f,
+                    ).let { base ->
+                        base.copy(
+                            material = CouiFabDefaults.translucentMaterial(
+                                scheme.accent, dark, base.material.extension,
+                            ),
+                        )
+                    }
+                }
                 CouiDockBar(
-                    modifier = Modifier.drawWithContent {
-                        val button = plusView?.takeIf { plusVisible && it.isAttachedToWindow && it.width > 0 }
-                        if (button == null) {
-                            drawContent()
-                        } else {
-                            val width = button.width.toFloat()
-                            val left = if (layoutDirection == LayoutDirection.Ltr) size.width - width else 0f
-                            liveLayer.record(
-                                density,
-                                layoutDirection,
-                                IntSize(size.width.roundToInt(), size.height.roundToInt()),
-                            ) {
-                                this@drawWithContent.drawContent()
-                            }
-                            button.updateCrop(left)
-                            clipRect(left, 0f, left + width, size.height, ClipOp.Difference) {
-                                drawLayer(liveLayer)
-                            }
-                        }
-                    },
+                    modifier = Modifier.width(dockWidth),
                     backdrop = backdrop,
                     renderer = renderer,
                     items = items,
                     selectedIndex = selectedIndex.coerceIn(0, destinations.lastIndex),
-                    style = dockStyle,
+                    style = style,
                     plusStyle = plusStyle,
-                    plusVisible = plusVisible,
-                    plusEnabled = plusEnabled,
+                    plusVisible = false,
+                    plusEnabled = false,
                     menuWidth = dockWidth,
-                    showPlusSurface = { plusView?.showsOverflow != false },
                     onSelection = { index -> destinations.getOrNull(index)?.let { onSelect(it.key) } },
-                    plusInputModifier = Modifier.onGloballyPositioned { },
-                    onPlusClick = { onSearch?.invoke() },
+                    onPlusClick = {},
                 )
             }
-            // 唱片占同一个槽位：plus 面由库收起后，同一位置淡入。
-            if (discActive) {
-                BackgroundPlayDisc(
-                    settings = settings,
-                    dependencies = AppGraph.discDependencies,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .size(CouiDockDefaults.plusSize)
-                        .graphicsLayer { alpha = visual.discSlot },
-                    size = CouiDockDefaults.plusSize,
-                    outerSize = CouiDockDefaults.plusSize,
-                    breathEnabled = false,
-                    shadowEnabled = false,
-                    onOpenFallback = onOpenVideo,
-                )
+            Box(
+                modifier = Modifier
+                    .width(slotWidth)
+                    .height(CouiDockDefaults.barHeight)
+                    .clipToBounds(),
+                contentAlignment = Alignment.CenterEnd,
+            ) {
+                if (slotWidth > 0.5.dp) {
+                    Box(
+                        modifier = Modifier
+                            .width(CouiDockDefaults.plusSize)
+                            .height(CouiDockDefaults.plusSize)
+                            .graphicsLayer {
+                                alpha = slotAlpha
+                                scaleX = slotScale
+                                scaleY = slotScale
+                            },
+                    ) {
+                        MainDockStack(
+                            settings = settings,
+                            visual = visual,
+                            onSearch = onBottomSearch,
+                            onOpenVideo = onOpenVideo,
+                            slotSize = CouiDockDefaults.plusSize,
+                            searchContent = {
+                                CouiTheme(darkTheme = dark, colorScheme = scheme) {
+                                    Fab(
+                                        modifier = Modifier.fillMaxSize(),
+                                        backdrop = backdrop,
+                                        onClick = onBottomSearch,
+                                        dark = dark,
+                                        contentLabel = "搜索",
+                                    ) {
+                                        androidx.compose.material3.Icon(
+                                            imageVector = CouiIcons.Search,
+                                            contentDescription = "搜索",
+                                            tint = scheme.onAccent,
+                                        )
+                                    }
+                                }
+                            },
+                        )
+                    }
+                }
             }
         }
     }
