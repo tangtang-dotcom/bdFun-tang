@@ -1,5 +1,7 @@
 package com.aritxonly.teak.common.material
 
+import android.os.Build
+
 import com.aritxonly.teak.common.material.miuixControlFeedback
 import com.aritxonly.teak.common.theme.LocalTeakControlEmphasis
 import com.aritxonly.teak.common.theme.LocalTeakContentColors
@@ -17,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.aritxonly.teak.common.coui.LocalTeakCouiToolbarBackdrop
 import com.aritxonly.teak.common.coui.teakCouiControlSurface
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -66,13 +69,20 @@ fun TeakGlassSurface(
     content: @Composable BoxScope.() -> Unit,
 ) {
     val advancedMaterial = LocalTeakMaterialSpec.current
-    // COUI 风格：胶囊/按钮表面换用 COUI 材质 token 画的实面（内容永远在材质之上）。
+    // COUI 风格：胶囊/按钮表面走库的三主体浮动材质（与底栏同一套合成）；没有采样源时退回 token 实面。
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
-        Box(
-            modifier = modifier.teakCouiControlSurface(shape),
-            contentAlignment = contentAlignment,
-        ) {
-            content()
+        val surfaceBackdrop = LocalTeakCouiToolbarBackdrop.current
+        if (surfaceBackdrop != null && Build.VERSION.SDK_INT >= 34) {
+            com.aritxonly.teak.common.coui.TeakCouiFloatingSurface(
+                backdrop = surfaceBackdrop,
+                modifier = modifier,
+                capsule = true,
+                contentAlignment = contentAlignment,
+            ) { content() }
+        } else {
+            Box(modifier = modifier.teakCouiControlSurface(shape), contentAlignment = contentAlignment) {
+                content()
+            }
         }
         return
     }
@@ -161,12 +171,22 @@ fun TeakGlassIconButton(
     neutralTintProgress: Float = 0f,
     content: @Composable () -> Unit,
 ) {
-    // COUI 风格：圆形图标钮用 COUI 材质实面，图标画在最上层。
+    // COUI 风格：圆形图标钮走库的三主体浮动材质（与底栏同一套合成）；无采样源时退回 token 实面。
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
-        Box(
-            modifier = modifier.size(size).teakCouiControlSurface(androidx.compose.foundation.shape.CircleShape),
-            contentAlignment = Alignment.Center,
-        ) { content() }
+        val surfaceBackdrop = LocalTeakCouiToolbarBackdrop.current
+        if (surfaceBackdrop != null && Build.VERSION.SDK_INT >= 34) {
+            com.aritxonly.teak.common.coui.TeakCouiFloatingSurface(
+                backdrop = surfaceBackdrop,
+                modifier = modifier.size(size),
+                capsule = false,
+                contentAlignment = Alignment.Center,
+            ) { content() }
+        } else {
+            Box(
+                modifier = modifier.size(size).teakCouiControlSurface(androidx.compose.foundation.shape.CircleShape),
+                contentAlignment = Alignment.Center,
+            ) { content() }
+        }
         return
     }
 

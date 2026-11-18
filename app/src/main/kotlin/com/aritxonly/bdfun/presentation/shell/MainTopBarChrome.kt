@@ -77,15 +77,20 @@ internal fun BoxScope.MainTopBarChrome(
                 backdrop = couiBackdrop,
                 dark = CouiTheme.isDark,
             ) {
-                Box(
-                    modifier = Modifier.graphicsLayer {
-                        val searchScale = 1f - 0.1f * bottom.bottomSearchProgress.value
-                        scaleX = searchScale
-                        scaleY = searchScale
-                        translationX = -(pageFloat - pageIndex) * size.width * 0.92f
-                    },
+                // 顶栏内的胶囊/按钮从同一个 backdrop 采样（库的三主体浮动材质管线）。
+                CompositionLocalProvider(
+                    com.aritxonly.teak.common.coui.LocalTeakCouiToolbarBackdrop provides couiBackdrop,
                 ) {
-                    content()
+                    Box(
+                        modifier = Modifier.graphicsLayer {
+                            val searchScale = 1f - 0.1f * bottom.bottomSearchProgress.value
+                            scaleX = searchScale
+                            scaleY = searchScale
+                            translationX = -(pageFloat - pageIndex) * size.width * 0.92f
+                        },
+                    ) {
+                        content()
+                    }
                 }
             }
         } else {
