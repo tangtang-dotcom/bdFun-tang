@@ -24,5 +24,7 @@ object TeakFloatingTabBarDefaults {
     val DetachedSpacing @Composable get() = if (isWideFoldTopBar()) 12.dp else 8.dp
     val DockHorizontalPadding = 8.dp
     val ContainerShape = Capsule()
+    /** COUI 悬浮工具条圆角（FloatingToolbarDefaults.CornerRadius）。 */
+    val CouiCornerRadius = 24.dp
     val IndicatorShape = Capsule()
 }

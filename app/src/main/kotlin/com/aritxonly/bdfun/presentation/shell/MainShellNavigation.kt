@@ -62,7 +62,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(set
         }
     }
     MainBottomNavigation(
-        settings, dark, wideNavigation, ui.showSearch, destinations, tabItems, destinations[selected].key,
+        settings, dark, wideNavigation, ui.showSearch, tabItems, destinations[selected].key,
         onBarItem = onBarItem,
         onSearch = {
             if (TeakStyle.fromStoredValue(settings.interfaceStyle).layout.hasBottomSearch) shell.bottom.open() else {

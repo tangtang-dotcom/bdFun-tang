@@ -3,6 +3,8 @@ package com.aritxonly.teak.common.navigation
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -157,10 +159,7 @@ internal class FloatingTabMotionState(
     private suspend fun animateTo(index: Int) {
         position.animateTo(
             targetValue = index.toFloat(),
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioLowBouncy,
-                stiffness = Spring.StiffnessMediumLow,
-            ),
+            animationSpec = tween(durationMillis = 280, easing = CouiTabEase),
         )
     }
 
@@ -174,3 +173,6 @@ internal class FloatingTabMotionState(
         }
     }
 }
+
+/** COUI 底栏滑动曲线：cubic-bezier(0.3, 0, 0.1, 1)、280ms。 */
+private val CouiTabEase = CubicBezierEasing(0.3f, 0f, 0.1f, 1f)

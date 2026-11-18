@@ -49,6 +49,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.shadow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import io.github.suqi8.coui.kmp.squircle.squircleBackground
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
@@ -188,21 +191,17 @@ fun TeakFloatingTabBar(
             modifier = Modifier
                 .fillMaxSize()
                 .offset { IntOffset(panelOffsetPx.roundToInt(), 0) }
-                .teakFloatingNavigationShadow(
-                    shape = TeakFloatingTabBarDefaults.ContainerShape,
-                    isDark = isDark,
+                .shadow(
+                    elevation = 10.dp,
+                    shape = RoundedCornerShape(TeakFloatingTabBarDefaults.CouiCornerRadius),
+                    clip = false,
+                )
+                .squircleBackground(
+                    color = COUITheme.colorScheme.surfaceContainer,
+                    cornerRadius = TeakFloatingTabBarDefaults.CouiCornerRadius,
                 ),
         ) {
-            TeakGlassSurface(
-                modifier = Modifier.fillMaxSize(),
-                shape = TeakFloatingTabBarDefaults.ContainerShape,
-                recipe = TeakGlassRecipes.floatingNavigation(advancedMaterial.fineTuning),
-                interaction = GlassMaterialInteraction(
-                    refractionScale = if (motion.isPressed) 1.06f else 1f,
-                    highlightScale = if (motion.isPressed) 1.04f else 1f,
-                ),
-                backdrop = backdrop,
-            ) {
+            androidx.compose.foundation.layout.Box(modifier = Modifier.fillMaxSize()) {
                 BoxWithConstraints(
                     modifier = Modifier
                         .fillMaxSize()
@@ -213,11 +212,8 @@ fun TeakFloatingTabBar(
                 ) {
                     val itemWidth = maxWidth / items.size
                     val itemWidthPx = with(density) { itemWidth.toPx() }
-                    val indicatorColor = if (isDark) {
-                        Color.White.copy(alpha = 0.13f)
-                    } else {
-                        Color.Black.copy(alpha = 0.075f)
-                    }
+                    // COUI 选中指示：用 onSurfaceContainer 低透明度，不再用纯黑白
+                    val indicatorColor = COUITheme.colorScheme.onSurfaceContainer.copy(alpha = 0.10f)
                     val transformOriginX = floatingTabTransformOriginX(
                         velocityPxPerSecond = motion.velocityPxPerSecond,
                         stretch = stretch,

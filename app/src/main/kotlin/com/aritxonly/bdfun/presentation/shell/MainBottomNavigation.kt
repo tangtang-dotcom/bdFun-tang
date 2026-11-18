@@ -17,7 +17,7 @@ import com.aritxonly.teak.common.interaction.blockTouches
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     settings: SettingsBindings, dark: Boolean, wideNavigation: Boolean, searchVisible: Boolean,
-    destinations: List<Destination>, tabItems: List<TeakFloatingTabItem>, selectedKey: String,
+    tabItems: List<TeakFloatingTabItem>, selectedKey: String,
     onBarItem: (TeakFloatingTabItem) -> Unit, onSearch: () -> Unit, onOpenVideo: (VideoItem) -> Unit,
     onBottomSearch: () -> Unit,
 ) {
@@ -63,7 +63,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
                     .navigationBarsPadding(),
             )
         } else {
-            MainFloatingNavigation(settings, destinations, tabItems, selectedKey, onBarItem, visual, onBottomSearch)
+            MainFloatingNavigation(settings, tabItems, selectedKey, onBarItem, visual, onBottomSearch)
         }
         if (visual.discSlot > 0.01f) MainNavigationDisc(settings, visual, onOpenVideo)
     }
