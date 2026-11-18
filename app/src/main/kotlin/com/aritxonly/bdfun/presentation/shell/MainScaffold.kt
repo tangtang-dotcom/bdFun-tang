@@ -67,6 +67,9 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
                     // 这一层放在 couiBackdrop 之后 = 在录制层内部绘制。
                     .background(background),
             ) {
+                androidx.compose.runtime.CompositionLocalProvider(
+                    com.aritxonly.teak.common.coui.LocalTeakCouiBackdrop provides couiBackdrop,
+                ) {
                 // 三个 tab：横向相连的 pager（可拖拽，切换是同一套非线性动画）
                 // 外面包一层更大的触摸阈值，手指轻抖不会误翻页。
                 // 分段只在 HyperOS 4 风格下可见；切回官方/经典时强制回到推荐，
@@ -78,7 +81,7 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
                     homeInteractive = !ui.showSearch,
                     onHomeSectionChange = { ui.homeSection = it },
                     onHomeSectionPositionChange = { ui.homeSectionPosition.floatValue = it })
-
+                }
             }
 
             ScrollTopButton(

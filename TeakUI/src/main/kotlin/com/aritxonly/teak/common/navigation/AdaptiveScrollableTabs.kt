@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
 import com.aritxonly.teak.common.coui.couiTabContainer
+import com.aritxonly.teak.common.coui.teakCouiGlassSurface
 import com.aritxonly.teak.common.material.TeakGlassRecipes
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
@@ -134,10 +135,20 @@ private fun GlassSegmentedBar(
         // 只换材质：布局、滑动指示器、点击逻辑保持原样，容器换成 COUI 的胶囊底色 + 描边。
         val scheme = com.itos.coui.theme.CouiTheme.colorScheme
         val dark = com.itos.coui.theme.CouiTheme.isDark
+        val couiBackdrop = com.aritxonly.teak.common.coui.LocalTeakCouiBackdrop.current
+        val containerModifier = if (couiBackdrop != null) {
+            Modifier.teakCouiGlassSurface(
+                backdrop = couiBackdrop,
+                shape = com.itos.coui.shape.CouiCapsuleShape,
+                dark = dark,
+            )
+        } else {
+            Modifier.couiTabContainer(dark)
+        }
         Box(
             modifier = modifier
                 .height(40.dp)
-                .couiTabContainer(dark)
+                .then(containerModifier)
                 .clip(com.itos.coui.shape.CouiCapsuleShape),
         ) {
             Box(modifier = Modifier.padding(4.dp)) {

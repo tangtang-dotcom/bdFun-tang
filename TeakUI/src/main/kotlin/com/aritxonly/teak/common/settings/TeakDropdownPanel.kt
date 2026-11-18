@@ -70,6 +70,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
+import com.aritxonly.teak.common.coui.teakCouiGlassSurface
 import com.aritxonly.teak.common.material.TeakGlassPanel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -335,9 +336,21 @@ fun TeakDropdownPanel(
                             ),
                         )
                         .clip(shape)
-                        .background(
-                            if (coui) com.itos.coui.theme.CouiTheme.colorScheme.container.copy(alpha = 0.94f)
-                            else Color.White,
+                        .then(
+                            if (coui) {
+                                val couiBackdrop = com.aritxonly.teak.common.coui.LocalTeakCouiBackdrop.current
+                                if (couiBackdrop != null) {
+                                    Modifier.teakCouiGlassSurface(
+                                        backdrop = couiBackdrop,
+                                        shape = shape,
+                                        dark = com.itos.coui.theme.CouiTheme.isDark,
+                                        blurRadius = 25.dp,
+                                        surfaceAlpha = 0.78f,
+                                    )
+                                } else {
+                                    Modifier.background(com.itos.coui.theme.CouiTheme.colorScheme.container.copy(alpha = 0.94f))
+                                }
+                            } else Modifier.background(Color.White),
                         ),
                 ) {
                     if (coui) {
