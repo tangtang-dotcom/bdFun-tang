@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ import com.itos.coui.backdrop.CouiBackdrop
 import com.itos.coui.effect.CouiFloatingRenderer
 import com.itos.coui.navigation.CouiDockBar
 import com.itos.coui.navigation.CouiDockDefaults
+import com.itos.coui.floatingactionbutton.Fab
 import com.itos.coui.navigation.CouiDockItem
 import com.itos.coui.navigation.CouiDockPlusStyle
 import com.itos.coui.navigation.CouiDockStyle
@@ -119,6 +121,24 @@ internal fun BoxScope.MainCouiBottomBar(
                 visual = visual,
                 onSearch = onBottomSearch,
                 onOpenVideo = onOpenVideo,
+                searchContent = {
+                    // COUI 风格保留库里的 Fab：凝光材质 + 跟手形变 + 按压回弹都由库实现。
+                    CouiTheme(darkTheme = dark, colorScheme = scheme) {
+                        Fab(
+                            modifier = Modifier.fillMaxSize(),
+                            backdrop = backdrop,
+                            onClick = onBottomSearch,
+                            dark = dark,
+                            contentLabel = "搜索",
+                        ) {
+                            androidx.compose.material3.Icon(
+                                imageVector = com.itos.coui.icons.CouiIcons.Search,
+                                contentDescription = "搜索",
+                                tint = CouiTheme.colorSchemeFor(dark).onAccent,
+                            )
+                        }
+                    }
+                },
             )
         }
     }
