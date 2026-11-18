@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
+import androidx.compose.foundation.layout.ime
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -52,6 +54,7 @@ import com.itos.coui.theme.CouiTheme
  *   Compose 只画除 plus 区域外的像素，两者共用同一张 GraphicsLayer，接缝不可见。
  */
 @RequiresApi(34)
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 internal fun BoxScope.MainCouiBottomBar(
     settings: SettingsBindings,
@@ -80,7 +83,9 @@ internal fun BoxScope.MainCouiBottomBar(
     val plusView = remember(activity, liveLayer, plusRadiusPx, density, layoutDirection) {
         activity?.let { LiveTransitionSourceView(it, liveLayer, density, layoutDirection, plusRadiusPx) }
     }
-    val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val systemBottomPx = WindowInsets.navigationBarsIgnoringVisibility.getBottom(density)
+    val bottomInset = with(density) { systemBottomPx.toDp() }
+    val imeCompensation = (WindowInsets.ime.getBottom(density) - systemBottomPx).coerceAtLeast(0)
     // SleepDown 的 CouiHomeDockChrome：plusVisible = selectedIndex < 2（最后一个 tab 收起）。
     val plusVisible = onSearch != null && selectedIndex < destinations.lastIndex && visual.discSlot <= 0.01f
 
@@ -98,7 +103,8 @@ internal fun BoxScope.MainCouiBottomBar(
         Box(
             Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = bottomInset + 8.dp),
+                .padding(bottom = bottomInset + 8.dp)
+                .graphicsLayer { translationY = imeCompensation.toFloat() },
         ) {
             if (plusView != null) {
                 AndroidView(
@@ -130,7 +136,11 @@ internal fun BoxScope.MainCouiBottomBar(
                         selectedColor = scheme.accent,
                         unselectedColor = scheme.onSurfaceVariant.copy(alpha = 184f / 255f),
                         density = density.density,
+                        sampleBrightness = 0.5f,
                         contourGlowEnabled = true,
+                        lightFollowLightIntensity = 2f,
+                        darkFollowLightIntensity = 0.3f,
+                        spotLightColor = scheme.accent,
                     )
                 }
                 val plusStyle = remember(dark, scheme.accent, density) {
@@ -141,7 +151,13 @@ internal fun BoxScope.MainCouiBottomBar(
                         contourGlowEnabled = true,
                         icon = CouiIcons.Search,
                         iconDescription = "搜索",
-                    )
+                    ).let { base ->
+                        base.copy(
+                            material = com.itos.coui.floatingactionbutton.CouiFabDefaults.translucentMaterial(
+                                scheme.accent, dark, base.material.extension,
+                            ),
+                        )
+                    }
                 }
                 CouiDockBar(
                     modifier = Modifier.drawWithContent {
