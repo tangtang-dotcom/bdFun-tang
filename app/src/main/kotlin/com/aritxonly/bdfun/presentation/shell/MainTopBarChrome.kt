@@ -67,33 +67,7 @@ internal fun BoxScope.MainTopBarChrome(
         },
     ) {
         val chromeAlpha = pageAlpha * (1f - bottom.bottomTopBarAlpha.value) * searchFade
-        if (couiBackdrop != null && com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
-            // COUI 风格：材质层换成库的 TopAppBarSurface（采样 + 渐进模糊 + 渐变遮罩），
-            // 布局和搜索一镜到底的变换仍沿用原来的实现，只换材质来源。
-            TopAppBarSurface(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .graphicsLayer { alpha = chromeAlpha },
-                backdrop = couiBackdrop,
-                dark = CouiTheme.isDark,
-            ) {
-                // 顶栏内的胶囊/按钮从同一个 backdrop 采样（库的三主体浮动材质管线）。
-                CompositionLocalProvider(
-                    com.aritxonly.teak.common.coui.LocalTeakCouiToolbarBackdrop provides couiBackdrop,
-                ) {
-                    Box(
-                        modifier = Modifier.graphicsLayer {
-                            val searchScale = 1f - 0.1f * bottom.bottomSearchProgress.value
-                            scaleX = searchScale
-                            scaleY = searchScale
-                            translationX = -(pageFloat - pageIndex) * size.width * 0.92f
-                        },
-                    ) {
-                        content()
-                    }
-                }
-            }
-        } else {
+
             ProgressiveTopBarMaterial(
                 underlayLiftPx = liftPx,
                 underlayBlurPx = underlayBlurPx,
@@ -112,6 +86,5 @@ internal fun BoxScope.MainTopBarChrome(
                     content()
                 }
             }
-        }
     }
 }

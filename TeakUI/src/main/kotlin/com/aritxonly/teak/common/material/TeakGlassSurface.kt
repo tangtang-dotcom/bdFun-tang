@@ -78,12 +78,7 @@ fun TeakGlassSurface(
                 modifier = modifier.teakCouiMaterialSurface(surfaceBackdrop, shape, capsule = true),
                 contentAlignment = contentAlignment,
             ) { content() }
-        } else {
-            Box(modifier = modifier.teakCouiControlSurface(shape), contentAlignment = contentAlignment) {
-                content()
-            }
         }
-        return
     }
     // 经典样式不使用玻璃：所有玻璃表面退化为平面容器，保留调用方指定的形状。
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) {
@@ -182,13 +177,7 @@ fun TeakGlassIconButton(
                 ),
                 contentAlignment = Alignment.Center,
             ) { content() }
-        } else {
-            Box(
-                modifier = modifier.size(size).teakCouiControlSurface(androidx.compose.foundation.shape.CircleShape),
-                contentAlignment = Alignment.Center,
-            ) { content() }
         }
-        return
     }
 
     // 经典样式：顶栏按钮只保留图标，不再画圆底。
