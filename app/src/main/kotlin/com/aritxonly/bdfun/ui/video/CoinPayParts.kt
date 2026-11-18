@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.R
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
-import top.yukonga.miuix.kmp.icon.extended.ChevronForward
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.ChevronBackward
+import io.github.suqi8.coui.kmp.icon.extended.ChevronForward
 
 /** 投币页的硬币箱：点击即选中这一档。 */
 @Composable
@@ -70,7 +70,7 @@ internal fun CoinArrow(
     onClick: () -> Unit,
 ) {
     Icon(
-        imageVector = if (forward) MiuixIcons.ChevronForward else MiuixIcons.ChevronBackward,
+        imageVector = if (forward) COUIIcons.ChevronForward else COUIIcons.ChevronBackward,
         contentDescription = if (forward) "下一档" else "上一档",
         tint = Color.White.copy(alpha = if (enabled) 0.92f else 0.30f),
         modifier = modifier

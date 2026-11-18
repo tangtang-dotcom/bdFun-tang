@@ -26,8 +26,8 @@ import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.settings.hostActivity
 import com.aritxonly.teak.common.settings.matchSystemBars
 import kotlinx.coroutines.delay
-import top.yukonga.miuix.kmp.glass.GlassDropdownPopup
-import top.yukonga.miuix.kmp.glass.GlassPopupSizing
+import io.github.suqi8.coui.kmp.glass.GlassDropdownPopup
+import io.github.suqi8.coui.kmp.glass.GlassPopupSizing
 
 /**
  * 设置页二级菜单同款的 Miuix 玻璃下拉菜单，可锚定到任意按钮 / 评论位置。

@@ -25,7 +25,7 @@ internal fun SettingsAboutContent(session: SettingsBrowserSession, values: Map<S
     Box(modifier) {
         if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) {
             // 经典样式不铺动态光晕背景，保持平面底色。
-            Box(Modifier.matchParentSize().background(top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.background))
+            Box(Modifier.matchParentSize().background(io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.background))
         } else {
             SettingsAboutFloatingBackground(Modifier.matchParentSize(), { 1f - progress }, runtime.settings.animationsEnabled)
         }

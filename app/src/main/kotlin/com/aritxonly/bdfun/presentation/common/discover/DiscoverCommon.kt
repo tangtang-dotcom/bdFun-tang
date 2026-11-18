@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.common.AppError
 import com.aritxonly.teak.common.chrome.TeakGlass
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 直播 / 番剧两段共用的小节标题。
@@ -27,7 +27,7 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 internal fun DiscoverSectionTitle(text: String) {
     Text(
         text = text,
-        color = MiuixTheme.colorScheme.onBackground,
+        color = COUITheme.colorScheme.onBackground,
         fontSize = 20.sp,
         lineHeight = 24.sp,
         fontWeight = FontWeight.Bold,
@@ -42,12 +42,12 @@ internal fun DiscoverErrorState(message: String, onRetry: () -> Unit) {
         modifier = Modifier.fillMaxWidth().padding(vertical = 60.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(message, color = MiuixTheme.colorScheme.onBackgroundVariant, fontSize = 14.sp)
+        Text(message, color = COUITheme.colorScheme.onBackgroundVariant, fontSize = 14.sp)
         Spacer(Modifier.height(10.dp))
         TeakGlass(modifier = Modifier.height(34.dp), shape = Capsule(), onClick = onRetry) {
             Text(
                 text = "重试",
-                color = MiuixTheme.colorScheme.primary,
+                color = COUITheme.colorScheme.primary,
                 fontSize = 13.sp,
                 modifier = Modifier.padding(horizontal = 18.dp).align(Alignment.Center),
             )

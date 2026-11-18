@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.aritxonly.bdfun.feature.sent.application.*
 
 @Composable
 internal fun SentHistoryEmpty(cardShape: androidx.compose.ui.graphics.Shape) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .fillMaxWidth()

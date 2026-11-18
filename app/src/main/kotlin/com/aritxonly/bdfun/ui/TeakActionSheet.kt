@@ -18,12 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aritxonly.teak.common.modal.MiuixBottomSheet
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.basic.IconButton
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import com.aritxonly.teak.common.modal.COUIBottomSheet
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.basic.IconButton
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Close
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun SheetActionRow(

@@ -14,9 +14,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
 
 @Composable
 internal fun FeedViewerTopBar(dismissAnimated: () -> Unit) {
@@ -27,14 +27,14 @@ internal fun FeedViewerTopBar(dismissAnimated: () -> Unit) {
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AppGlyph(MiuixIcons.Close, size = 26.dp, tint = Color.White,
+        AppGlyph(COUIIcons.Close, size = 26.dp, tint = Color.White,
 
             modifier = Modifier
                 .clip(CircleShape)
                 .clickable(interactionSource = null, indication = null, onClick = dismissAnimated)
                 .padding(6.dp))
         Spacer(Modifier.weight(1f))
-        AppGlyph(MiuixIcons.More, size = 22.dp, tint = Color.White,
+        AppGlyph(COUIIcons.More, size = 22.dp, tint = Color.White,
 
             modifier = Modifier.padding(6.dp))
     }

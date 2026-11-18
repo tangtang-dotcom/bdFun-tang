@@ -29,8 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Refresh
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Refresh
 
 @Composable
 internal fun LiveChromeRender.LiveChromeBottomControls(modifier: Modifier) {
@@ -76,7 +76,7 @@ internal fun LiveChromeRender.LiveChromePrimaryControls() {
                         },
                     ) {
                         Icon(
-                            imageVector = MiuixIcons.Refresh,
+                            imageVector = COUIIcons.Refresh,
                             contentDescription = "直播重载",
                             tint = Color.White,
                             modifier = Modifier.size(21.dp),

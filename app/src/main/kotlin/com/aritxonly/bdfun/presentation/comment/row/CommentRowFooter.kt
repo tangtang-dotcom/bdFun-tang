@@ -1,6 +1,6 @@
 package com.aritxonly.bdfun.ui
 
-import top.yukonga.miuix.kmp.icon.extended.More
+import io.github.suqi8.coui.kmp.icon.extended.More
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width

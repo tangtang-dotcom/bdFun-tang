@@ -13,12 +13,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 
 @Composable
 internal fun CacheRowActions(completed: Boolean, onOpen: () -> Unit, onDelete: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(horizontalAlignment = Alignment.End) {
         if (completed) {
             Text(

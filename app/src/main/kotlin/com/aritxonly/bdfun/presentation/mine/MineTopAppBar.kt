@@ -16,9 +16,9 @@ import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.teak.common.material.TeakGlassRecipes
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Settings
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Settings
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MineTopAppBar(showSettings: Boolean, onSettings: () -> Unit) {
@@ -37,13 +37,13 @@ internal fun MineTopAppBar(showSettings: Boolean, onSettings: () -> Unit) {
                         },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(MiuixIcons.Settings, "设置", tint = MiuixTheme.colorScheme.primary,
+                    Icon(COUIIcons.Settings, "设置", tint = COUITheme.colorScheme.primary,
                         modifier = Modifier.size(20.dp))
                 }
             } else {
                 TeakGlassIconButton(onClick = { haptics.tap(); onSettings() }, size = 40.dp, recipe = recipe,
                     backdrop = LocalTeakBackdrop.current, materialAlpha = 1f) {
-                    Icon(MiuixIcons.Settings, "设置", tint = MiuixTheme.colorScheme.onSurfaceContainer,
+                    Icon(COUIIcons.Settings, "设置", tint = COUITheme.colorScheme.onSurfaceContainer,
                         modifier = Modifier.size(20.dp))
                 }
             }

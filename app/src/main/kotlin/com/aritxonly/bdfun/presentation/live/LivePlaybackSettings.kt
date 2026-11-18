@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
 
 @Composable
 internal fun LiveSettingsOverlay(
@@ -195,11 +195,11 @@ internal fun LiveSettingsContent(
 
 @Composable
 internal fun LiveCloseGlyph(tint: Color = Color.White.copy(alpha = 0.7f)) {
-    AppGlyph(MiuixIcons.Close, tint, size = 18.dp)
+    AppGlyph(COUIIcons.Close, tint, size = 18.dp)
 }
 
 
 @Composable
 internal fun LiveCheckGlyph(tint: Color = Color.White) {
-    AppGlyph(MiuixIcons.Ok, tint, size = 15.dp)
+    AppGlyph(COUIIcons.Ok, tint, size = 15.dp)
 }

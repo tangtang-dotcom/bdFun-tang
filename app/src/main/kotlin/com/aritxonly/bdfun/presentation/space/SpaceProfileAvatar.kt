@@ -25,13 +25,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SpaceProfileAvatar(
     content: SpaceScreenContent, actions: SpaceScreenActions,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val profile = content.snapshot.profile.space?.profile
     Box(modifier = Modifier.offset(y = (-38).dp).size(96.dp)) {
         AsyncImage(
@@ -94,7 +94,7 @@ internal fun SpaceAvatarStats(
     content: SpaceScreenContent, actions: SpaceScreenActions,
 ) {
     val context = actions.context
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val mid = content.mid
     val profile = content.snapshot.profile.space?.profile
     Row(

@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
 import com.aritxonly.teak.common.chrome.TeakLargeTitle
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal val TERMS_SECTIONS = listOf(
     "本项目为第三方非官方客户端，与哔哩哔哩（上海宽娱数码科技有限公司）及其关联方无任何隶属、授权或合作关系。",
@@ -58,7 +58,7 @@ fun TermsScreen(
     onAccept: () -> Unit,
     onExit: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val scrollState = rememberScrollState()
     Box(modifier = Modifier.fillMaxSize()) {
         TeakScrollContainer(scrollState, Modifier.fillMaxSize().statusBarsPadding()) {
@@ -114,7 +114,7 @@ private fun TermsButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = modifier
             .height(46.dp)

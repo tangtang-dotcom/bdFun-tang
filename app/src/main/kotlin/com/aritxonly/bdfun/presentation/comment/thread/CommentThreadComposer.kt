@@ -17,7 +17,7 @@ import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.aritxonly.teak.common.material.TeakGlassRecipes
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.CommentThreadComposer(
@@ -32,7 +32,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.CommentThreadComposer(
             .imePadding(),
     ) {
         if (sendError != null) androidx.compose.material3.Text(
-            sendError, color = MiuixTheme.colorScheme.primary,
+            sendError, color = COUITheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
         )
         CommentThreadComposerField(transient, target, focusRequester, sending, onSend)
@@ -45,7 +45,7 @@ private fun CommentThreadComposerField(
     target: com.aritxonly.bdfun.core.model.comment.CommentItem,
     focusRequester: FocusRequester, sending: Boolean, onSend: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     TeakGlassSurface(
         modifier = Modifier.fillMaxWidth().heightIn(min = 44.dp, max = 160.dp),
         shape = Capsule(),

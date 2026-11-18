@@ -36,12 +36,12 @@ import com.aritxonly.teak.common.chrome.TrackTeakPageScroll
 import com.aritxonly.teak.common.material.TeakGlassButton
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import androidx.compose.runtime.CompositionLocalProvider
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.basic.TextButton
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.basic.TextButton
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun UpdatePage(current: String, state: UpdateUiState, download: String,
@@ -65,7 +65,7 @@ private fun UpdateCheckContent(current: String, state: UpdateUiState, download: 
     onCheck: () -> Unit, onDownload: () -> Unit, onHistory: () -> Unit, onBrowser: (String) -> Unit) {
     val scroll = rememberScrollState()
     TrackTeakPageScroll(scroll)
-    val surface = MiuixTheme.colorScheme.surface
+    val surface = COUITheme.colorScheme.surface
     val backdrop = rememberLayerBackdrop { drawRect(surface); drawContent() }
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().layerBackdrop(backdrop).verticalScroll(scroll)
@@ -75,11 +75,11 @@ private fun UpdateCheckContent(current: String, state: UpdateUiState, download: 
             horizontalAlignment = Alignment.CenterHorizontally) {
             UpdateVersionHeader(current, state)
             if (state.release != null) TextButton(text = "更新日志", onClick = onHistory,
-                colors = ButtonDefaults.textButtonColors(color = Color.Transparent, textColor = MiuixTheme.colorScheme.primary))
+                colors = ButtonDefaults.textButtonColors(color = Color.Transparent, textColor = COUITheme.colorScheme.primary))
             if (state.error != null) Text(state.error)
             if (state.release == null && !state.checking) {
                 if (state.currentRelease != null) UpdateNotesCard(state.currentRelease, current.removeSuffix("-debug"), onBrowser)
-                else Text("当前版本暂无更新日志", color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
+                else Text("当前版本暂无更新日志", color = COUITheme.colorScheme.onSurfaceVariantSummary)
             }
         }
         CompositionLocalProvider(LocalTeakBackdrop provides backdrop) {
@@ -92,14 +92,14 @@ private fun UpdateCheckContent(current: String, state: UpdateUiState, download: 
 @Composable
 private fun UpdateNotesCard(release: UpdateRelease, current: String, onBrowser: (String) -> Unit) {
     val lines = remember(release.notes) { releaseNoteLines(release.notes) }
-    Column(Modifier.fillMaxWidth().background(MiuixTheme.colorScheme.surfaceContainer,
+    Column(Modifier.fillMaxWidth().background(COUITheme.colorScheme.surfaceContainer,
         RoundedCornerShape(20.dp)).padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(release.version.name + if (release.version.name == current) " · 当前版本" else "",
                 modifier = Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
             TextButton(text = "发布页", onClick = { onBrowser(release.page) },
                 colors = ButtonDefaults.textButtonColors(color = Color.Transparent,
-                    textColor = MiuixTheme.colorScheme.primary),
+                    textColor = COUITheme.colorScheme.primary),
                 insideMargin = PaddingValues(horizontal = 12.dp, vertical = 8.dp))
         }
         SelectionContainer {
@@ -113,7 +113,7 @@ private fun UpdateNotesCard(release: UpdateRelease, current: String, onBrowser: 
 @Composable
 private fun UpdateBottomActions(state: UpdateUiState, download: String, onCheck: () -> Unit,
     onDownload: () -> Unit, onHistory: () -> Unit, modifier: Modifier) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     // 检查时按钮会禁用；库默认禁用色为蓝色，必须跟随本页主色。
     val primaryButtons = ButtonDefaults.buttonColorsPrimary(
         color = colors.primary, disabledColor = colors.primary.copy(alpha = .38f),
@@ -142,7 +142,7 @@ private fun UpdateBottomActions(state: UpdateUiState, download: String, onCheck:
 
 @Composable
 private fun UpdateVersionHeader(current: String, state: UpdateUiState) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(Modifier.fillMaxWidth().padding(top = 44.dp, bottom = 64.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Text(buildAnnotatedString {

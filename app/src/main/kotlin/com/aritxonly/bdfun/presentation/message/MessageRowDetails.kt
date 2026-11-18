@@ -2,8 +2,8 @@ package com.aritxonly.bdfun.ui
 
 import com.aritxonly.teak.common.icons.ResourceGlyph
 
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.More
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.More
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,12 +29,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 楼中楼里的浅色引用：左边一条竖线 + 「我：原文」。 */
 @Composable
 internal fun QuoteBlock(name: String, text: String) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,7 +67,7 @@ internal fun QuoteBlock(name: String, text: String) {
 
 @Composable
 internal fun SmallMessageAction(icon: Int, label: String, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(modifier = Modifier.clickable(onClick = onClick).padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         ResourceGlyph(res = icon, tint = colors.onBackgroundVariant, size = 14.dp)
         Spacer(Modifier.width(3.dp))
@@ -78,7 +78,7 @@ internal fun SmallMessageAction(icon: Int, label: String, onClick: () -> Unit) {
 /** 三个圆点的省略号按钮：和评论区同款，圆底，不是方形文字块。 */
 @Composable
 internal fun MessageMoreDots(onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .size(24.dp)
@@ -86,8 +86,8 @@ internal fun MessageMoreDots(onClick: () -> Unit) {
             .clickable(interactionSource = null, indication = null, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        top.yukonga.miuix.kmp.basic.Icon(
-            imageVector = MiuixIcons.More,
+        io.github.suqi8.coui.kmp.basic.Icon(
+            imageVector = COUIIcons.More,
             contentDescription = "更多",
             tint = colors.onBackgroundVariant,
             modifier = Modifier.size(22.dp),
@@ -97,7 +97,7 @@ internal fun MessageMoreDots(onClick: () -> Unit) {
 
 @Composable
 internal fun MessageAvatar(url: String, size: androidx.compose.ui.unit.Dp = 44.dp) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     Box(
         modifier = Modifier.size(size).clip(CircleShape).background(colors.surfaceContainerHigh),

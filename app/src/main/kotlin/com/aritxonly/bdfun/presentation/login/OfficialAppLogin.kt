@@ -17,11 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun OfficialAppLoginButton(enabled: Boolean, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Spacer(Modifier.height(12.dp))
     Box(Modifier.clip(CircleShape).background(colors.surfaceContainerHigh)
         .clickable(enabled = enabled, onClick = onClick).padding(horizontal = 22.dp, vertical = 12.dp)) {

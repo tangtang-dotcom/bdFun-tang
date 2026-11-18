@@ -28,14 +28,14 @@ import com.aritxonly.teak.common.material.TeakGlassRecipes
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.aritxonly.teak.common.material.teakContentControlShadow
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 共用一个胶囊，输入和开关保持独立点击区域，不互相触发。 */
 @Composable
 internal fun VideoDanmakuControl(
     compact: Boolean, enabled: Boolean, onOpenInput: () -> Unit, onToggle: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val material = LocalTeakMaterialSpec.current
     val progress = if (LocalProgressiveTopBarMaterialHosted.current) LocalTopBarButtonMaterialProgress.current else 1f
     TeakGlassSurface(
@@ -64,7 +64,7 @@ internal fun VideoDanmakuControl(
 
 @Composable
 private fun DanmakuInlineToggle(enabled: Boolean, onToggle: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier.width(40.dp).fillMaxHeight()
             .semantics {

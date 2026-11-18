@@ -8,8 +8,8 @@ import androidx.compose.runtime.*
 import androidx.compose.material3.LocalContentColor as MaterialContentColor
 import androidx.compose.material3.LocalTextStyle as MaterialTextStyle
 import androidx.compose.ui.graphics.Color
-import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixContentColor
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.LocalContentColor as COUIContentColor
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.Dp
 import com.aritxonly.teak.common.material.TeakModalKind
 import com.aritxonly.teak.common.material.TeakGlassRecipes
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
-import top.yukonga.miuix.kmp.window.WindowDialog
-import top.yukonga.miuix.kmp.theme.LocalDismissState
+import io.github.suqi8.coui.kmp.window.WindowDialog
+import io.github.suqi8.coui.kmp.theme.LocalDismissState
 
-internal data class MiuixDialogRequest(
+internal data class COUIDialogRequest(
     val title: String?,
     val summary: String?,
     val modifier: Modifier,
@@ -32,7 +32,7 @@ internal data class MiuixDialogRequest(
 )
 
 @Stable
-internal class RetainedMiuixDialog(request: MiuixDialogRequest) {
+internal class RetainedMiuixDialog(request: COUIDialogRequest) {
     var request by mutableStateOf(request)
     var show by mutableStateOf(true)
 }
@@ -44,16 +44,16 @@ internal fun RetainedMiuixDialogs(state: AdvancedMaterialDialogBlurHostState) {
         key(id) {
             val request = dialog.request
             CompositionLocalProvider(request.locals) {
-                MiuixDialogSurface(dialog.show, request, onDismissFinished = { state.removeFinished(id) })
+                COUIDialogSurface(dialog.show, request, onDismissFinished = { state.removeFinished(id) })
             }
         }
     }
 }
 
 @Composable
-internal fun MiuixDialogSurface(
+internal fun COUIDialogSurface(
     show: Boolean,
-    request: MiuixDialogRequest,
+    request: COUIDialogRequest,
     onDismissFinished: () -> Unit,
 ) {
     val advanced = LocalTeakMaterialSpec.current
@@ -90,11 +90,11 @@ internal fun MiuixDialogSurface(
         }
         // The caller scope is restored before creating WindowDialog. Keep its new Android
         // window locals here (especially LocalView), instead of restoring the Sheet's View.
-        val contentColor = MiuixTheme.colorScheme.onSurface
+        val contentColor = COUITheme.colorScheme.onSurface
         CompositionLocalProvider(
             LocalDismissState provides request.onDismiss,
             MaterialContentColor provides contentColor,
-            MiuixContentColor provides contentColor,
+            COUIContentColor provides contentColor,
             MaterialTextStyle provides MaterialTextStyle.current.copy(color = Color.Unspecified),
         ) {
             Box(Modifier.fillMaxWidth().then(closing)) { request.content() }

@@ -21,19 +21,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.comment.CommentItem
-import com.aritxonly.teak.common.modal.MiuixBottomSheet
-import top.yukonga.miuix.kmp.basic.Button
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.basic.IconButton
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import com.aritxonly.teak.common.modal.COUIBottomSheet
+import io.github.suqi8.coui.kmp.basic.Button
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.basic.IconButton
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Close
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 「自由复制」弹层。
  *
- * 与收藏夹选择使用同一个 MiuixBottomSheet 外壳（同样的标题、关闭按钮、底部主按钮），
+ * 与收藏夹选择使用同一个 COUIBottomSheet 外壳（同样的标题、关闭按钮、底部主按钮），
  * 内容仍是可选择文本：用户能按住任意一段自由拖选，也可以点底部按钮整条复制。
  * 关闭时保留最后一份内容，让 sheet 的退场动画完整播放。
  */
@@ -43,12 +43,12 @@ internal fun CommentCopySheet(item: CommentItem?, onDismiss: () -> Unit) {
     if (item != null) displayed = item
     val content = displayed ?: return
     val context = LocalContext.current
-    MiuixBottomSheet(
+    COUIBottomSheet(
         show = item != null,
         title = "自由复制",
         onDismissRequest = onDismiss,
         startAction = {
-            IconButton(onClick = onDismiss) { Icon(MiuixIcons.Close, "关闭") }
+            IconButton(onClick = onDismiss) { Icon(COUIIcons.Close, "关闭") }
         },
         bottomBar = {
             Button(
@@ -62,7 +62,7 @@ internal fun CommentCopySheet(item: CommentItem?, onDismiss: () -> Unit) {
                 modifier = Modifier.fillMaxWidth().navigationBarsPadding()
                     .padding(horizontal = 20.dp, vertical = 12.dp),
             ) {
-                Text("复制全部", color = MiuixTheme.colorScheme.onPrimary)
+                Text("复制全部", color = COUITheme.colorScheme.onPrimary)
             }
         },
     ) { padding ->
@@ -73,7 +73,7 @@ internal fun CommentCopySheet(item: CommentItem?, onDismiss: () -> Unit) {
         ) {
             Text(
                 text = content.uname,
-                color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+                color = COUITheme.colorScheme.onSurfaceVariantSummary,
                 fontSize = 12.sp,
             )
             Spacer(Modifier.height(8.dp))
@@ -85,7 +85,7 @@ internal fun CommentCopySheet(item: CommentItem?, onDismiss: () -> Unit) {
             ) {
                 Text(
                     text = content.message,
-                    color = MiuixTheme.colorScheme.onSurfaceContainer,
+                    color = COUITheme.colorScheme.onSurfaceContainer,
                     fontSize = 14.5.sp,
                     lineHeight = 21.sp,
                 )

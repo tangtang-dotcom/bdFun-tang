@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.video.VideoPage
 import kotlinx.coroutines.delay
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
@@ -41,7 +41,7 @@ fun VideoPageStrip(
     currentCid: Long,
     onSelect: (com.aritxonly.bdfun.core.model.video.VideoPage) -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val stripState = rememberLazyListState()
     val leftAlpha by androidx.compose.animation.core.animateFloatAsState(
         targetValue = if (stripState.canScrollBackward) 1f else 0f,

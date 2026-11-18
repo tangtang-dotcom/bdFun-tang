@@ -3,9 +3,9 @@ package com.aritxonly.bdfun.ui
 import com.aritxonly.teak.common.icons.ResourceGlyph
 
 import com.aritxonly.bdfun.navigateToMessageFeed
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Messages
-import top.yukonga.miuix.kmp.icon.extended.Promotions
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Messages
+import io.github.suqi8.coui.kmp.icon.extended.Promotions
 import com.aritxonly.bdfun.feature.message.application.replyAndMentionUnread
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,11 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MessageShortcutGroup(unread: Map<String, Int>, events: MessageScreenEvents) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val navigation = LocalMessageNavigation.current
     val context = LocalContext.current
     val classic = com.aritxonly.teak.common.theme.TeakUiStyle.isClassic
@@ -43,7 +43,7 @@ internal fun MessageShortcutGroup(unread: Map<String, Int>, events: MessageScree
             modifier = Modifier.weight(1f),
             onClick = events.onOpenReplies,
             unread = unread.replyAndMentionUnread(),
-        ) { androidx.compose.material3.Icon(MiuixIcons.Messages, null, Modifier.size(ShortcutGlyphSize), tint = MessageGreen) }
+        ) { androidx.compose.material3.Icon(COUIIcons.Messages, null, Modifier.size(ShortcutGlyphSize), tint = MessageGreen) }
         MessageShortcut(
             label = "收到喜欢",
             modifier = Modifier.weight(1f),
@@ -53,7 +53,7 @@ internal fun MessageShortcutGroup(unread: Map<String, Int>, events: MessageScree
         MessageShortcut(label = "系统通知", modifier = Modifier.weight(1f),
             unread = unread["sys_msg"] ?: 0,
             onClick = { navigation?.feed?.invoke(MessageFeedKind.System, 0) ?: navigateToMessageFeed(context, "system") }) {
-            androidx.compose.material3.Icon(MiuixIcons.Promotions, null, Modifier.size(ShortcutGlyphSize), tint = colors.primary)
+            androidx.compose.material3.Icon(COUIIcons.Promotions, null, Modifier.size(ShortcutGlyphSize), tint = colors.primary)
         }
     }
 }

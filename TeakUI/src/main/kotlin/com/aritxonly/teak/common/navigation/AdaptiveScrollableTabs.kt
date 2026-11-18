@@ -29,7 +29,7 @@ import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 底栏同款玻璃分段控件（全部 / 视频）。
@@ -85,7 +85,7 @@ private fun ClassicSegmentedBar(
     itemWidth: Dp,
     animIndex: Float,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(modifier = modifier.height(40.dp)) {
         Box(
             modifier = Modifier
@@ -128,7 +128,7 @@ private fun GlassSegmentedBar(
     materialAlpha: Float,
     animIndex: Float,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val advancedMaterial = LocalTeakMaterialSpec.current
     val recipe = TeakGlassRecipes.floatingNavigation(advancedMaterial.fineTuning)
     TeakGlassSurface(

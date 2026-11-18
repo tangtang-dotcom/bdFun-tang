@@ -14,8 +14,8 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.DpSize
-import top.yukonga.miuix.kmp.utils.MiuixPopupUtils.Companion.DialogLayout
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.utils.COUIPopupUtils.Companion.DialogLayout
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal val ScaffoldSheetMaxWidth = 560.dp
 
@@ -47,7 +47,7 @@ internal fun ScaffoldSheetOverlay(
         sheetMaxWidth = ScaffoldSheetMaxWidth,
         outsideMargin = DpSize(0.dp, 0.dp),
         insideMargin = DpSize(0.dp, 0.dp),
-        dragHandleColor = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+        dragHandleColor = COUITheme.colorScheme.onSurfaceVariantSummary,
         allowDismiss = allowDismiss,
         onDismissRequest = onDismissRequest,
         onDismissFinished = onDismissFinished,

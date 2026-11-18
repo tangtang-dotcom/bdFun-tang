@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.kyant.shapes.Capsule
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 object TeakGlassDefaults {
     /** 仅供原本有平面底色的控件使用，跟随应用主题而非系统主题。 */
@@ -69,7 +69,7 @@ fun TeakGlassSurface(
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) {
         Box(
             modifier = modifier.clip(shape).background(
-                flatBackgroundColor ?: top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainer,
+                flatBackgroundColor ?: io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainer,
             ),
             contentAlignment = contentAlignment,
         ) {
@@ -93,7 +93,7 @@ fun TeakGlassSurface(
 
     Box(
         modifier = modifier.clip(shape).background(
-            (flatBackgroundColor ?: top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainer).copy(
+            (flatBackgroundColor ?: io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainer).copy(
                 alpha = flatBackgroundAlpha.coerceIn(0f, 1f) * (1f - materialAlpha.coerceIn(0f, 1f)),
             ),
         ),

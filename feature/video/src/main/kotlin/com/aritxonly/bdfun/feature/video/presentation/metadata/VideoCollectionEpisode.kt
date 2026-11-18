@@ -25,14 +25,14 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.common.formatCount
 import com.aritxonly.bdfun.core.common.formatDateTime
 import com.aritxonly.bdfun.core.common.formatDuration
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun VideoCollectionEpisodeRow(
     episode: com.aritxonly.bdfun.core.model.video.VideoEpisode, active: Boolean,
     onSelect: (com.aritxonly.bdfun.core.model.video.VideoEpisode) -> Unit, slots: VideoDetailTailSlots,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,7 +54,7 @@ internal fun VideoCollectionEpisodeRow(
 
 @Composable
 internal fun VideoCollectionEpisodeCover(episode: com.aritxonly.bdfun.core.model.video.VideoEpisode, slots: VideoDetailTailSlots) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .width(84.dp)
@@ -81,7 +81,7 @@ internal fun VideoCollectionEpisodeCover(episode: com.aritxonly.bdfun.core.model
 internal fun VideoCollectionEpisodeText(
     episode: com.aritxonly.bdfun.core.model.video.VideoEpisode, active: Boolean, modifier: Modifier,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(modifier = modifier) {
         Text(
             text = episode.title,

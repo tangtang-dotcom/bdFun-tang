@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.data.CommentItem
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.runtime.getValue
 
 internal data class CommentListViewState(
@@ -60,7 +60,7 @@ internal fun CommentListView(
     state: CommentListViewState, layout: CommentListViewLayout, actions: CommentListViewActions,
     listState: androidx.compose.foundation.lazy.LazyListState,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val comments = state.comments
     val total = state.total
     val loading = state.loading

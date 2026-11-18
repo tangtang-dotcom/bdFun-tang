@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import top.yukonga.miuix.kmp.icon.extended.SearchDevice
-import top.yukonga.miuix.kmp.icon.MiuixIcons
+import io.github.suqi8.coui.kmp.icon.extended.SearchDevice
+import io.github.suqi8.coui.kmp.icon.COUIIcons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +51,7 @@ private fun FullscreenMoreQuickActions(actions: FullscreenActions, onClose: () -
             actions.onAudioOnlyChanged(true)
             onClose()
         }
-        QuickAction("稍后再看", Modifier.weight(1f), { androidx.compose.material3.Icon(MiuixIcons.SearchDevice, null, Modifier.size(24.dp), tint = Color.White) }) {
+        QuickAction("稍后再看", Modifier.weight(1f), { androidx.compose.material3.Icon(COUIIcons.SearchDevice, null, Modifier.size(24.dp), tint = Color.White) }) {
             actions.onAddWatchLater()
             onClose()
         }

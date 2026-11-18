@@ -36,14 +36,14 @@ import com.aritxonly.teak.common.settings.TeakSettingsCard
 import com.aritxonly.teak.common.settings.TeakSettingsPage
 import com.kyant.shapes.Capsule
 import kotlin.math.abs
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private val AlipayBlue = Color(0xFF1677FF)
 private val WeChatGreen = Color(0xFF07C160)
 
 @Composable
 fun DonationScreen() {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     var method by remember { mutableIntStateOf(0) }
     var dragTotal by remember { mutableFloatStateOf(0f) }
 
@@ -127,7 +127,7 @@ private fun DonationMethodChip(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = modifier
             .height(42.dp)

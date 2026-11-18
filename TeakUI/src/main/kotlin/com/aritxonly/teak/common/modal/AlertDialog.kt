@@ -48,7 +48,7 @@ fun AlertDialog(
     val showInlineText = text != null && (renderTextContentInMiuix || miuixSummary == null)
     val showInlineContent = showInlineTitle || showInlineText
     val hasTextAboveActions = showInlineContent || miuixTitle != null || miuixSummary != null
-    MiuixDialog(
+    COUIDialog(
         show = show,
         onDismissRequest = onDismissRequest,
         modifier = modifier,
@@ -59,7 +59,7 @@ fun AlertDialog(
         Column(modifier = Modifier.fillMaxWidth()) {
             if (showInlineTitle) title?.invoke()
             if (showInlineText) text?.invoke()
-            MiuixDialogActions(
+            COUIDialogActions(
                 modifier = Modifier.fillMaxWidth().padding(
                     top = if (hasTextAboveActions) TeakModalDefaults.DialogActionTopSpacing else 0.dp,
                 ),
@@ -72,29 +72,29 @@ fun AlertDialog(
 
 /** Equal-width, filled action buttons used by Miuix dialog content. */
 @Composable
-internal fun MiuixDialogActions(
+internal fun COUIDialogActions(
     primaryButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     secondaryButton: @Composable (() -> Unit)? = null,
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         if (secondaryButton != null) {
-            MiuixDialogActionSlot(
-                style = MiuixDialogActionStyle.Secondary,
+            COUIDialogActionSlot(
+                style = COUIDialogActionStyle.Secondary,
                 content = secondaryButton,
             )
             Spacer(modifier = Modifier.width(TeakModalDefaults.DialogActionSpacing))
         }
-        MiuixDialogActionSlot(
-            style = MiuixDialogActionStyle.Primary,
+        COUIDialogActionSlot(
+            style = COUIDialogActionStyle.Primary,
             content = primaryButton,
         )
     }
 }
 
 @Composable
-private fun RowScope.MiuixDialogActionSlot(
-    style: MiuixDialogActionStyle,
+private fun RowScope.COUIDialogActionSlot(
+    style: COUIDialogActionStyle,
     content: @Composable () -> Unit,
 ) {
     Box(

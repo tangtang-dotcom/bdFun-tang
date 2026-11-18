@@ -24,11 +24,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun VideoMetadataIdentifier(content: VideoMetadataContent, description: VideoDescriptionStateHolder, descText: String?, descProgress: Float) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val detail = content.detail
     val video = content.video
     Row(
@@ -83,7 +83,7 @@ internal fun VideoMetadataIdentifier(content: VideoMetadataContent, description:
 
 @Composable
 internal fun VideoMetadataDescription(descText: String?, descProgress: Float, description: VideoDescriptionStateHolder, slots: VideoMetadataSlots) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     if (descText != null) {
         Spacer(Modifier.height(4.dp))
         CollapsibleDescription(
@@ -109,7 +109,7 @@ internal fun VideoMetadataDescription(descText: String?, descProgress: Float, de
 
 @Composable
 internal fun VideoMetadataCategory(content: VideoMetadataContent) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val detail = content.detail
     if (!detail?.tname.isNullOrBlank()) {
         Spacer(Modifier.height(12.dp))

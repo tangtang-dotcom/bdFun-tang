@@ -34,7 +34,7 @@ import com.aritxonly.teak.common.chrome.TeakChromeDefaults
 import com.aritxonly.teak.common.chrome.TeakLargeTitle
 import com.aritxonly.teak.common.chrome.TrackTeakPageScroll
 import com.aritxonly.teak.common.navigation.TeakPagerTabs
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun LibraryModePage(content: LibraryModeContent, layout: LibraryModeLayout, actions: LibraryModeActions) {
@@ -180,7 +180,7 @@ internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.libraryGridFoot
                     Text(
                         text = message,
                         modifier = Modifier.padding(vertical = 20.dp),
-                        color = MiuixTheme.colorScheme.onBackgroundVariant,
+                        color = COUITheme.colorScheme.onBackgroundVariant,
                         fontSize = 13.sp,
                     )
                 }

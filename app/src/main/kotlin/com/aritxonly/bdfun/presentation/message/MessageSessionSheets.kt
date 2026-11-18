@@ -4,15 +4,15 @@ import com.aritxonly.teak.common.modal.TeakActionSheet
 import com.aritxonly.teak.common.modal.AlertDialog
 import com.aritxonly.teak.common.modal.TextButton
 
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Delete
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Delete
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import com.aritxonly.bdfun.core.domain.SessionAction
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MessageSessionSheets(
@@ -24,7 +24,7 @@ internal fun MessageSessionSheets(
     onMutate: (SessionAction) -> Unit,
 ) {
     val navigate = messageRouteAction()
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = androidx.compose.ui.platform.LocalContext.current
     val loading = snapshot.loading
     val busy = snapshot.busy
@@ -55,7 +55,7 @@ internal fun MessageSessionSheets(
     )
     TeakActionSheet(menu.confirmClear, onDismiss = { if (!busy) menu.confirmClear = false }, title = "清空列表") {
         Text("清空后所有消息将被删除，无法恢复。", Modifier.padding(18.dp), color = colors.onBackgroundVariant)
-        ActionSheetRow("确认清空", !busy && !loading, MiuixIcons.Delete) { onClearList() }
+        ActionSheetRow("确认清空", !busy && !loading, COUIIcons.Delete) { onClearList() }
     }
     TeakActionSheet(menu.selected != null, onDismiss = { if (!busy) menu.selected = null }, title = menu.selected?.name) {
         val target = menu.selected
@@ -63,7 +63,7 @@ internal fun MessageSessionSheets(
             val enabled = !busy && !loading
             if (menu.confirmDelete) {
                 Text("删除会话后，可通过对方的个人空间重新发起私信。", Modifier.padding(18.dp), color = colors.onBackgroundVariant)
-                ActionSheetRow("确认删除会话", enabled, MiuixIcons.Delete) { onMutate(SessionAction.Delete) }
+                ActionSheetRow("确认删除会话", enabled, COUIIcons.Delete) { onMutate(SessionAction.Delete) }
                 ActionSheetRow("取消", enabled) { menu.confirmDelete = false }
             } else {
                 ActionSheetRow(if (target.pinned) "取消置顶" else "置顶会话", enabled) {
@@ -75,7 +75,7 @@ internal fun MessageSessionSheets(
                 if (target.talkerId > 0) ActionSheetRow("标为已读", enabled && (target.unread > 0 || target.preferences.unreadDot)) {
                     onMutate(SessionAction.Read)
                 }
-                if (target.talkerId > 0) ActionSheetRow("删除会话", enabled, MiuixIcons.Delete) { menu.confirmDelete = true }
+                if (target.talkerId > 0) ActionSheetRow("删除会话", enabled, COUIIcons.Delete) { menu.confirmDelete = true }
             }
         }
     }

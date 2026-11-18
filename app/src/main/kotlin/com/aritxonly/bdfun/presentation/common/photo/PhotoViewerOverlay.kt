@@ -36,10 +36,10 @@ import com.aritxonly.teak.common.chrome.TeakChromeDefaults
 import com.aritxonly.teak.common.settings.TeakDropdownPanel
 import kotlinx.coroutines.launch
 import kotlin.math.max
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Close
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 图片层 + 黑底 + 上方 chrome。
@@ -117,7 +117,7 @@ private fun PhotoImageMenu(
     onSaveAll: () -> Unit,
     onReport: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     TeakGlassMenu(
         visible = visible,
         onDismiss = onDismiss,
@@ -176,7 +176,7 @@ private fun PhotoViewerTopBar(onDismiss: () -> Unit) {
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = MiuixIcons.Close,
+                imageVector = COUIIcons.Close,
                 contentDescription = "关闭",
                 tint = Color.White,
                 modifier = Modifier.size(buttonSize * 0.552f),

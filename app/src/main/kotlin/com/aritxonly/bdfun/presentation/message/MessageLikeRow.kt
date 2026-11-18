@@ -7,11 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.message.MessageItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun LikeRow(item: MessageItem, onClick: () -> Unit = {}, onMore: () -> Unit = {}) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(Modifier.fillMaxWidth()
         .combinedClickable(onClick = onClick, onLongClick = onMore)
         .padding(16.dp)) {

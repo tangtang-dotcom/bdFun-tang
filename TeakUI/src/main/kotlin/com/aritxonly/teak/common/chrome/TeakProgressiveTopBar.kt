@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
-import top.yukonga.miuix.kmp.blur.progressiveTextureBlur
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.blur.progressiveTextureBlur
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -203,7 +203,7 @@ private fun ProgressiveTopBarBackground(
     val advancedMaterial = LocalTeakMaterialSpec.current
     val backdrop = LocalTeakBackdrop.current
     if (advancedMaterial.useOfficialMiuixGlass && advancedMaterial.textureBlurEnabled &&
-        backdrop != null && top.yukonga.miuix.kmp.blur.isRuntimeShaderSupported()) {
+        backdrop != null && io.github.suqi8.coui.kmp.blur.isRuntimeShaderSupported()) {
         // Keep the app's edge fade and scroll ownership, with the official action-bar body.
         Box(modifier.then(samplingShift).graphicsLayer {
             alpha = materialProgress

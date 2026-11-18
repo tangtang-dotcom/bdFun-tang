@@ -18,14 +18,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.core.model.feed.FeedItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun FeedCard(
     item: FeedItem, actions: FeedCardActions, presentation: FeedCardPresentation,
     modifier: Modifier = Modifier, live: Boolean = false,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     val classic = TeakUiStyle.isClassic
     val shape: androidx.compose.ui.graphics.Shape =

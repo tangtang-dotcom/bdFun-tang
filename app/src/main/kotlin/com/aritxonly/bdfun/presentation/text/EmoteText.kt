@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.text.InlineTextContent
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.aritxonly.bdfun.core.application.*
 
 @Composable
@@ -17,7 +17,7 @@ internal fun EmoteText(content: EmoteTextContent, style: EmoteTextStyle, modifie
     androidx.compose.runtime.LaunchedEffect(dependencies.emotes) { dependencies.emotes.ensure() }
     val uriHandler = androidx.compose.ui.platform.LocalUriHandler.current
     val context = androidx.compose.ui.platform.LocalContext.current
-    val linkColor = MiuixTheme.colorScheme.primary
+    val linkColor = COUITheme.colorScheme.primary
     val text = content.text
     val biliTitles = rememberBiliLinkTitles(text)
     val map = remember(dependencies.emotes.byText, content.extraEmotes) {

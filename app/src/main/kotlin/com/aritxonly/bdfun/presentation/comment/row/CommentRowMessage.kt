@@ -11,11 +11,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.comment.CommentItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun CommentRowMessage(item: CommentItem) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     val photo = LocalPhotoViewer.current
     val view = androidx.compose.ui.platform.LocalView.current

@@ -15,11 +15,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.core.model.video.VideoItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun GridVideoCover(video: VideoItem, progress: Float, selectionEnabled: Boolean, selected: Boolean, reserveMeta: Boolean) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,7 +52,7 @@ internal fun GridVideoCover(video: VideoItem, progress: Float, selectionEnabled:
                     .align(Alignment.BottomStart)
                     .fillMaxWidth(progress.coerceIn(0f, 1f))
                     .height(2.dp)
-                    .background(MiuixTheme.colorScheme.primary),
+                    .background(COUITheme.colorScheme.primary),
             )
         }
 

@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SpaceProfileBadges(
@@ -36,7 +36,7 @@ internal fun SpaceProfileBadges(
 internal fun SpaceProfileLevelVip(
     content: SpaceScreenContent, actions: SpaceScreenActions,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val profile = content.snapshot.profile.space?.profile
     Image(
         painter = painterResource(
@@ -84,7 +84,7 @@ internal fun SpaceProfileLevelVip(
 internal fun SpaceProfileMedal(
     content: SpaceScreenContent, actions: SpaceScreenActions,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val profile = content.snapshot.profile.space?.profile
     if (!profile?.fansMedalName.isNullOrBlank()) {
         Spacer(Modifier.width(5.dp))

@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.data.SearchUser
 import com.aritxonly.bdfun.data.VideoItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SearchUserRow(user: SearchUser, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,7 +84,7 @@ internal fun SearchResultRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val coverWidth = 150.dp
     val coverHeight = coverWidth * 9f / 16f
     Row(
@@ -145,7 +145,7 @@ internal fun SearchResultRow(
 
 @Composable
 private fun SearchVideoCover(video: VideoItem, coverWidth: androidx.compose.ui.unit.Dp, coverHeight: androidx.compose.ui.unit.Dp) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .width(coverWidth)

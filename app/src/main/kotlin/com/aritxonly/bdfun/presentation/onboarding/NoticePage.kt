@@ -25,14 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.aritxonly.teak.common.settings.TeakSettingsCard
-import top.yukonga.miuix.kmp.basic.Checkbox
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.icon.extended.Info
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Checkbox
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.extended.Info
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun NoticePage(
@@ -61,14 +61,14 @@ internal fun NoticePage(
 
 @Composable
 private fun NoticeHeading() {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Spacer(Modifier.height(10.dp))
     Box(
         modifier = Modifier.fillMaxWidth().height(82.dp),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            imageVector = MiuixIcons.Info,
+            imageVector = COUIIcons.Info,
             contentDescription = null,
             modifier = Modifier.size(64.dp),
             tint = colors.primary,
@@ -81,7 +81,7 @@ private fun NoticeHeading() {
     ) {
         Text(
             text = "重要提醒",
-            style = MiuixTheme.textStyles.title1.copy(fontWeight = FontWeight.Bold),
+            style = COUITheme.textStyles.title1.copy(fontWeight = FontWeight.Bold),
             textAlign = TextAlign.Center,
             color = colors.onBackground,
         )
@@ -91,7 +91,7 @@ private fun NoticeHeading() {
 
 @Composable
 private fun NoticeTipsCard() {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     TeakSettingsCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
             GuideNote("本应用是第三方哔哩哔哩客户端，与哔哩哔哩官方无隶属、授权或合作关系。")
@@ -105,7 +105,7 @@ private fun NoticeTipsCard() {
 
 @Composable
 private fun NoticeTermsCard(termsViewed: Boolean, onOpenTerms: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     TeakSettingsCard(title = "使用条款", modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -117,24 +117,24 @@ private fun NoticeTermsCard(termsViewed: Boolean, onOpenTerms: () -> Unit) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = "使用条款与免责声明",
-                    style = MiuixTheme.textStyles.headline1,
+                    style = COUITheme.textStyles.headline1,
                     color = colors.onBackground,
                 )
                 Spacer(Modifier.height(3.dp))
                 Text(
                     text = if (termsViewed) "已查看" else "使用前请完整阅读",
-                    style = MiuixTheme.textStyles.footnote1,
+                    style = COUITheme.textStyles.footnote1,
                     color = if (termsViewed) colors.primary else colors.onSurfaceVariantSummary,
                 )
             }
-            AppGlyph(MiuixIcons.Basic.ArrowRight, size = 22.dp, tint = colors.onSurfaceVariantSummary)
+            AppGlyph(COUIIcons.Basic.ArrowRight, size = 22.dp, tint = colors.onSurfaceVariantSummary)
         }
     }
 }
 
 @Composable
 private fun NoticeConsentRow(accepted: Boolean, onAcceptedChange: (Boolean) -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .widthIn(max = 440.dp)
@@ -157,7 +157,7 @@ private fun NoticeConsentRow(accepted: Boolean, onAcceptedChange: (Boolean) -> U
         Text(
             text = "我已阅读并理解以上提醒",
             modifier = Modifier.weight(1f),
-            style = MiuixTheme.textStyles.body2,
+            style = COUITheme.textStyles.body2,
             color = colors.onSurfaceContainer,
         )
     }
@@ -172,14 +172,14 @@ private fun GuideNote(text: String) {
     ) {
         Text(
             text = "•",
-            style = MiuixTheme.textStyles.body2,
-            color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+            style = COUITheme.textStyles.body2,
+            color = COUITheme.colorScheme.onSurfaceVariantSummary,
         )
         Text(
             text = text,
             modifier = Modifier.weight(1f),
-            style = MiuixTheme.textStyles.body2.copy(lineHeight = 1.5.em),
-            color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+            style = COUITheme.textStyles.body2.copy(lineHeight = 1.5.em),
+            color = COUITheme.colorScheme.onSurfaceVariantSummary,
         )
     }
 }

@@ -23,19 +23,19 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.kyant.shapes.Capsule
 import kotlin.math.abs
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.icon.extended.Download
-import top.yukonga.miuix.kmp.icon.extended.SearchDevice
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.extended.Download
+import io.github.suqi8.coui.kmp.icon.extended.SearchDevice
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal val HALF_SPEEDS = listOf(3f, 2f, 1.5f, 1.25f, 1f)
 
 @Composable
 internal fun HalfSpeedRow(speed: Float, onSelect: (Float) -> Unit, accentColor: Color) {
 
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -94,8 +94,8 @@ internal fun HalfQuickAction(
         ) {
             when (label) {
                 "不感兴趣" -> DislikeGlyph(tint)
-                "稍后再看" -> androidx.compose.material3.Icon(MiuixIcons.SearchDevice, null, Modifier.size(24.dp), tint = tint)
-                "缓存" -> androidx.compose.material3.Icon(MiuixIcons.Download, null, Modifier.size(24.dp), tint = tint)
+                "稍后再看" -> androidx.compose.material3.Icon(COUIIcons.SearchDevice, null, Modifier.size(24.dp), tint = tint)
+                "缓存" -> androidx.compose.material3.Icon(COUIIcons.Download, null, Modifier.size(24.dp), tint = tint)
                 "小窗播放" -> PipGlyphSmall(tint)
                 else -> CastGlyphSmall(tint)
             }
@@ -114,7 +114,7 @@ internal fun HalfMoreSwitchRow(
     onToggle: () -> Unit,
 ) {
 
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -147,7 +147,7 @@ internal fun HalfMoreSwitchRow(
 @Composable
 internal fun HalfLoopRow(loopMode: Int, onSelect: (Int) -> Unit, accentColor: Color) {
 
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -188,7 +188,7 @@ internal fun HalfMoreChoiceRow(
     onClick: () -> Unit,
 ) {
 
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -204,6 +204,6 @@ internal fun HalfMoreChoiceRow(
             Text(text = value, color = colors.onBackgroundVariant, fontSize = 12.sp)
             Spacer(Modifier.width(4.dp))
         }
-        AppGlyph(MiuixIcons.Basic.ArrowRight, size = 16.dp, tint = colors.onBackgroundVariant)
+        AppGlyph(COUIIcons.Basic.ArrowRight, size = 16.dp, tint = colors.onBackgroundVariant)
     }
 }

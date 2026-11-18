@@ -26,14 +26,14 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.ui.ContinuousCornerShape
 import com.aritxonly.bdfun.ui.showToast
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun WideSpaceProfile(
     profile: com.aritxonly.bdfun.core.model.user.UserProfile?, bitmap: android.graphics.Bitmap?, mid: Long,
     isSelf: Boolean, followed: Boolean, busy: Boolean, onFollow: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     Column(Modifier.fillMaxWidth().background(colors.background), horizontalAlignment = Alignment.CenterHorizontally) {
         SpaceBanner(bitmap, aspect = 2.35f, alignmentY = profile?.bannerAlignmentY ?: 0f)

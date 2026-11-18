@@ -19,24 +19,24 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.blur.BlendColorEntry
-import top.yukonga.miuix.kmp.blur.BlurBlendMode
-import top.yukonga.miuix.kmp.blur.BlurColors
-import top.yukonga.miuix.kmp.blur.LayerBackdrop
-import top.yukonga.miuix.kmp.blur.isRuntimeShaderSupported
-import top.yukonga.miuix.kmp.blur.textureBlur
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.BlendColorEntry
+import io.github.suqi8.coui.kmp.blur.BlurBlendMode
+import io.github.suqi8.coui.kmp.blur.BlurColors
+import io.github.suqi8.coui.kmp.blur.LayerBackdrop
+import io.github.suqi8.coui.kmp.blur.isRuntimeShaderSupported
+import io.github.suqi8.coui.kmp.blur.textureBlur
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun GuideArrowButton(
     backdrop: LayerBackdrop,
     onClick: () -> Unit,
 ) {
-    val surface = MiuixTheme.colorScheme.surfaceContainer
+    val surface = COUITheme.colorScheme.surfaceContainer
     val shader = remember { isRuntimeShaderSupported() }
     val scrim = lerp(
-        MiuixTheme.colorScheme.onSurfaceContainer,
-        MiuixTheme.colorScheme.onSurface,
+        COUITheme.colorScheme.onSurfaceContainer,
+        COUITheme.colorScheme.onSurface,
         0.35f,
     ).copy(alpha = 0.34f)
     Box(
@@ -73,7 +73,7 @@ internal fun GuideArrowButton(
 
 @Composable
 private fun guideBlendColors(): List<BlendColorEntry> {
-    val dark = MiuixTheme.colorScheme.surfaceContainer.luminance() < 0.5f
+    val dark = COUITheme.colorScheme.surfaceContainer.luminance() < 0.5f
     return remember(dark) {
         if (dark) {
             listOf(

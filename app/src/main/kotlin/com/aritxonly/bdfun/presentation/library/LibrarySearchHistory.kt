@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.feature.library.application.*
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun LibrarySearchHistory(history: List<String>, events: LibrarySearchEvents) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
@@ -57,7 +57,7 @@ internal fun LibrarySearchHistory(history: List<String>, events: LibrarySearchEv
 
 @Composable
 internal fun LibrarySearchHistoryHeader(history: List<String>, events: LibrarySearchEvents) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -84,7 +84,7 @@ internal fun LibrarySearchHistoryHeader(history: List<String>, events: LibrarySe
 
 @Composable
 internal fun LibrarySearchHistoryWord(word: String, rank: Int, events: LibrarySearchEvents) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()

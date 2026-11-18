@@ -15,12 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.aritxonly.bdfun.feature.sent.application.*
 
 @Composable
 internal fun SentHistoryFilters(state: SentHistoryState, onSelect: (Int) -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val filter = state.filter
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),

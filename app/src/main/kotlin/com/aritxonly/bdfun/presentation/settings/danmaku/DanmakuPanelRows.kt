@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
 import com.aritxonly.bdfun.feature.settings.application.*
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
 
 internal val DmText = Color.White
 internal val DmSecondary = Color(0xFFB9BDC6)
@@ -123,7 +123,7 @@ internal fun DmActionRow(
             Text(text = trailing, color = DmSecondary, fontSize = 11.5.sp)
             Spacer(Modifier.width(6.dp))
         }
-        AppGlyph(MiuixIcons.Basic.ArrowRight, size = 16.dp, tint = Color.White.copy(alpha = 0.4f))
+        AppGlyph(COUIIcons.Basic.ArrowRight, size = 16.dp, tint = Color.White.copy(alpha = 0.4f))
     }
 }
 

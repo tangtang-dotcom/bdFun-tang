@@ -42,8 +42,8 @@ internal data class MainShellFeeds(
     val unreadMessageCount: Int,
 )
 internal data class MainShellBackdrops(
-    val main: top.yukonga.miuix.kmp.blur.LayerBackdrop,
-    val search: top.yukonga.miuix.kmp.blur.LayerBackdrop, val wideNavigation: Boolean,
+    val main: io.github.suqi8.coui.kmp.blur.LayerBackdrop,
+    val search: io.github.suqi8.coui.kmp.blur.LayerBackdrop, val wideNavigation: Boolean,
 )
 internal data class MainShellState(
     val ui: MainShellUiStateHolder, val navigation: MainShellNavigation, val chrome: MainShellChrome,

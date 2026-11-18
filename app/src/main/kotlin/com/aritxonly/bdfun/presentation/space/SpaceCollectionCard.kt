@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.core.model.user.SpaceSeason
 import com.aritxonly.bdfun.ui.formatCount
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SpaceCollectionGridCard(
@@ -35,7 +35,7 @@ internal fun SpaceCollectionGridCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = modifier
             .clip(com.aritxonly.bdfun.ui.FeedCardShape)

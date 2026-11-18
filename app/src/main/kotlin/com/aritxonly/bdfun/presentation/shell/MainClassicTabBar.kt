@@ -36,7 +36,7 @@ internal fun ClassicTabBar(
     modifier: Modifier = Modifier,
     showDivider: Boolean = true,
 ) {
-    val colors = top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme
+    val colors = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme
     Box(modifier = modifier.height(58.dp)) {
         if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) {
             // 经典底栏整条走 Miuix 玻璃模糊；不再画顶部分割线。

@@ -18,14 +18,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal fun androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope.dynamicFeedFooter(
     state: FeedState, actions: FeedActions,
 ) {
     if (state.items.isEmpty() && !state.refreshing && !state.loading && state.error == null) {
         item(key = "empty", span = StaggeredGridItemSpan.FullLine) {
-            val colors = MiuixTheme.colorScheme
+            val colors = COUITheme.colorScheme
             Text(
                 if (state.type == "up" && state.filterMid == null) "选择一位 UP 主查看动态" else "暂无动态",
                 color = colors.onBackgroundVariant,
@@ -35,14 +35,14 @@ internal fun androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridSco
     }
     if (state.hasMore && state.items.isNotEmpty() && !state.activeLoading && !state.refreshing && state.error == null) {
         item(key = "more", span = StaggeredGridItemSpan.FullLine) {
-            val colors = MiuixTheme.colorScheme
+            val colors = COUITheme.colorScheme
             Text("加载更多", color = colors.primary, modifier = Modifier
                 .fillMaxWidth().clickable { actions.loadMore() }.padding(16.dp))
         }
     }
     state.error?.let { message ->
         item(key = "error", span = StaggeredGridItemSpan.FullLine) {
-            val colors = MiuixTheme.colorScheme
+            val colors = COUITheme.colorScheme
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

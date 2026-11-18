@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun CollapsibleDescription(
@@ -34,7 +34,7 @@ internal fun CollapsibleDescription(
     slots: VideoMetadataSlots,
 ) {
     val density = LocalDensity.current
-    val linkColor = MiuixTheme.colorScheme.primary
+    val linkColor = COUITheme.colorScheme.primary
     val links = slots.links(text, linkColor)
     val measurer = androidx.compose.ui.text.rememberTextMeasurer()
     val style = androidx.compose.ui.text.TextStyle(
@@ -79,7 +79,7 @@ internal fun CollapsibleDescription(
 /** 和简介一样的展开箭头：展开/收回都旋转，带补间动画。 */
 @Composable
 fun ExpandChevron(expanded: Boolean) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val progress = rememberManualProgress(if (expanded) 1f else 0f, 300f)
     Box(
         modifier = Modifier.size(width = 24.dp, height = 24.dp),

@@ -19,53 +19,53 @@ import androidx.compose.ui.graphics.Shape
 
 // 为官方和 MIUIX 的组件起别名，防止重名冲突
 import androidx.compose.material3.LocalContentColor as Material3LocalContentColor
-import top.yukonga.miuix.kmp.basic.Button as MiuixButton
-import top.yukonga.miuix.kmp.basic.ButtonColors as MiuixButtonColors
-import top.yukonga.miuix.kmp.basic.ButtonDefaults as MiuixButtonDefaults
-import top.yukonga.miuix.kmp.basic.TextButton as MiuixTextButton
-import top.yukonga.miuix.kmp.basic.TextButtonColors as MiuixTextButtonColors
-import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixLocalContentColor
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Button as COUIButton
+import io.github.suqi8.coui.kmp.basic.ButtonColors as COUIButtonColors
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults as COUIButtonDefaults
+import io.github.suqi8.coui.kmp.basic.TextButton as COUITextButton
+import io.github.suqi8.coui.kmp.basic.TextButtonColors as COUITextButtonColors
+import io.github.suqi8.coui.kmp.theme.LocalContentColor as COUILocalContentColor
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
-internal enum class MiuixDialogActionStyle {
+internal enum class COUIDialogActionStyle {
     Default,
     Secondary,
     Primary,
 }
 
 internal val LocalMiuixDialogActionStyle = staticCompositionLocalOf {
-    MiuixDialogActionStyle.Default
+    COUIDialogActionStyle.Default
 }
 
 @Composable
 private fun resolveMiuixButtonColors(
-    style: MiuixDialogActionStyle, fallback: ButtonColors, destructive: Boolean = false,
-): MiuixButtonColors {
-    if (style == MiuixDialogActionStyle.Default) return MiuixButtonDefaults.buttonColors(
+    style: COUIDialogActionStyle, fallback: ButtonColors, destructive: Boolean = false,
+): COUIButtonColors {
+    if (style == COUIDialogActionStyle.Default) return COUIButtonDefaults.buttonColors(
         color = fallback.containerColor, contentColor = fallback.contentColor,
         disabledColor = fallback.disabledContainerColor, disabledContentColor = fallback.disabledContentColor)
     // 弹窗跟随 Miuix 中性色板，避免 Material 默认色板为按钮带入紫色。
-    return MiuixButtonDefaults.buttonColors(
-        color = MiuixTheme.colorScheme.secondaryContainer.copy(alpha = .85f),
-        disabledColor = MiuixTheme.colorScheme.secondaryContainer.copy(alpha = .85f),
-        contentColor = if (destructive) MaterialTheme.colorScheme.error else MiuixTheme.colorScheme.onSecondaryContainer,
-        disabledContentColor = MiuixTheme.colorScheme.disabledOnSurface)
+    return COUIButtonDefaults.buttonColors(
+        color = COUITheme.colorScheme.secondaryContainer.copy(alpha = .85f),
+        disabledColor = COUITheme.colorScheme.secondaryContainer.copy(alpha = .85f),
+        contentColor = if (destructive) MaterialTheme.colorScheme.error else COUITheme.colorScheme.onSecondaryContainer,
+        disabledContentColor = COUITheme.colorScheme.disabledOnSurface)
 }
 
 @Composable
 private fun resolveMiuixTextButtonColors(
-    style: MiuixDialogActionStyle, destructive: Boolean = false,
-): MiuixTextButtonColors {
-    if (style == MiuixDialogActionStyle.Default) return MiuixButtonDefaults.textButtonColors()
-    return MiuixButtonDefaults.textButtonColors(
-        color = MiuixTheme.colorScheme.secondaryContainer.copy(alpha = .85f),
-        disabledColor = MiuixTheme.colorScheme.secondaryContainer.copy(alpha = .85f),
-        textColor = if (destructive) MaterialTheme.colorScheme.error else MiuixTheme.colorScheme.onSecondaryContainer,
-        disabledTextColor = MiuixTheme.colorScheme.disabledOnSurface)
+    style: COUIDialogActionStyle, destructive: Boolean = false,
+): COUITextButtonColors {
+    if (style == COUIDialogActionStyle.Default) return COUIButtonDefaults.textButtonColors()
+    return COUIButtonDefaults.textButtonColors(
+        color = COUITheme.colorScheme.secondaryContainer.copy(alpha = .85f),
+        disabledColor = COUITheme.colorScheme.secondaryContainer.copy(alpha = .85f),
+        textColor = if (destructive) MaterialTheme.colorScheme.error else COUITheme.colorScheme.onSecondaryContainer,
+        disabledTextColor = COUITheme.colorScheme.disabledOnSurface)
 }
 
-private fun Modifier.miuixDialogActionWidth(style: MiuixDialogActionStyle): Modifier =
-    if (style == MiuixDialogActionStyle.Default) this else fillMaxWidth()
+private fun Modifier.miuixDialogActionWidth(style: COUIDialogActionStyle): Modifier =
+    if (style == COUIDialogActionStyle.Default) this else fillMaxWidth()
 
 /**
  * Deadliner 基础 Button 组件 (实心按钮)
@@ -88,7 +88,7 @@ fun Button(
     val dialogActionStyle = LocalMiuixDialogActionStyle.current
     val miuixColors = resolveMiuixButtonColors(dialogActionStyle, colors, destructive)
     val resolvedContentColor = if (enabled) miuixColors.contentColor else miuixColors.disabledContentColor
-    MiuixButton(
+    COUIButton(
         onClick = onClick,
         modifier = modifier.miuixDialogActionWidth(dialogActionStyle),
         enabled = enabled,
@@ -97,7 +97,7 @@ fun Button(
     ) {
         CompositionLocalProvider(
             Material3LocalContentColor provides resolvedContentColor,
-            MiuixLocalContentColor provides resolvedContentColor,
+            COUILocalContentColor provides resolvedContentColor,
         ) {
             content()
         }
@@ -130,7 +130,7 @@ fun TextButton(
     val dialogActionStyle = LocalMiuixDialogActionStyle.current
     val miuixModifier = modifier.miuixDialogActionWidth(dialogActionStyle)
     if (miuixText.isNotBlank()) {
-        MiuixTextButton(
+        COUITextButton(
             text = miuixText,
             onClick = onClick,
             modifier = miuixModifier,
@@ -144,7 +144,7 @@ fun TextButton(
             fallback = colors, destructive = destructive,
         )
         val resolvedContentColor = if (enabled) miuixColors.contentColor else miuixColors.disabledContentColor
-        MiuixButton(
+        COUIButton(
             onClick = onClick,
             modifier = miuixModifier,
             enabled = enabled,
@@ -153,7 +153,7 @@ fun TextButton(
         ) {
             CompositionLocalProvider(
                 Material3LocalContentColor provides resolvedContentColor,
-                MiuixLocalContentColor provides resolvedContentColor,
+                COUILocalContentColor provides resolvedContentColor,
             ) {
                 content()
             }

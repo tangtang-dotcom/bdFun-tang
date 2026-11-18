@@ -14,7 +14,7 @@ import com.aritxonly.teak.common.icons.LucideIcons
 import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun PrivateChatComposerRow(
@@ -31,7 +31,7 @@ internal fun PrivateChatComposerRow(
             recipe = recipe,
             backdrop = backdrop,
             flatBackgroundColor = if (classic) {
-                top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainerHigh
+                io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainerHigh
             } else {
                 null
             },
@@ -46,7 +46,7 @@ internal fun PrivateChatComposerRow(
             recipe = recipe,
             backdrop = backdrop,
         ) {
-            AppGlyph(LucideIcons.FaceGrinning, size = 19.dp, tint = MiuixTheme.colorScheme.onBackgroundVariant)
+            AppGlyph(LucideIcons.FaceGrinning, size = 19.dp, tint = COUITheme.colorScheme.onBackgroundVariant)
         }
     }
 }

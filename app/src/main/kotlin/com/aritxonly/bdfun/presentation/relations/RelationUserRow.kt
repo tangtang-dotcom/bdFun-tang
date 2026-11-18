@@ -18,9 +18,9 @@ import coil.compose.AsyncImage
 import com.aritxonly.bdfun.core.model.user.RelationUser
 import com.aritxonly.bdfun.ui.*
 import com.aritxonly.teak.common.chrome.*
-import top.yukonga.miuix.kmp.basic.Button
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Button
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.aritxonly.bdfun.feature.relations.application.*
 
@@ -28,7 +28,7 @@ import com.aritxonly.bdfun.feature.relations.application.*
 internal fun RelationUserRow(user: RelationUser, busy: Boolean, showAction: Boolean,
     onOpen: () -> Unit, onFollow: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Row(Modifier.weight(1f).clickable(onClick = onOpen), verticalAlignment = Alignment.CenterVertically,

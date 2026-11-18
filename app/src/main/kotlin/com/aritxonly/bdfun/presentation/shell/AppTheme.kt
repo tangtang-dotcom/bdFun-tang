@@ -4,8 +4,8 @@ package com.aritxonly.bdfun
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
-import top.yukonga.miuix.kmp.theme.darkColorScheme as miuixDarkColorScheme
-import top.yukonga.miuix.kmp.theme.lightColorScheme as miuixLightColorScheme
+import io.github.suqi8.coui.kmp.theme.darkColorScheme as miuixDarkColorScheme
+import io.github.suqi8.coui.kmp.theme.lightColorScheme as miuixLightColorScheme
 
 /** HyperOS 色板：B 站主色 + Miuix 表面层级。 */
 private val AcPink = Color(0xFFFB7299)

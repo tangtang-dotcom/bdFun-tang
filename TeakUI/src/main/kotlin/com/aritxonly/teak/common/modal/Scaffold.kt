@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
-import top.yukonga.miuix.kmp.basic.Scaffold as MiuixScaffold
+import io.github.suqi8.coui.kmp.basic.Scaffold as COUIScaffold
 
 /**
  * Deadliner 基础脚手架
@@ -35,7 +35,7 @@ fun Scaffold(
     content: @Composable (PaddingValues) -> Unit
 ) {
     CompositionLocalProvider(LocalContentColor provides contentColor) {
-        MiuixScaffold(
+        COUIScaffold(
             modifier = modifier,
             topBar = topBar,
             bottomBar = bottomBar,

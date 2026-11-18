@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun VideoMetadataTitle(content: VideoMetadataContent) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val detail = content.detail
     val video = content.video
     androidx.compose.foundation.text.selection.SelectionContainer {
@@ -36,7 +36,7 @@ internal fun VideoMetadataTitle(content: VideoMetadataContent) {
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 internal fun VideoMetadataStatistics(content: VideoMetadataContent, slots: VideoMetadataSlots) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val detail = content.detail
     val video = content.video
     val onlineCount = content.onlineCount

@@ -71,8 +71,8 @@ import com.aritxonly.teak.common.material.GlassMaterialInteraction
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -119,7 +119,7 @@ fun TeakFloatingTabBar(
     val currentOnItemSelected by androidx.compose.runtime.rememberUpdatedState(onItemSelected)
     val selectedIndex = items.indexOfFirst { it.key == selectedKey }.coerceAtLeast(0)
     val advancedMaterial = LocalTeakMaterialSpec.current
-    val themedContentColor = MiuixTheme.colorScheme.onSurfaceContainer
+    val themedContentColor = COUITheme.colorScheme.onSurfaceContainer
     val isDark = themedContentColor.luminance() > 0.5f
     val contentColor = if (isDark) Color.White else Color.Black
     val currentSelectedIndex by androidx.compose.runtime.rememberUpdatedState(selectedIndex)

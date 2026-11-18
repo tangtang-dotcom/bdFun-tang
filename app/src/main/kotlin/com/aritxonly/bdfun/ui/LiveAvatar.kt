@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kyant.shapes.Capsule
 import kotlinx.coroutines.delay
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 「正在直播」的 UP 头像。
@@ -50,7 +50,7 @@ internal fun LiveAvatar(
     onClick: () -> Unit,
     onLongClick: (() -> Unit)? = null,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val pulse = rememberLivePulse()
     val avatarModifier = if (onLongClick != null) {
         Modifier.combinedClickable(
@@ -117,7 +117,7 @@ internal fun LiveAvatar(
 /** 头像底部的「直播中」胶囊：白边是往外加的一圈，不是往胶囊里描边。 */
 @Composable
 private fun androidx.compose.foundation.layout.BoxScope.LiveBadge() {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .align(Alignment.BottomCenter)

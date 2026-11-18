@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.teak.common.chrome.TeakLargeTitle
 import com.aritxonly.teak.common.navigation.TeakPagerTabs
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +39,7 @@ internal fun MessageFeedList(
     actions: MessageFeedActions,
 ) {
     val navigate = messageRouteAction()
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val itemsByTab = snapshot.itemsByTab
     val loadingByTab = snapshot.loadingByTab
     val errorByTab = snapshot.errorByTab
@@ -107,7 +107,7 @@ private fun MessageFeedTabsRow(
     onSelectTab: (Int) -> Unit, onOpenSettings: () -> Unit, onRefresh: () -> Unit,
     refreshEnabled: Boolean,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(Modifier.fillMaxWidth().padding(
         top = 16.dp, bottom = 10.dp,
         start = if (classic) 16.dp else 0.dp,

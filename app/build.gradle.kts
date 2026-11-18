@@ -160,10 +160,10 @@ dependencies {
     implementation(libs.compose.animation)
     implementation(libs.compose.material3)
 
-    implementation(libs.miuix.ui)
-    implementation(libs.miuix.nav)
-    implementation(libs.miuix.blur)
-    implementation(libs.miuix.icons)
+    implementation(libs.coui.ui)
+    implementation(libs.coui.nav)
+    implementation(libs.coui.blur)
+    implementation(libs.coui.icons)
 
     implementation(libs.kyant.shapes)
 

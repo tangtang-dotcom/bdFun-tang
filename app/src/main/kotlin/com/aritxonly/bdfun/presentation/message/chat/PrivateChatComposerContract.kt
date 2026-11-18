@@ -10,5 +10,5 @@ internal class PrivateChatComposerActions(
 )
 internal data class PrivateChatComposerMaterial(
     val recipe: com.aritxonly.teak.common.material.GlassMaterialRecipe,
-    val backdrop: top.yukonga.miuix.kmp.blur.Backdrop?,
+    val backdrop: io.github.suqi8.coui.kmp.blur.Backdrop?,
 )

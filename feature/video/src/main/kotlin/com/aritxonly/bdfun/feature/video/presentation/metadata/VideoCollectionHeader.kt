@@ -20,16 +20,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Playlist
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Playlist
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun VideoCollectionHeader(
     title: String, count: Int, currentIndex: Int, expanded: Boolean,
     onExpand: () -> Unit, onScroll: (Int) -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -37,7 +37,7 @@ internal fun VideoCollectionHeader(
                 .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            AppGlyph(MiuixIcons.Playlist, colors.onBackground, size = 18.dp)
+            AppGlyph(COUIIcons.Playlist, colors.onBackground, size = 18.dp)
             Spacer(Modifier.width(8.dp))
             Text(
                 text = "合集 · $title",
@@ -75,6 +75,6 @@ private fun CollectionScrollButton(icon: Int, onClick: () -> Unit) {
             .clickable(interactionSource = null, indication = null, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        AppGlyph(icon, MiuixTheme.colorScheme.onBackgroundVariant, size = 14.dp)
+        AppGlyph(icon, COUITheme.colorScheme.onBackgroundVariant, size = 14.dp)
     }
 }

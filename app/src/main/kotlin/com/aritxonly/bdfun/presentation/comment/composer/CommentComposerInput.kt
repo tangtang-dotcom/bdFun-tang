@@ -26,7 +26,7 @@ internal fun androidx.compose.foundation.layout.RowScope.CommentComposerInput(
         recipe = recipe,
         backdrop = backdrop,
         flatBackgroundColor = if (classic) {
-            top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainerHigh
+            io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainerHigh
         } else {
             null
         },

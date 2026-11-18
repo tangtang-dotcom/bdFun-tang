@@ -32,4 +32,4 @@ internal data class HomeTopBarActions(val onSearch: () -> Unit, val onOpenMessag
     val onCancelSearch: () -> Unit = {}, val onClearQuery: () -> Unit = {}, val onOpenSearchPage: () -> Unit = {})
 internal class HomeTopBarMaterial(val wide: Boolean, val searchWidth: Dp,
     val recipe: com.aritxonly.teak.common.material.GlassMaterialRecipe,
-    val backdrop: top.yukonga.miuix.kmp.blur.Backdrop?, val searchInteraction: MutableInteractionSource, val classic: Boolean)
+    val backdrop: io.github.suqi8.coui.kmp.blur.Backdrop?, val searchInteraction: MutableInteractionSource, val classic: Boolean)

@@ -26,8 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.ChevronBackward
 
 @Composable
 internal fun BoxScope.LiveChromeShade(render: LiveChromeRender) {
@@ -124,7 +124,7 @@ internal fun BoxScope.LiveChromeLandscapeHeader(render: LiveChromeRender) {
                             contentAlignment = Alignment.Center,
                         ) {
                             Icon(
-                                imageVector = MiuixIcons.ChevronBackward,
+                                imageVector = COUIIcons.ChevronBackward,
                                 contentDescription = "返回",
                                 tint = Color.White,
                                 modifier = Modifier.size(23.5.dp),

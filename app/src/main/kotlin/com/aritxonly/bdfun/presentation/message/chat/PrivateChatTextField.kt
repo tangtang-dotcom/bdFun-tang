@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun androidx.compose.foundation.layout.RowScope.PrivateChatTextField(
@@ -17,7 +17,7 @@ internal fun androidx.compose.foundation.layout.RowScope.PrivateChatTextField(
 ) {
     val draft = content.draft
     val onDraftChange = actions.onDraftChange
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     BasicTextField(
         value = draft,
         onValueChange = onDraftChange,

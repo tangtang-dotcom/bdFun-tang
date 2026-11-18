@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.skeleton.TeakSkeletonBlock
 import com.aritxonly.teak.common.skeleton.rememberTeakSkeletonSweep
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 动态首屏骨架：和动态卡片同构（头像/昵称 + 正文 + 图片块）。 */
 internal fun LazyStaggeredGridScope.dynamicFeedSkeletonItems() {
@@ -36,7 +36,7 @@ private fun FeedCardSkeleton() {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(MiuixTheme.colorScheme.surfaceContainer)
+            .background(COUITheme.colorScheme.surfaceContainer)
             .padding(12.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {

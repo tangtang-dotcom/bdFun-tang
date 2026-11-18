@@ -1,7 +1,7 @@
 // Copyright 2026, compose-miuix-ui contributors
 // SPDX-License-Identifier: Apache-2.0
 
-package top.yukonga.miuix.kmp.effect.bg
+package io.github.suqi8.coui.kmp.effect.bg
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import top.yukonga.miuix.kmp.blur.isRuntimeShaderSupported
+import io.github.suqi8.coui.kmp.blur.isRuntimeShaderSupported
 
 /**
  * A composable that renders an animated gradient background effect.
@@ -37,7 +37,7 @@ import top.yukonga.miuix.kmp.blur.isRuntimeShaderSupported
  *     dynamicBackground = isAnimating,
  *     deviceType = DeviceType.PHONE,
  *     isDarkTheme = isSystemInDarkTheme(),
- *     surface = MiuixTheme.colorScheme.surface,
+ *     surface = COUITheme.colorScheme.surface,
  *     modifier = Modifier.fillMaxWidth().height(300.dp),
  * ) {
  *     // Foreground content rendered above the gradient

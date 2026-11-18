@@ -36,17 +36,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
-import top.yukonga.miuix.kmp.blur.BlendColorEntry
-import top.yukonga.miuix.kmp.blur.BlurDefaults
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.progressiveTextureBlur
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
-import top.yukonga.miuix.kmp.blur.textureBlur
-import top.yukonga.miuix.kmp.glass.GlassDefaults
-import top.yukonga.miuix.kmp.glass.GlassShape
-import top.yukonga.miuix.kmp.glass.glassPanel
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.BlendColorEntry
+import io.github.suqi8.coui.kmp.blur.BlurDefaults
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.progressiveTextureBlur
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.textureBlur
+import io.github.suqi8.coui.kmp.glass.GlassDefaults
+import io.github.suqi8.coui.kmp.glass.GlassShape
+import io.github.suqi8.coui.kmp.glass.glassPanel
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 只有页面级 chrome 才会把大标题换成顶栏占位，引导页等内容页不受影响。 */
 internal val LocalTeakClassicChrome = compositionLocalOf { false }
@@ -132,7 +132,7 @@ private val TeakBarProgressiveBlur = ProgressiveBlur.Top.copy(
  */
 @Composable
 fun Modifier.teakProgressiveBarBlur(
-    color: Color = MiuixTheme.colorScheme.background,
+    color: Color = COUITheme.colorScheme.background,
     tintAlpha: Float = TeakChromeDefaults.BarTintAlpha,
     blurRadius: Float = TeakChromeDefaults.BarBlurRadius,
 ): Modifier {
@@ -164,7 +164,7 @@ fun Modifier.teakProgressiveBarBlur(
 fun Modifier.teakClassicBarGlass(): Modifier {
     val material = LocalTeakMaterialSpec.current
     val backdrop = LocalTeakBackdrop.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val tint = colors.surfaceContainer
     val blurColors = BlurDefaults.blurColors(
         blendColors = listOf(BlendColorEntry(color = tint.copy(alpha = 0.35f))),
@@ -228,7 +228,7 @@ fun TeakTopBar(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .background(MiuixTheme.colorScheme.surfaceContainer.copy(alpha = 0.62f)),
+                    .background(COUITheme.colorScheme.surfaceContainer.copy(alpha = 0.62f)),
             )
             Text(
                 text = title,
@@ -280,8 +280,8 @@ fun TeakLargeTitle(
     pageState: TeakPageScrollState = LocalTeakPageScrollState.current,
     topSpacer: Dp = TeakChromeDefaults.LargeTitleTopSpacer,
     /** 头图上叠标题时传白色；普通页面默认跟随主题。 */
-    titleColor: Color = MiuixTheme.colorScheme.onBackground,
-    subtitleColor: Color = MiuixTheme.colorScheme.onBackgroundVariant,
+    titleColor: Color = COUITheme.colorScheme.onBackground,
+    subtitleColor: Color = COUITheme.colorScheme.onBackgroundVariant,
 ) {
     // 经典页面不再在内容里画大标题，标题常驻顶栏；这里只保留顶栏占位，让内容从栏下开始。
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic && LocalTeakClassicChrome.current) {
@@ -289,7 +289,7 @@ fun TeakLargeTitle(
         return
     }
     if (isWideFoldTopBar()) { Spacer(Modifier.height(TeakChromeDefaults.TopOverlayHeight - 12.dp)); return }
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val p = (pageState.collapse / TeakChromeDefaults.CollapseFadeFraction).coerceIn(0f, 1f)
     Column(
         modifier = modifier
@@ -392,7 +392,7 @@ fun TeakPageScaffold(
                     if (wide && title != null) {
                         WideFoldTopAppBar(
                             title = title,
-                            titleColor = topBarGlyphColor ?: MiuixTheme.colorScheme.onSurface,
+                            titleColor = topBarGlyphColor ?: COUITheme.colorScheme.onSurface,
                             navigationIcon = {
                                 androidx.compose.foundation.layout.Row {
                                     if (showBackButton) TeakGlassBackButton(onClick = onBack, glyphColor = topBarGlyphColor)

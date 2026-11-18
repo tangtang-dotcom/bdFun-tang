@@ -25,10 +25,10 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.user.SentRecord
 import com.aritxonly.bdfun.feature.sent.application.*
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SentRecordRow(
@@ -36,7 +36,7 @@ internal fun SentRecordRow(
     shape: androidx.compose.ui.graphics.Shape,
     onClick: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val isDanmaku = record.kind == "danmaku"
     val classic = com.aritxonly.teak.common.theme.TeakUiStyle.isClassic
     Column(
@@ -78,7 +78,7 @@ internal fun SentRecordRow(
                 fontSize = 10.5.sp,
             )
             Spacer(Modifier.weight(1f))
-            AppGlyph(MiuixIcons.Basic.ArrowRight, size = 14.dp, tint = colors.outline)
+            AppGlyph(COUIIcons.Basic.ArrowRight, size = 14.dp, tint = colors.outline)
         }
         Spacer(Modifier.height(6.dp))
         Text(

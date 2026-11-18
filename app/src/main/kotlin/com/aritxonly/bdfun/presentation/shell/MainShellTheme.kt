@@ -10,8 +10,8 @@ import com.aritxonly.bdfun.ui.findHostActivity
 import com.aritxonly.bdfun.ui.syncSystemBarIcons
 
 internal data class MainShellTheme(
-    val dark: Boolean, val light: top.yukonga.miuix.kmp.theme.Colors,
-    val darkColors: top.yukonga.miuix.kmp.theme.Colors, val materialColors: androidx.compose.material3.ColorScheme,
+    val dark: Boolean, val light: io.github.suqi8.coui.kmp.theme.Colors,
+    val darkColors: io.github.suqi8.coui.kmp.theme.Colors, val materialColors: androidx.compose.material3.ColorScheme,
 )
 
 @Composable

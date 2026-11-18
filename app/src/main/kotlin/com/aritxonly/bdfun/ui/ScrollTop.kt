@@ -28,7 +28,7 @@ import com.aritxonly.teak.common.icons.AppGlyph
 import com.aritxonly.teak.common.icons.LucideIcons
 import com.aritxonly.teak.common.material.TeakGlassIconButton
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 当前列表页注册的「回到顶部」动作；没有注册时不显示按钮。 */
 
@@ -76,7 +76,7 @@ fun BoxScope.ScrollTopButton(settings: SettingsBindings, bottomObstruction: andr
                 Box(
                     Modifier.matchParentSize()
                         .clip(androidx.compose.foundation.shape.CircleShape)
-                        .background(MiuixTheme.colorScheme.surfaceContainer.copy(alpha = 0.55f)),
+                        .background(COUITheme.colorScheme.surfaceContainer.copy(alpha = 0.55f)),
                 )
             }
             TeakGlassIconButton(

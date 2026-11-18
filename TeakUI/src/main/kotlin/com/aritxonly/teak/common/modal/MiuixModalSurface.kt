@@ -16,11 +16,11 @@ import com.aritxonly.teak.common.material.teakGlassMaterial
 import com.aritxonly.teak.common.material.softGlassTintColor
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Immutable
-data class MiuixModalSurface(
+data class COUIModalSurface(
     val modifier: Modifier,
     val backgroundColor: Color,
 )
@@ -36,22 +36,22 @@ fun rememberMiuixModalSurface(
     shape: Shape,
     recipe: GlassMaterialRecipe,
     backdrop: Backdrop? = null,
-): MiuixModalSurface {
+): COUIModalSurface {
     val advancedMaterial = LocalTeakMaterialSpec.current
     val resolvedBackdrop = backdrop ?: LocalTeakBackdrop.current
         ?: LocalAdvancedMaterialDialogBlurHostState.current?.modalBackdrop
-    val container = MiuixTheme.colorScheme.surfaceContainer
-    val isDark = MiuixTheme.colorScheme.background.luminance() < 0.5f
+    val container = COUITheme.colorScheme.surfaceContainer
+    val isDark = COUITheme.colorScheme.background.luminance() < 0.5f
     val modalMaterial = advancedMaterial.fineTuning.miuixModalMaterial(kind)
 
     if (!advancedMaterial.textureBlurEnabled) {
-        return MiuixModalSurface(Modifier, container)
+        return COUIModalSurface(Modifier, container)
     }
 
-    if (resolvedBackdrop == null) return MiuixModalSurface(Modifier, container)
+    if (resolvedBackdrop == null) return COUIModalSurface(Modifier, container)
     val tint = if (kind == TeakModalKind.Dialog) container
         else advancedMaterial.fineTuning.softGlassTintColor(isDark)
-    return MiuixModalSurface(
+    return COUIModalSurface(
         modifier = Modifier.teakGlassMaterial(
             advancedMaterial = advancedMaterial, backdrop = resolvedBackdrop, shape = shape,
             tint = tint, tintStyle = GlassTintStyle.Neutral, isDark = isDark, recipe = recipe,
@@ -64,7 +64,7 @@ fun rememberMiuixModalSurface(
 
 /** Root-hosted Miuix dialog; conditional callers may disappear before its exit finishes. */
 @Composable
-fun MiuixDialog(
+fun COUIDialog(
     show: Boolean,
     onDismissRequest: () -> Unit,
     title: String? = null,
@@ -74,10 +74,10 @@ fun MiuixDialog(
     content: @Composable () -> Unit,
 ) {
     val host = LocalAdvancedMaterialDialogBlurHostState.current
-    val request = MiuixDialogRequest(title, summary, modifier, minOf(maxWidth, TeakModalDefaults.DialogMaxWidth),
+    val request = COUIDialogRequest(title, summary, modifier, minOf(maxWidth, TeakModalDefaults.DialogMaxWidth),
         currentCompositionLocalContext, onDismissRequest, content)
     if (host == null) {
-        MiuixDialogSurface(show, request, onDismissFinished = {})
+        COUIDialogSurface(show, request, onDismissFinished = {})
         return
     }
     val id = remember { Any() }

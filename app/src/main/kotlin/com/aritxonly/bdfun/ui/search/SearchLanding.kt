@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SearchLanding(
@@ -22,7 +22,7 @@ internal fun SearchLanding(
     onPickKeyword: (String) -> Unit,
     onClearHistory: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     val listState = rememberLazyListState()
     TrackTeakPageScroll(listState)

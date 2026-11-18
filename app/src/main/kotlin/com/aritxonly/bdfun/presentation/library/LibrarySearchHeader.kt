@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.feature.library.application.*
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun LibrarySearchHeader(title: String, state: LibrarySearchState, events: LibrarySearchEvents, onBack: () -> Unit) {
@@ -48,7 +48,7 @@ internal fun LibrarySearchHeader(title: String, state: LibrarySearchState, event
 
 @Composable
 internal fun LibrarySearchBackButton(onBack: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .size(38.dp)
@@ -57,13 +57,13 @@ internal fun LibrarySearchBackButton(onBack: () -> Unit) {
             .clickable(interactionSource = null, indication = null, onClick = onBack),
         contentAlignment = Alignment.Center,
     ) {
-        AppGlyph(MiuixIcons.ChevronBackward, colors.onBackground, size = 18.dp)
+        AppGlyph(COUIIcons.ChevronBackward, colors.onBackground, size = 18.dp)
     }
 }
 
 @Composable
 internal fun androidx.compose.foundation.layout.RowScope.LibrarySearchField(title: String, state: LibrarySearchState, events: LibrarySearchEvents) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .weight(1f)
@@ -82,13 +82,13 @@ internal fun androidx.compose.foundation.layout.RowScope.LibrarySearchField(titl
 
 @Composable
 internal fun LibrarySearchMagnifier() {
-    val colors = MiuixTheme.colorScheme
-    AppGlyph(MiuixIcons.Search, colors.onBackgroundVariant, size = 16.dp)
+    val colors = COUITheme.colorScheme
+    AppGlyph(COUIIcons.Search, colors.onBackgroundVariant, size = 16.dp)
 }
 
 @Composable
 internal fun androidx.compose.foundation.layout.RowScope.LibrarySearchInput(title: String, state: LibrarySearchState, events: LibrarySearchEvents) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
         if (state.draft.isEmpty()) {
             Text(
@@ -114,7 +114,7 @@ internal fun androidx.compose.foundation.layout.RowScope.LibrarySearchInput(titl
 
 @Composable
 internal fun LibrarySearchClearButton(state: LibrarySearchState, events: LibrarySearchEvents) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .size(28.dp)
@@ -125,7 +125,7 @@ internal fun LibrarySearchClearButton(state: LibrarySearchState, events: Library
         contentAlignment = Alignment.Center,
     ) {
         if (state.draft.isNotEmpty()) {
-            AppGlyph(MiuixIcons.Basic.SearchCleanup, colors.onBackgroundVariant, size = 14.dp)
+            AppGlyph(COUIIcons.Basic.SearchCleanup, colors.onBackgroundVariant, size = 14.dp)
         }
     }
 }

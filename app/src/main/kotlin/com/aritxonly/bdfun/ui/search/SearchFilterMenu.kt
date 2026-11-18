@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun FilterMenu(
@@ -71,7 +71,7 @@ internal fun FilterSection(
     bottom: androidx.compose.ui.unit.Dp = 14.dp,
     content: @Composable () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(modifier = Modifier.fillMaxWidth().padding(bottom = bottom)) {
         Text(
             text = title,
@@ -91,7 +91,7 @@ internal fun FilterChips(
     columns: Int,
     onSelect: (Int) -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         options.chunked(columns).forEachIndexed { rowIndex, row ->
             Row(

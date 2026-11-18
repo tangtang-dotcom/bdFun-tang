@@ -16,10 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.SearchCleanup
-import top.yukonga.miuix.kmp.icon.extended.Search
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.SearchCleanup
+import io.github.suqi8.coui.kmp.icon.extended.Search
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 
 @Composable
@@ -34,9 +34,9 @@ internal fun androidx.compose.foundation.layout.BoxScope.HomeSearchContents(sear
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = MiuixIcons.Search,
+            imageVector = COUIIcons.Search,
             contentDescription = "搜索",
-            tint = MiuixTheme.colorScheme.onBackgroundVariant,
+            tint = COUITheme.colorScheme.onBackgroundVariant,
             modifier = Modifier.size(16.dp),
         )
         Spacer(Modifier.width(8.dp))
@@ -45,7 +45,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.HomeSearchContents(sear
         } else {
             Text(
                 text = "搜索视频、UP 主",
-                color = MiuixTheme.colorScheme.onBackgroundVariant,
+                color = COUITheme.colorScheme.onBackgroundVariant,
                 fontSize = 13.sp,
                 maxLines = 1,
             )
@@ -61,8 +61,8 @@ internal fun androidx.compose.foundation.layout.BoxScope.HomeSearchContents(sear
             onClick = actions.onClearQuery,
             modifier = Modifier.align(Alignment.CenterEnd).size(40.dp),
         ) {
-            Icon(MiuixIcons.Basic.SearchCleanup, "清空搜索",
-                tint = MiuixTheme.colorScheme.onBackgroundVariant, modifier = Modifier.size(18.dp))
+            Icon(COUIIcons.Basic.SearchCleanup, "清空搜索",
+                tint = COUITheme.colorScheme.onBackgroundVariant, modifier = Modifier.size(18.dp))
         }
     }
 }

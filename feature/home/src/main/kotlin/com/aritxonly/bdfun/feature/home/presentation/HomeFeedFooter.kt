@@ -13,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun HomeFeedFooter(state: HomeFeedState, scope: kotlinx.coroutines.CoroutineScope) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
                     val footerError = state.loadMoreError
                     Box(
                         modifier = Modifier

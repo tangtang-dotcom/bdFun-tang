@@ -22,14 +22,14 @@ import com.aritxonly.teak.common.chrome.TeakComposerBackground
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.aritxonly.teak.common.material.TeakGlassRecipes
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun PrivateChatComposer(content: PrivateChatComposerContent, actions: PrivateChatComposerActions) {
     val showEmoji = content.showEmoji
     val uploading = content.uploading
     val onPickEmoji = actions.onPickEmoji
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val recipe = TeakGlassRecipes.floatingNavigation(LocalTeakMaterialSpec.current.fineTuning)
     val backdrop = LocalTeakBackdrop.current
     val material = PrivateChatComposerMaterial(recipe, backdrop)

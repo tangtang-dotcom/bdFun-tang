@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.data.VideoItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun VideoRelatedCover(item: VideoItem, coverWidth: androidx.compose.ui.unit.Dp, coverHeight: androidx.compose.ui.unit.Dp) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .width(coverWidth)
@@ -59,7 +59,7 @@ internal fun VideoRelatedCover(item: VideoItem, coverWidth: androidx.compose.ui.
 internal fun VideoRelatedMetadata(
     item: VideoItem, metaLabel: String?, coverHeight: androidx.compose.ui.unit.Dp, modifier: Modifier,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = modifier.height(coverHeight),
     ) {

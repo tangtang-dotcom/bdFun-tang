@@ -16,10 +16,10 @@ import androidx.compose.ui.unit.Density
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.aritxonly.teak.common.material.TeakMaterialFineTuning
 import com.aritxonly.teak.common.material.TeakMaterialSpec
-import top.yukonga.miuix.kmp.theme.Colors
-import top.yukonga.miuix.kmp.theme.ColorSchemeMode
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.theme.ThemeController
+import io.github.suqi8.coui.kmp.theme.Colors
+import io.github.suqi8.coui.kmp.theme.ColorSchemeMode
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.theme.ThemeController
 
 /**
  * 全局界面风格。
@@ -44,7 +44,7 @@ object TeakUiStyle {
  * TeakUI 的主题适配层。
  *
  * TeakUI 本身不绑定任何 App 的品牌色：宿主 App 传入 Miuix 的浅色/深色色板、
- * Material3 色板和字号倍率，这里统一注入 MiuixTheme、MaterialTheme、
+ * Material3 色板和字号倍率，这里统一注入 COUITheme、MaterialTheme、
  * LocalTeakMaterialSpec 和全局字号。
  */
 @Composable
@@ -113,7 +113,7 @@ fun TeakTheme(
         LocalHapticsEnabled provides hapticsEnabled,
         androidx.compose.ui.platform.LocalHapticFeedback provides haptics,
     ) {
-        MiuixTheme(controller = controller) {
+        COUITheme(controller = controller) {
             MaterialTheme(colorScheme = materialColors) {
                 CompositionLocalProvider(LocalTeakMaterialSpec provides materialSpec) {
                     com.aritxonly.teak.common.modal.TeakModalHost { content() }

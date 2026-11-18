@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.aritxonly.teak.common.modal.LocalTextFieldContainerColors
-import top.yukonga.miuix.kmp.squircle.squircleBackground
-import top.yukonga.miuix.kmp.squircle.squircleSurface
+import io.github.suqi8.coui.kmp.squircle.squircleBackground
+import io.github.suqi8.coui.kmp.squircle.squircleSurface
 
 /** Set after the popup boundary so every form in any Sheet gets the Sheet semantic role. */
 internal val LocalSheetFormContainers = staticCompositionLocalOf { false }
@@ -23,7 +23,7 @@ internal fun formContainerColor(fallback: Color): Color {
 /** Match MIUIX TextField's translucent fill path, including its continuous rounded corners. */
 @Composable
 internal fun Modifier.formContainerBackground(cornerRadius: Dp): Modifier = squircleSurface(Color.Transparent, cornerRadius).squircleBackground(
-    color = formContainerColor(top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.secondaryContainer),
+    color = formContainerColor(io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.secondaryContainer),
     cornerRadius = cornerRadius,
 )
 

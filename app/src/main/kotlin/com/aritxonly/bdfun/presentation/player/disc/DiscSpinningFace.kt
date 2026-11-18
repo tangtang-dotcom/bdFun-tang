@@ -21,7 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun DiscSpinningFace(runtime: DiscRuntime, visual: DiscVisual) {
@@ -62,7 +62,7 @@ internal fun DiscSpinningFace(runtime: DiscRuntime, visual: DiscVisual) {
 @Composable
 private fun androidx.compose.foundation.layout.BoxScope.DiscCover(runtime: DiscRuntime, coverRequest: coil.request.ImageRequest) {
     val cover = runtime.ui.displayedCover
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .fillMaxSize(0.60f)
@@ -89,7 +89,7 @@ private fun androidx.compose.foundation.layout.BoxScope.DiscCover(runtime: DiscR
 
 @Composable
 private fun DiscGrooves(size: Dp) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val darkTheme = colors.background.luminance() < 0.5f
     Canvas(modifier = Modifier.fillMaxSize()) {
         val r = size.toPx() / 2f

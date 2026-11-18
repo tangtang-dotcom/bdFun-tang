@@ -10,13 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.navigation.TeakPagerTabs
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SpaceCompactProfile(
     content: SpaceScreenContent, actions: SpaceScreenActions,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val profile = content.snapshot.profile.space?.profile
     val ui = content.ui
     val banner = content.banner

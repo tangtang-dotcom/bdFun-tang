@@ -1,7 +1,7 @@
 // Copyright 2026, compose-miuix-ui contributors
 // SPDX-License-Identifier: Apache-2.0
 
-package top.yukonga.miuix.kmp.effect.bg
+package io.github.suqi8.coui.kmp.effect.bg
 
 import androidx.compose.animation.core.spring
 import androidx.compose.runtime.withFrameNanos
@@ -15,7 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.effect.bg.BgEffectNode.Companion.MIN_FRAME_DELTA_NANOS
+import io.github.suqi8.coui.kmp.effect.bg.BgEffectNode.Companion.MIN_FRAME_DELTA_NANOS
 import kotlin.math.floor
 
 /**

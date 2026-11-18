@@ -13,7 +13,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.chrome.teakClassicBarGlass
 import com.aritxonly.teak.common.chrome.teakProgressiveBarBlur
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 
 @Composable
@@ -34,7 +34,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.HomeTopBarBackground(cl
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(MiuixTheme.colorScheme.surfaceContainer.copy(alpha = 0.62f)),
+                .background(COUITheme.colorScheme.surfaceContainer.copy(alpha = 0.62f)),
         )
     }
 }

@@ -16,7 +16,7 @@ import com.aritxonly.bdfun.feature.message.application.*
 import com.aritxonly.bdfun.feature.message.application.MessageFeedKind
 import com.aritxonly.bdfun.infra.storage.RouteJsonCodec
 import com.aritxonly.bdfun.ui.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MessageCenterHost(onBack: () -> Unit) {
@@ -36,7 +36,7 @@ internal fun MessageCenterHost(onBack: () -> Unit) {
                         }
                     }
                     if (split) Box(Modifier.padding(start = 340.dp).width(1.dp).fillMaxHeight()
-                        .background(MiuixTheme.colorScheme.onBackgroundVariant.copy(alpha = .1f)))
+                        .background(COUITheme.colorScheme.onBackgroundVariant.copy(alpha = .1f)))
                     // 两种布局使用同一组合位置，展开或旋转不会重建正在编辑的子页。
                     Box(Modifier.align(Alignment.CenterEnd)
                         .width(if (split) width - 341.dp else width).fillMaxHeight()) {
@@ -118,11 +118,11 @@ private fun MessageCenterPage(destination: MessageDestination, onBack: () -> Uni
 
 @Composable
 private fun MessageCenterPlaceholder() {
-    Column(Modifier.fillMaxSize().background(MiuixTheme.colorScheme.background),
+    Column(Modifier.fillMaxSize().background(COUITheme.colorScheme.background),
         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("选择一条消息", color = MiuixTheme.colorScheme.onBackground)
+        Text("选择一条消息", color = COUITheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
-        Text("私信、互动与通知，集中查看", color = MiuixTheme.colorScheme.onBackgroundVariant)
+        Text("私信、互动与通知，集中查看", color = COUITheme.colorScheme.onBackgroundVariant)
     }
 }
 

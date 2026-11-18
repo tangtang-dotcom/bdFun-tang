@@ -13,16 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.chrome.TeakTopOverlay
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun GuidePageFrame(
     onBack: (() -> Unit)?,
     content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val backdrop = rememberLayerBackdrop {
         drawRect(colors.background)
         drawContent()

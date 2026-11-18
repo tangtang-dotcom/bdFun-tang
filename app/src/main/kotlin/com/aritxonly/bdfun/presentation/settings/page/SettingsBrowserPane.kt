@@ -22,10 +22,10 @@ import com.aritxonly.teak.common.interaction.blockTouches
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.search.TeakSearchTransitionDefaults
 import com.aritxonly.teak.common.search.teakSearchUnderlay
-import top.yukonga.miuix.kmp.basic.Scaffold
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Scaffold
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal enum class SettingsPane { Single, Categories, Details }
 
@@ -89,8 +89,8 @@ private fun SettingsPaneScaffold(runtime: SettingsPageRuntime, pane: SettingsPan
     } else PageChromeScope {
         // 两栏共用主题，但外壳、滚动、弹层和玻璃采样各自持有，不能再套整页内容宽度限制。
         TeakPageScaffold(title = title, onBack = back, showBackButton = pane == SettingsPane.Categories || detail, limitContentWidth = false,
-            pageState = rememberTeakPageScrollState(), backgroundColor = MiuixTheme.colorScheme.surface,
-            contentModifier = Modifier.background(MiuixTheme.colorScheme.surface).smartRefresh(runtime.settings.smartRefresh),
+            pageState = rememberTeakPageScrollState(), backgroundColor = COUITheme.colorScheme.surface,
+            contentModifier = Modifier.background(COUITheme.colorScheme.surface).smartRefresh(runtime.settings.smartRefresh),
             topBarActions = { if (search != null) SettingsCategorySearchButton(search) },
             overlay = { ScrollTopButton(runtime.settings) }, content = content)
     }
@@ -99,7 +99,7 @@ private fun SettingsPaneScaffold(runtime: SettingsPageRuntime, pane: SettingsPan
 @Composable
 private fun SettingsPaneBody(session: SettingsBrowserSession, values: Map<String, SettingValue>, runtime: SettingsPageRuntime,
     controller: IndexedSettingsStateHolder, categories: Boolean) {
-    val background = MiuixTheme.colorScheme.surface
+    val background = COUITheme.colorScheme.surface
     val backdrop = rememberLayerBackdrop { drawRect(background); drawContent() }
     CompositionLocalProvider(LocalTeakBackdrop provides backdrop) {
         Scaffold(containerColor = Color.Transparent, contentWindowInsets = WindowInsets(0, 0, 0, 0)) {

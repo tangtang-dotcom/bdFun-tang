@@ -86,13 +86,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.anim.folmeSpring
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.overlay.OverlayBottomSheet
-import top.yukonga.miuix.kmp.squircle.squircleSurface
-import top.yukonga.miuix.kmp.theme.LocalDismissState
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.window.WindowBottomSheet
+import io.github.suqi8.coui.kmp.anim.folmeSpring
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.overlay.OverlayBottomSheet
+import io.github.suqi8.coui.kmp.squircle.squircleSurface
+import io.github.suqi8.coui.kmp.theme.LocalDismissState
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.window.WindowBottomSheet
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.abs
 
@@ -255,7 +255,7 @@ internal fun BottomSheetContentLayout(
         }
 
         if (enableWindowDim) {
-            val baseColor = MiuixTheme.colorScheme.windowDimming
+            val baseColor = COUITheme.colorScheme.windowDimming
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -889,10 +889,10 @@ private fun TitleAndActionsRow(
             Text(
                 text = it,
                 modifier = Modifier.align(Alignment.Center),
-                fontSize = MiuixTheme.textStyles.title4.fontSize,
+                fontSize = COUITheme.textStyles.title4.fontSize,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
-                color = MiuixTheme.colorScheme.onSurface,
+                color = COUITheme.colorScheme.onSurface,
             )
         }
 
@@ -938,13 +938,13 @@ object BottomSheetDefaults {
      * The default background color of the bottom sheet.
      */
     @Composable
-    fun backgroundColor() = MiuixTheme.colorScheme.background
+    fun backgroundColor() = COUITheme.colorScheme.background
 
     /**
      * The default color of the drag handle.
      */
     @Composable
-    fun dragHandleColor() = MiuixTheme.colorScheme.onSurfaceVariantSummary.copy(alpha = 0.2f)
+    fun dragHandleColor() = COUITheme.colorScheme.onSurfaceVariantSummary.copy(alpha = 0.2f)
 
     /**
      * The default corner radius of the bottom sheet.

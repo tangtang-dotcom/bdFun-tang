@@ -17,20 +17,20 @@ import androidx.compose.ui.layout.ContentScale
 import coil.request.ImageRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal const val DEFAULT_SPACE_BANNER =
     "https://i0.hdslb.com/bfs/space/cb1c3ef50e22b6096fde67febe863494caefebad.png"
 
 @Composable
 internal fun SpaceBanner(bitmap: android.graphics.Bitmap?, aspect: Float = 16f / 10f, alignmentY: Float = 0f) {
-    val dark = MiuixTheme.colorScheme.background.luminance() < 0.5f
+    val dark = COUITheme.colorScheme.background.luminance() < 0.5f
     Box(
         modifier = Modifier
             .fillMaxWidth()
             // 参考图里的头图约 960×600，也就是 16:10；高度跟着屏幕宽度走。
             .aspectRatio(aspect)
-            .background(MiuixTheme.colorScheme.surfaceContainerHigh),
+            .background(COUITheme.colorScheme.surfaceContainerHigh),
     ) {
         if (bitmap != null && !bitmap.isRecycled) {
             Image(

@@ -6,9 +6,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.aritxonly.teak.common.icons.LucideIcons
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
 
 /** 播放器设置行的小图标，统一 22dp 线性风格。 */
 
@@ -34,7 +34,7 @@ fun BackgroundListenGlyph(tint: Color = Color.White) {
 
 @Composable
 internal fun ResizeGlyph(tint: Color = Color.White) {
-    AppGlyph(MiuixIcons.ExpandMore, tint, size = 22.dp)
+    AppGlyph(COUIIcons.ExpandMore, tint, size = 22.dp)
 }
 
 @Composable
@@ -59,7 +59,7 @@ fun SubtitleGlyph(tint: Color = Color.White) {
 
 @Composable
 fun DanmakuSettingGlyph(tint: Color = Color.White) {
-    AppGlyph(MiuixIcons.Tune, tint, size = 22.dp)
+    AppGlyph(COUIIcons.Tune, tint, size = 22.dp)
 }
 
 @Composable
@@ -74,7 +74,7 @@ internal fun WatchLaterGlyph(tint: Color = Color.White, sizeDp: androidx.compose
 
 @Composable
 internal fun CacheGlyphSmall(tint: Color = Color.White, sizeDp: androidx.compose.ui.unit.Dp = 24.dp) {
-    AppGlyph(MiuixIcons.Download, tint, size = sizeDp)
+    AppGlyph(COUIIcons.Download, tint, size = sizeDp)
 }
 
 @Composable
@@ -84,5 +84,5 @@ fun PipGlyphSmall(tint: Color = Color.White, sizeDp: androidx.compose.ui.unit.Dp
 
 @Composable
 fun CastGlyphSmall(tint: Color = Color.White, sizeDp: androidx.compose.ui.unit.Dp = 24.dp) {
-    AppGlyph(MiuixIcons.ScreenMirroring, tint, size = sizeDp)
+    AppGlyph(COUIIcons.ScreenMirroring, tint, size = sizeDp)
 }

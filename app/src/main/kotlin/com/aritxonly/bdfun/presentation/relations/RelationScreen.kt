@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.ui.*
 import com.aritxonly.teak.common.chrome.*
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Refresh
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Refresh
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.aritxonly.bdfun.feature.relations.application.*
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
@@ -51,13 +51,13 @@ private fun RelationPageContent(controller: RelationFeedStateHolder, order: Rela
         slots = ActivityPageSlots(
             topBarActions = {
             TeakTopGlassButton(onClick = { scope.launch { controller.fetch(reset = true) } }) {
-                Icon(MiuixIcons.Refresh, contentDescription = "刷新$title", tint = MiuixTheme.colorScheme.onBackground,
+                Icon(COUIIcons.Refresh, contentDescription = "刷新$title", tint = COUITheme.colorScheme.onBackground,
                     modifier = Modifier.size(20.dp))
             }
         },
         ),
     ) {
-        val colors = MiuixTheme.colorScheme
+        val colors = COUITheme.colorScheme
         val dark = colors.background.luminance() < 0.5f
         SideEffect { context.findHostActivity()?.syncSystemBarIcons(dark) }
         TrackTeakPageScroll(listState)

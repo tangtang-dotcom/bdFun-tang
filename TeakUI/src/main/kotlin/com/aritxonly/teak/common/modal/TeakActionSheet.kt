@@ -6,10 +6,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.basic.IconButton
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.basic.IconButton
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Close
 
 /** 兼容旧操作入口，显示与拖拽生命周期统一交给 Deadliner Sheet。 */
 @Composable
@@ -20,14 +20,14 @@ fun TeakActionSheet(
     allowDismiss: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    MiuixBottomSheet(
+    COUIBottomSheet(
         show = visible,
         title = title ?: "操作",
         onDismissRequest = onDismiss,
         allowDismiss = allowDismiss,
         startAction = {
             IconButton(onClick = onDismiss, enabled = allowDismiss) {
-                Icon(MiuixIcons.Close, contentDescription = "关闭")
+                Icon(COUIIcons.Close, contentDescription = "关闭")
             }
         },
     ) { padding ->

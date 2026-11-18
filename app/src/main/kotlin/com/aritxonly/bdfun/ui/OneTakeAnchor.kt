@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalView
 import com.aritxonly.bdfun.TeakOneTake
 import com.aritxonly.bdfun.data.VideoItem
 import kotlin.math.roundToInt
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 一镜到底的「起飞点」。
@@ -66,7 +66,7 @@ class OneTakeAnchor internal constructor() {
 @Composable
 fun rememberOneTakeAnchor(): OneTakeAnchor {
     val view = LocalView.current
-    val pageBackground = MiuixTheme.colorScheme.background.toArgb()
+    val pageBackground = COUITheme.colorScheme.background.toArgb()
     val anchor = remember { OneTakeAnchor() }
     anchor.backgroundColor = pageBackground
     anchor.modifier = remember(anchor, view) {

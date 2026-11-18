@@ -14,8 +14,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.ImeAction
 import com.aritxonly.bdfun.BrandPink
-import top.yukonga.miuix.kmp.icon.extended.Search
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.extended.Search
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 
 @Composable
@@ -43,7 +43,7 @@ internal fun androidx.compose.foundation.layout.RowScope.HomeSearchEditor(search
         onValueChange = onQueryChange,
         singleLine = true,
         textStyle = ComposerTextStyle.copy(
-            color = MiuixTheme.colorScheme.onBackground,
+            color = COUITheme.colorScheme.onBackground,
         ),
         cursorBrush = SolidColor(BrandPink),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -53,7 +53,7 @@ internal fun androidx.compose.foundation.layout.RowScope.HomeSearchEditor(search
             if (searchQuery.isEmpty()) {
                 Text(
                     text = "搜索视频、UP 主",
-                    color = MiuixTheme.colorScheme.onBackgroundVariant,
+                    color = COUITheme.colorScheme.onBackgroundVariant,
                     style = ComposerTextStyle,
                     maxLines = 1,
                 )

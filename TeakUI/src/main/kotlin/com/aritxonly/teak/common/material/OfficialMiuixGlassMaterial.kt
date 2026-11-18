@@ -7,12 +7,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.glass.GlassDefaults
-import top.yukonga.miuix.kmp.glass.GlassMaterials
-import top.yukonga.miuix.kmp.glass.GlassShape
-import top.yukonga.miuix.kmp.glass.GlassStrokes
-import top.yukonga.miuix.kmp.glass.glass
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.glass.GlassDefaults
+import io.github.suqi8.coui.kmp.glass.GlassMaterials
+import io.github.suqi8.coui.kmp.glass.GlassShape
+import io.github.suqi8.coui.kmp.glass.GlassStrokes
+import io.github.suqi8.coui.kmp.glass.glass
 
 /** Application roles mapped to the unmodified material primitives from MIUIX PR #423. */
 enum class GlassSurfaceRole { Control, FloatingBar, Panel, TopBar }

@@ -16,7 +16,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
@@ -31,7 +31,7 @@ internal fun ActionStat(
     onClick: () -> Unit,
     onLongPress: (() -> Unit)? = null,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val state = remember { VideoActionPressStateHolder() }
     VideoActionPressDecay(state, kind)
     val colorTarget = if (active || state.isPressing || state.press > 0.01f) accentColor else colors.onBackgroundVariant
@@ -51,7 +51,7 @@ internal enum class ActionKind { ThumbUp, ThumbDown, Coin, Star, Share }
 
 @Composable
 internal fun MiniStat(text: String, playIcon: Boolean) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(verticalAlignment = Alignment.CenterVertically) {
         androidx.compose.foundation.Canvas(modifier = Modifier.size(12.dp)) {
             if (playIcon) {

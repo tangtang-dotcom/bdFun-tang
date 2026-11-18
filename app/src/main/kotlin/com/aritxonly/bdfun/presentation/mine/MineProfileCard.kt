@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.border
 import com.aritxonly.bdfun.trimBottom
-import top.yukonga.miuix.kmp.basic.Button
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
+import io.github.suqi8.coui.kmp.basic.Button
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -33,13 +33,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.aritxonly.bdfun.core.model.user.UserProfile
 import com.aritxonly.bdfun.feature.mine.application.*
 
 @Composable
 internal fun MineProfileCard(shown: UserProfile, cardShape: androidx.compose.ui.graphics.Shape, navigation: MineNavigation) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val classic = com.aritxonly.teak.common.theme.TeakUiStyle.isClassic
     Column(
         modifier = Modifier
@@ -75,7 +75,7 @@ internal fun MineProfileCard(shown: UserProfile, cardShape: androidx.compose.ui.
 
 @Composable
 private fun androidx.compose.foundation.layout.RowScope.MineIdentity(shown: UserProfile) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(modifier = Modifier.weight(1f)) {
         MineNameAndLevel(shown)
         Spacer(Modifier.height(9.dp))
@@ -94,7 +94,7 @@ private fun androidx.compose.foundation.layout.RowScope.MineIdentity(shown: User
 
 @Composable
 private fun MineNameAndLevel(shown: UserProfile) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = shown.name,

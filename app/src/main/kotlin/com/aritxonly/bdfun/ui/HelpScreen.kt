@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.teak.common.settings.TeakSettingsCard
 import com.aritxonly.teak.common.settings.TeakSettingsPage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 帮助中心：问答形式，入口在设置 → 关于 → 帮助中心。 */
 @Composable
@@ -47,7 +47,7 @@ fun HelpScreen() {
 
 @Composable
 private fun HelpQaRow(question: String, answer: String) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,7 +71,7 @@ private fun HelpQaRow(question: String, answer: String) {
 
 @Composable
 private fun HelpFeedbackRow() {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     fun open(url: String) {
         runCatching {

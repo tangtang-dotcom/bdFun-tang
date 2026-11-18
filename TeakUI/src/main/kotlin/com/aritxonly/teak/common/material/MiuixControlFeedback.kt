@@ -13,9 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
-import top.yukonga.miuix.kmp.utils.MiuixIndication
-import top.yukonga.miuix.kmp.utils.SinkFeedback
-import top.yukonga.miuix.kmp.utils.pressable
+import io.github.suqi8.coui.kmp.utils.COUIIndication
+import io.github.suqi8.coui.kmp.utils.SinkFeedback
+import io.github.suqi8.coui.kmp.utils.pressable
 
 internal val DefaultClickFeedback = SinkFeedback()
 
@@ -28,7 +28,7 @@ internal fun Modifier.miuixControlFeedback(
 ): Modifier {
     val source = remember { MutableInteractionSource() }
     val color = MaterialTheme.colorScheme.onSurface
-    val indication = remember(color) { MiuixIndication(color) }
+    val indication = remember(color) { COUIIndication(color) }
     return pressable(source, indication = DefaultClickFeedback, enabled = enabled)
         .then(if (overlay) Modifier.clip(shape).indication(source, indication) else Modifier)
 }

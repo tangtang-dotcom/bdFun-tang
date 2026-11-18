@@ -19,12 +19,12 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
 import com.aritxonly.bdfun.core.model.cache.CacheStatus
 import com.aritxonly.bdfun.core.model.cache.CachedVideo
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 
 @Composable
 internal fun androidx.compose.foundation.layout.RowScope.CacheRowContent(entry: CachedVideo) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(modifier = Modifier.weight(1f)) {
         Text(
             text = entry.title,

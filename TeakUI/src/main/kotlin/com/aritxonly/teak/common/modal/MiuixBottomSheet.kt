@@ -50,12 +50,12 @@ import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.aritxonly.teak.common.modal.sheet.ScaffoldSheetOverlay
 import com.aritxonly.teak.common.modal.sheet.LocalSheetHeaderDragModifier
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.material3.LocalContentColor as MaterialContentColor
-import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixContentColor
+import io.github.suqi8.coui.kmp.theme.LocalContentColor as COUIContentColor
 
 /**
  * Page-scoped glass sheet with a fixed-height Scaffold and fading content beneath its header.
@@ -64,7 +64,7 @@ import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixContentColor
  * the inner Scaffold owns navigation-bar padding and reserves no status-bar space.
  */
 @Composable
-fun MiuixBottomSheet(
+fun COUIBottomSheet(
     show: Boolean,
     title: String? = null,
     onDismissRequest: () -> Unit,
@@ -82,7 +82,7 @@ fun MiuixBottomSheet(
     content: @Composable (PaddingValues) -> Unit,
 ) {
     val advancedMaterial = LocalTeakMaterialSpec.current
-    val contentColor = MiuixTheme.colorScheme.onSurface
+    val contentColor = COUITheme.colorScheme.onSurface
     val pageBackdrop = LocalTeakBackdrop.current
         ?: LocalAdvancedMaterialDialogBlurHostState.current?.modalBackdrop
     val systemTop = maxOf(WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
@@ -143,7 +143,7 @@ fun MiuixBottomSheet(
                         // inherited content colors when its container is transparent.
                         CompositionLocalProvider(
                             MaterialContentColor provides contentColor,
-                            MiuixContentColor provides contentColor,
+                            COUIContentColor provides contentColor,
                         ) {
                             Column(Modifier.fillMaxWidth().then(LocalSheetHeaderDragModifier.current)) {
                                 Box(
@@ -160,7 +160,7 @@ fun MiuixBottomSheet(
                                         modifier = Modifier.align(Alignment.Center).padding(
                                             horizontal = if (startAction != null || endAction != null) 56.dp else 12.dp,
                                         ),
-                                        style = MiuixTheme.textStyles.title4,
+                                        style = COUITheme.textStyles.title4,
                                         fontWeight = FontWeight.Medium,
                                         textAlign = TextAlign.Center,
                                         maxLines = 2,
@@ -197,7 +197,7 @@ fun MiuixBottomSheet(
                 ) {
                     CompositionLocalProvider(
                         MaterialContentColor provides contentColor,
-                        MiuixContentColor provides contentColor,
+                        COUIContentColor provides contentColor,
                         LocalSheetFormContainers provides true,
                         LocalTeakBackdrop provides null,
                     ) {

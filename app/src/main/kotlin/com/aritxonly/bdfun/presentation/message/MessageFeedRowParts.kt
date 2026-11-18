@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.message.MessageItem
 import com.aritxonly.bdfun.navigateToSpace
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MessageActorAvatar(item: MessageItem) {
@@ -38,7 +38,7 @@ internal fun MessageActorAvatar(item: MessageItem) {
 
 @Composable
 internal fun MessageActorHeadline(item: MessageItem, aggregate: Boolean = false) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Text(buildAnnotatedString {
         withStyle(SpanStyle(color = colors.primary)) { append(item.name.ifBlank { "用户" }) }
         if (aggregate && item.likeCount > 1) append(" 等${item.likeCount}人")
@@ -50,7 +50,7 @@ internal fun MessageActorHeadline(item: MessageItem, aggregate: Boolean = false)
 internal fun MessageOriginalText(text: String) {
     androidx.compose.foundation.layout.Box(Modifier.fillMaxWidth()
         .clip(com.aritxonly.teak.common.chrome.TeakContinuousCornerShape(10.dp))
-        .background(MiuixTheme.colorScheme.surfaceContainerHigh.copy(alpha = .45f))
+        .background(COUITheme.colorScheme.surfaceContainerHigh.copy(alpha = .45f))
         .padding(horizontal = 12.dp, vertical = 10.dp)) {
         QuoteBlock("", text)
     }
@@ -58,7 +58,7 @@ internal fun MessageOriginalText(text: String) {
 
 @Composable
 internal fun MessageRowFooter(item: MessageItem, onMore: (() -> Unit)? = null) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(formatMessageDate(item.time), color = colors.onBackgroundVariant, fontSize = 12.sp)
         if (item.noticeState == 1) {

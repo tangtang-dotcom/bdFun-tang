@@ -34,7 +34,7 @@ import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.aritxonly.bdfun.BrandPink
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * tab 栏右侧的小胶囊（「点我发弹幕」「弹」）。
@@ -55,7 +55,7 @@ fun TeakGlassChip(
     val advancedMaterial = LocalTeakMaterialSpec.current
     val recipe = TeakGlassRecipes.floatingNavigation(advancedMaterial.fineTuning)
     val backdrop = LocalTeakBackdrop.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     TeakGlassSurface(
         modifier = modifier

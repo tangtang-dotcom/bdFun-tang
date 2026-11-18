@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun androidx.compose.foundation.layout.BoxScope.VideoDetailContentPager(
@@ -17,7 +17,7 @@ fun androidx.compose.foundation.layout.BoxScope.VideoDetailContentPager(
     pageUi: VideoDetailUiStateHolder, description: VideoDescriptionStateHolder,
     content: VideoScreenContent, actions: VideoDetailRenderActions, slots: VideoDetailPagerSlots,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val fullscreen by pageUi.fullscreen
     val metaReady by pageUi.metaReady
     val pictureInPicture = presentation.pictureInPicture

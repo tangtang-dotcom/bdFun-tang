@@ -25,7 +25,7 @@ import com.aritxonly.teak.common.skeleton.rememberTeakSkeletonSweep
 
 internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.searchResultStatusItems(
     content: com.aritxonly.bdfun.feature.search.application.SearchUiState,
-    pageColors: top.yukonga.miuix.kmp.theme.Colors,
+    pageColors: io.github.suqi8.coui.kmp.theme.Colors,
 ) {
     val results = content.results
     val users = content.users
@@ -49,7 +49,7 @@ internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.searchResultSta
 
 internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.searchVideoResultItems(
     content: com.aritxonly.bdfun.feature.search.application.SearchUiState,
-    pageColors: top.yukonga.miuix.kmp.theme.Colors, onOpenVideo: (VideoItem) -> Unit,
+    pageColors: io.github.suqi8.coui.kmp.theme.Colors, onOpenVideo: (VideoItem) -> Unit,
 ) {
     val results = content.results
     val loading = content.loading
@@ -86,7 +86,7 @@ internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.searchVideoResu
 
 internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.searchVideoPageFooter(
     content: com.aritxonly.bdfun.feature.search.application.SearchUiState,
-    pageColors: top.yukonga.miuix.kmp.theme.Colors,
+    pageColors: io.github.suqi8.coui.kmp.theme.Colors,
 ) {
     if (content.results.isEmpty()) return
     if (content.loadingMore) {
@@ -112,7 +112,7 @@ internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.searchVideoPage
 
 internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.searchUserResultItems(
     content: com.aritxonly.bdfun.feature.search.application.SearchUiState,
-    pageColors: top.yukonga.miuix.kmp.theme.Colors, onOpenUser: (SearchUser) -> Unit,
+    pageColors: io.github.suqi8.coui.kmp.theme.Colors, onOpenUser: (SearchUser) -> Unit,
 ) {
     val users = content.users
     val loading = content.loading

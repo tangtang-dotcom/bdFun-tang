@@ -72,7 +72,7 @@ internal class DanmakuInputPresentationStateHolder {
 internal class DanmakuInputRuntime(val controller: DanmakuInputStateHolder, val form: DanmakuInputState,
     val ui: DanmakuInputPresentationStateHolder, val focusRequester: FocusRequester,
     val recipe: com.aritxonly.teak.common.material.GlassMaterialRecipe,
-    val backdrop: top.yukonga.miuix.kmp.blur.Backdrop?, val send: () -> Unit)
+    val backdrop: io.github.suqi8.coui.kmp.blur.Backdrop?, val send: () -> Unit)
 @Composable
 private fun danmakuInputBottom(ui: DanmakuInputPresentationStateHolder): Float {
     val density = LocalDensity.current

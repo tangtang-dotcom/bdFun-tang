@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.size
 import com.aritxonly.teak.common.navigation.TeakFloatingTabItem
 import com.aritxonly.bdfun.ui.UiSwapDurationMs
 import com.aritxonly.bdfun.ui.rememberManualProgress
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 
 @Composable
 internal fun rememberMainShellState(background: Color): MainShellState {

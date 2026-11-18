@@ -13,14 +13,14 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.message.ImSetting
 import com.aritxonly.bdfun.core.navigation.Route
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Ok
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Ok
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MessageSettingRow(setting: ImSetting, busy: Boolean, onSet: (Boolean?, Int?) -> Unit) {
     val navigate = messageRouteAction()
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     val pageType = setting.pageType
     val enabled = setting.enabled
@@ -42,7 +42,7 @@ internal fun MessageSettingRow(setting: ImSetting, busy: Boolean, onSet: (Boolea
                 if (setting.subtitle.isNotBlank()) Text(setting.subtitle, color = colors.onBackgroundVariant, fontSize = 12.sp)
                 if (setting.summary.isNotBlank()) Text(setting.summary, color = colors.onBackgroundVariant, fontSize = 12.sp)
             }
-            if (enabled != null) top.yukonga.miuix.kmp.basic.Switch(checked = enabled,
+            if (enabled != null) io.github.suqi8.coui.kmp.basic.Switch(checked = enabled,
                 onCheckedChange = { onSet(it, null) }, enabled = !busy)
         }
         setting.choices.forEach { choice ->
@@ -54,7 +54,7 @@ internal fun MessageSettingRow(setting: ImSetting, busy: Boolean, onSet: (Boolea
             ) {
                 Box(Modifier.width(24.dp)) {
                     if (choice.selected) {
-                        AppGlyph(MiuixIcons.Ok, colors.primary, size = 18.dp)
+                        AppGlyph(COUIIcons.Ok, colors.primary, size = 18.dp)
                     }
                 }
                 Text(choice.text, color = if (choice.selected) colors.primary else colors.onBackground)

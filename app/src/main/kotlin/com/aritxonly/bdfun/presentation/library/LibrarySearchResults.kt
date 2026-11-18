@@ -18,11 +18,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.feature.library.application.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun LibrarySearchResults(content: LibrarySearchContent, actions: LibrarySearchActions) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val results = content.results; val loading = content.loading; val error = content.error; val onOpenVideo = actions.onOpenVideo
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),

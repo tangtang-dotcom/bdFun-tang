@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun TeakSplash(modifier: Modifier = Modifier, onFinished: () -> Unit) {
@@ -36,7 +36,7 @@ private fun SplashSurface(ui: SplashPresentationStateHolder, modifier: Modifier)
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MiuixTheme.colorScheme.background)
+            .background(COUITheme.colorScheme.background)
             // 开屏期间吞掉点击，避免误触下面已经渲染好的首页
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },

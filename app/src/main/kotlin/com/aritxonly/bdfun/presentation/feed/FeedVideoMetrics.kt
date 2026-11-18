@@ -18,9 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.video.VideoItem
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.VolumeOff
-import top.yukonga.miuix.kmp.icon.extended.VolumeUp
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.VolumeOff
+import io.github.suqi8.coui.kmp.icon.extended.VolumeUp
 
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.FeedVideoMetrics(video: VideoItem, muted: Boolean, onToggleMute: () -> Unit) {
@@ -68,7 +68,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.FeedVideoMetrics(video:
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = if (muted) MiuixIcons.VolumeOff else MiuixIcons.VolumeUp,
+                imageVector = if (muted) COUIIcons.VolumeOff else COUIIcons.VolumeUp,
                 contentDescription = if (muted) "静音" else "声音",
                 tint = Color.White,
                 modifier = Modifier.size(19.dp),

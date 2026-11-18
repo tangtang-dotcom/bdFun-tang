@@ -23,12 +23,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun FeedAuthorRow(name: String, face: String, selected: Boolean, updated: Boolean,
     live: Boolean = false, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(Modifier.fillMaxWidth().clip(ContinuousCornerShape(14.dp))
         .background(if (selected) colors.surfaceContainer else Color.Transparent)
         .clickable(onClick = onClick).padding(8.dp), verticalAlignment = Alignment.CenterVertically,

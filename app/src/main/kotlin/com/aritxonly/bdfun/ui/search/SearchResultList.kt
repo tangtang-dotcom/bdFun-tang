@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.data.SearchUser
 import com.aritxonly.bdfun.data.VideoItem
 import kotlinx.coroutines.flow.drop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SearchResultList(
@@ -29,7 +29,7 @@ internal fun SearchResultList(
     onLoadMore: () -> Unit = {},
 ) {
     val wide = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 600
-    val pageColors = MiuixTheme.colorScheme
+    val pageColors = COUITheme.colorScheme
     val listState = if (page == 0) presentation.videos else presentation.users
     // 只有视频 Tab 有分页：滑到接近底部就拉下一页；drop(1) 忽略进入页面时的首次布局。
     // 结果数量用 rememberUpdatedState 读最新值，否则 effect 会一直拿第一次的 20 条判断阈值。

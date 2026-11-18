@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 internal fun androidx.compose.foundation.lazy.LazyListScope.searchSuggestionItems(
-    suggestions: List<String>, colors: top.yukonga.miuix.kmp.theme.Colors, onPickKeyword: (String) -> Unit,
+    suggestions: List<String>, colors: io.github.suqi8.coui.kmp.theme.Colors, onPickKeyword: (String) -> Unit,
 ) {
     if (suggestions.isNotEmpty()) {
         item(key = "suggest-title") {
@@ -64,7 +64,7 @@ internal fun androidx.compose.foundation.lazy.LazyListScope.searchSuggestionItem
 }
 
 internal fun androidx.compose.foundation.lazy.LazyListScope.searchHistoryItems(
-    history: List<String>, colors: top.yukonga.miuix.kmp.theme.Colors, onPickKeyword: (String) -> Unit, onClearHistory: () -> Unit,
+    history: List<String>, colors: io.github.suqi8.coui.kmp.theme.Colors, onPickKeyword: (String) -> Unit, onClearHistory: () -> Unit,
 ) {
     if (history.isNotEmpty()) {
         item(key = "history-title") {
@@ -107,7 +107,7 @@ internal fun androidx.compose.foundation.lazy.LazyListScope.searchHistoryItems(
 }
 
 internal fun androidx.compose.foundation.lazy.LazyListScope.searchHotItems(
-    hot: List<String>, colors: top.yukonga.miuix.kmp.theme.Colors, onPickKeyword: (String) -> Unit,
+    hot: List<String>, colors: io.github.suqi8.coui.kmp.theme.Colors, onPickKeyword: (String) -> Unit,
 ) {
     if (hot.isNotEmpty()) {
         item(key = "hot-title") {

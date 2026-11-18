@@ -8,13 +8,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.comment.CommentItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun androidx.compose.foundation.layout.RowScope.CommentPreviewText(
     reply: CommentItem, liked: Boolean, likeCount: Int, actions: CommentPreviewActions,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     EmoteText(
         content = EmoteTextContent(

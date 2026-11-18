@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.ui.ComposerIcon
 import com.aritxonly.bdfun.ui.ComposerIconButton
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun PrivateChatComposerInput(
@@ -32,7 +32,7 @@ internal fun PrivateChatComposerInput(
     val onPickImage = actions.onPickImage
     val onClearImage = actions.onClearImage
     val onSend = actions.onSend
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 6.dp),
         verticalAlignment = Alignment.CenterVertically,

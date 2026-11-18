@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.R
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun BdFunMark(
@@ -75,8 +75,8 @@ internal fun BdFunMark(
 
     val pressure = onboardingMarkPressure(interactive, ui)
 
-    val tint = MiuixTheme.colorScheme.onSurface
-    val airflow = lerp(tint, MiuixTheme.colorScheme.primary, 0.55f)
+    val tint = COUITheme.colorScheme.onSurface
+    val airflow = lerp(tint, COUITheme.colorScheme.primary, 0.55f)
 
     Box(
         modifier = Modifier

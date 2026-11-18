@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
 import com.aritxonly.bdfun.ui.SearchOverlay
-import top.yukonga.miuix.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
 
 @Composable
 internal fun MainSearchLayer(settings: SettingsBindings, shell: MainShellState, bottomSearch: Boolean = false) {

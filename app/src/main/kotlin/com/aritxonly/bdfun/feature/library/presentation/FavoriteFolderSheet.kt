@@ -17,17 +17,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aritxonly.teak.common.modal.MiuixBottomSheet
-import top.yukonga.miuix.kmp.basic.Button
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
-import top.yukonga.miuix.kmp.basic.Checkbox
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.basic.IconButton
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
-import top.yukonga.miuix.kmp.icon.extended.Folder
-import top.yukonga.miuix.kmp.squircle.squircleSurface
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import com.aritxonly.teak.common.modal.COUIBottomSheet
+import io.github.suqi8.coui.kmp.basic.Button
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults
+import io.github.suqi8.coui.kmp.basic.Checkbox
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.basic.IconButton
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Close
+import io.github.suqi8.coui.kmp.icon.extended.Folder
+import io.github.suqi8.coui.kmp.squircle.squircleSurface
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Immutable
 internal data class FavoriteFolderOption(
@@ -66,16 +66,16 @@ internal fun FavoriteFolderSheet(
     SideEffect { holder.update(show, state) }
     val displayed = if (show) state else holder.displayed
     val busy = displayed.pendingFolderId != null
-    MiuixBottomSheet(
+    COUIBottomSheet(
         show = show, title = displayed.title, onDismissRequest = onDismiss, allowDismiss = !busy,
         startAction = {
-            IconButton(onClick = onDismiss, enabled = !busy) { Icon(MiuixIcons.Close, "关闭") }
+            IconButton(onClick = onDismiss, enabled = !busy) { Icon(COUIIcons.Close, "关闭") }
         },
         bottomBar = {
             Button(onClick = onDismiss, enabled = !busy,
                 colors = ButtonDefaults.buttonColorsPrimary(), cornerRadius = 20.dp,
                 modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 20.dp, vertical = 12.dp)) {
-                Text(if (busy) "正在保存…" else "完成", color = MiuixTheme.colorScheme.onPrimary)
+                Text(if (busy) "正在保存…" else "完成", color = COUITheme.colorScheme.onPrimary)
             }
         },
     ) { padding ->
@@ -89,7 +89,7 @@ internal fun FavoriteFolderSheet(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             item("hint") {
-                Text(displayed.description, color = MiuixTheme.colorScheme.onSurfaceVariantSummary, fontSize = 13.sp,
+                Text(displayed.description, color = COUITheme.colorScheme.onSurfaceVariantSummary, fontSize = 13.sp,
                     modifier = Modifier.padding(horizontal = 12.dp).padding(bottom = 8.dp))
             }
             if (displayed.loading && displayed.folders.isEmpty()) {
@@ -108,7 +108,7 @@ internal fun FavoriteFolderSheet(
 
 @Composable
 private fun FolderRow(folder: FavoriteFolderOption, pending: Boolean, enabled: Boolean, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val selected = folder.selected == true
     val input = if (folder.selected != null) Modifier.toggleable(
         value = selected, enabled = enabled, role = Role.Checkbox, onValueChange = { onClick() },
@@ -116,7 +116,7 @@ private fun FolderRow(folder: FavoriteFolderOption, pending: Boolean, enabled: B
     Row(Modifier.fillMaxWidth().squircleSurface(colors.surface.copy(alpha = 0.65f), 24.dp)
         .then(input).heightIn(min = 80.dp).padding(18.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-        Icon(MiuixIcons.Folder, null, Modifier.size(28.dp), tint = if (selected) colors.primary else colors.onSurfaceVariantSummary)
+        Icon(COUIIcons.Folder, null, Modifier.size(28.dp), tint = if (selected) colors.primary else colors.onSurfaceVariantSummary)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(folder.title, color = colors.onSurfaceContainer, fontWeight = FontWeight.Medium,
                 maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -133,7 +133,7 @@ private fun FolderRow(folder: FavoriteFolderOption, pending: Boolean, enabled: B
 private fun FolderPlaceholder(message: String) {
     Column(Modifier.fillMaxWidth().padding(vertical = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Icon(MiuixIcons.Folder, null, Modifier.size(40.dp), tint = MiuixTheme.colorScheme.onSurfaceVariantSummary)
-        Text(message, color = MiuixTheme.colorScheme.onSurfaceVariantSummary)
+        Icon(COUIIcons.Folder, null, Modifier.size(40.dp), tint = COUITheme.colorScheme.onSurfaceVariantSummary)
+        Text(message, color = COUITheme.colorScheme.onSurfaceVariantSummary)
     }
 }

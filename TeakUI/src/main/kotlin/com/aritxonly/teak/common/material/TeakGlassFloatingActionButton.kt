@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import androidx.compose.material3.MaterialTheme
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 object TeakGlassFloatingActionButtonDefaults {
     val Size = 58.dp

@@ -23,7 +23,7 @@ import com.aritxonly.bdfun.navigateToSpace
 import com.aritxonly.teak.common.chrome.TeakLargeTitle
 import com.aritxonly.teak.common.chrome.TrackTeakPageScroll
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,14 +63,14 @@ internal fun MessageToolsScreen(route: Route.MessageTools, onBack: () -> Unit) {
                     Text(state.title, Modifier.fillMaxWidth().clickable {
                         openMessageItem(com.aritxonly.bdfun.core.model.message.MessageItem(route.id, state.title, "", 0, "", "",
                             navigation = route.navigation), MessageFeedKind.Like, feed, feedScope, context)
-                    }.padding(16.dp), color = MiuixTheme.colorScheme.primary, fontSize = 15.sp)
+                    }.padding(16.dp), color = COUITheme.colorScheme.primary, fontSize = 15.sp)
                 }
                 items(state.people, key = { it.mid }) { person ->
                     Row(Modifier.fillMaxWidth().clickable { navigateToSpace(context, person.mid) }.padding(16.dp)) {
                         MessageAvatar(person.avatar)
                         Spacer(Modifier.width(12.dp))
-                        Column { Text("${person.name} 赞了我", color = MiuixTheme.colorScheme.primary)
-                            Text(formatMessageDate(person.time), color = MiuixTheme.colorScheme.onBackgroundVariant, fontSize = 12.sp) }
+                        Column { Text("${person.name} 赞了我", color = COUITheme.colorScheme.primary)
+                            Text(formatMessageDate(person.time), color = COUITheme.colorScheme.onBackgroundVariant, fontSize = 12.sp) }
                     }
                 }
             }

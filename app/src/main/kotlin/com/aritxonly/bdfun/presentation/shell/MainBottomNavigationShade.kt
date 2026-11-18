@@ -20,7 +20,7 @@ import com.aritxonly.teak.common.chrome.TeakChromeDefaults
 import com.aritxonly.teak.common.chrome.isWideFoldTopBar
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import com.aritxonly.teak.common.theme.TeakUiStyle
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 仅为竖屏悬浮底栏提供内容渐隐；与底栏共用显隐层，不进入玻璃采样树。 */
 @Composable
@@ -34,7 +34,7 @@ internal fun BoxScope.MainBottomNavigationShade(
     val bottomSpacing = if (isWideFoldTopBar()) 0.dp else 4.dp
     val lift = if (!wideNavigation && settings.bottomBarRaise) TeakChromeDefaults.RaisedBottomBarExtra else 0.dp
     val height = navigationBottom + bottomSpacing + lift + TeakFloatingTabBarDefaults.CurrentHeight + 24.dp
-    val background = MiuixTheme.colorScheme.background
+    val background = COUITheme.colorScheme.background
     Box(
         Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(height)
             .graphicsLayer { alpha = barAlpha }

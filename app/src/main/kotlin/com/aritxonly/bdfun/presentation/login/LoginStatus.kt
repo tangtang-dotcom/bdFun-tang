@@ -17,13 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.aritxonly.bdfun.feature.login.application.QrLoginState
 
 @Composable
 internal fun LoginStatus(state: QrLoginState, onRefresh: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Spacer(Modifier.height(16.dp))
     Text(
         text = state.status,

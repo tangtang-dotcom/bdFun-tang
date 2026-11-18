@@ -50,7 +50,7 @@ internal fun PrivateChatRoot(session: MessageSession, onBack: (() -> Unit)? = nu
                 androidx.compose.material3.Text("设置", modifier = Modifier.padding(12.dp).clickable {
                     val route = com.aritxonly.bdfun.core.navigation.Route.MessageTools("chat", session.talkerId.toString())
                     navigation?.route?.invoke(route) ?: context.startActivity(com.aritxonly.bdfun.navigation.createRouteIntent(context, route))
-                }, color = top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.primary)
+                }, color = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.primary)
             },
             overlay = {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {

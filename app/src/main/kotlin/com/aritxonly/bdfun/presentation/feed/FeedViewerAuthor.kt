@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.core.model.feed.FeedItem
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
 
 @Composable
 internal fun FeedViewerAuthor(item: FeedItem, dismissAnimated: () -> Unit) {
@@ -50,7 +50,7 @@ internal fun FeedViewerAuthor(item: FeedItem, dismissAnimated: () -> Unit) {
             Spacer(Modifier.height(2.dp))
             Text(text = item.time, color = Color.White.copy(alpha = 0.55f), fontSize = 11.sp)
         }
-        AppGlyph(MiuixIcons.Basic.ArrowUpDown, size = 24.dp, tint = Color.White.copy(alpha = 0.8f),
+        AppGlyph(COUIIcons.Basic.ArrowUpDown, size = 24.dp, tint = Color.White.copy(alpha = 0.8f),
 
             modifier = Modifier
                 .clip(CircleShape)

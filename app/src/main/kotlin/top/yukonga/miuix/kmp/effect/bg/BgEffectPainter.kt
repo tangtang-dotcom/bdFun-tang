@@ -1,10 +1,10 @@
 // Copyright 2026, compose-miuix-ui contributors
 // SPDX-License-Identifier: Apache-2.0
 
-package top.yukonga.miuix.kmp.effect.bg
+package io.github.suqi8.coui.kmp.effect.bg
 
-import top.yukonga.miuix.kmp.blur.RuntimeShader
-import top.yukonga.miuix.kmp.blur.asBrush
+import io.github.suqi8.coui.kmp.blur.RuntimeShader
+import io.github.suqi8.coui.kmp.blur.asBrush
 import kotlin.math.cos
 import kotlin.math.sin
 

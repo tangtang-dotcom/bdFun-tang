@@ -19,14 +19,14 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SearchSuggestGlyph() {
-    AppGlyph(MiuixIcons.Search, MiuixTheme.colorScheme.onBackgroundVariant, size = 16.dp)
+    AppGlyph(COUIIcons.Search, COUITheme.colorScheme.onBackgroundVariant, size = 16.dp)
 }
 
 @Composable
@@ -35,7 +35,7 @@ internal fun HistoryWord(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = modifier
             .clip(Capsule())
@@ -55,7 +55,7 @@ internal fun HistoryWord(
 
 @Composable
 internal fun SectionHeader(title: String, action: String?, onAction: (() -> Unit)?) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier.fillMaxWidth()
             .padding(
@@ -80,7 +80,7 @@ internal fun SectionHeader(title: String, action: String?, onAction: (() -> Unit
 
 @Composable
 internal fun HotRow(rank: Int, word: String, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()

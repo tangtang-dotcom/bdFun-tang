@@ -10,8 +10,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.ArrowRight
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.ArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.feature.mine.application.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MinePreviewCard(kind: MinePreviewKind, section: MinePreviewSection, navigation: MineNavigation, retry: () -> Unit) {
@@ -41,27 +41,27 @@ internal fun MinePreviewCard(kind: MinePreviewKind, section: MinePreviewSection,
         MinePreviewKind.WatchLater -> "稍后再看"
     }
 
-    val surfaceColor = MiuixTheme.colorScheme.surfaceContainer
-    val dividerColor = MiuixTheme.colorScheme.onBackground.copy(alpha = 0.12f)
+    val surfaceColor = COUITheme.colorScheme.surfaceContainer
+    val dividerColor = COUITheme.colorScheme.onBackground.copy(alpha = 0.12f)
     Column(Modifier.fillMaxWidth().clip(
         TeakUiStyle.design.cardShape(ContinuousCornerShape(22.dp)),
     )
         .background(surfaceColor)
         .padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(title, Modifier.weight(1f), fontSize = 15.sp, lineHeight = 18.sp, color = MiuixTheme.colorScheme.onBackground,
+            Text(title, Modifier.weight(1f), fontSize = 15.sp, lineHeight = 18.sp, color = COUITheme.colorScheme.onBackground,
                 minLines = 1, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (section.loaded && section.error != null) Text("重试",
                 Modifier.clickable(onClick = retry).padding(horizontal = 6.dp, vertical = 6.dp), fontSize = 12.sp,
-                lineHeight = 18.sp, minLines = 1, maxLines = 1, color = MiuixTheme.colorScheme.primary)
+                lineHeight = 18.sp, minLines = 1, maxLines = 1, color = COUITheme.colorScheme.primary)
             Row(
                 Modifier.clickable(onClick = openAll).padding(vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text("查看全部", fontSize = 12.sp, lineHeight = 18.sp, minLines = 1, maxLines = 1,
-                    overflow = TextOverflow.Ellipsis, color = MiuixTheme.colorScheme.onBackgroundVariant)
+                    overflow = TextOverflow.Ellipsis, color = COUITheme.colorScheme.onBackgroundVariant)
                 Spacer(Modifier.width(4.dp))
-                AppGlyph(MiuixIcons.Basic.ArrowRight, MiuixTheme.colorScheme.onBackgroundVariant, size = 12.dp)
+                AppGlyph(COUIIcons.Basic.ArrowRight, COUITheme.colorScheme.onBackgroundVariant, size = 12.dp)
             }
         }
         MinePreviewBody(kind, section, navigation, openAll, retry)
@@ -83,7 +83,7 @@ private fun MinePreviewBody(kind: MinePreviewKind, section: MinePreviewSection, 
             when {
                 !section.loaded && section.error != null -> Text("加载失败，点击重试",
                     Modifier.clickable(onClick = retry).padding(12.dp),
-                    color = MiuixTheme.colorScheme.primary, fontSize = 13.sp)
+                    color = COUITheme.colorScheme.primary, fontSize = 13.sp)
                 !section.loaded -> MinePreviewSkeleton(kind, videoWidth, folderRow)
                 kind == MinePreviewKind.Favorites -> Column(Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(14.dp)) { MineFolderPreviews(section, openAll) }
@@ -97,7 +97,7 @@ private fun MinePreviewBody(kind: MinePreviewKind, section: MinePreviewSection, 
 
 @Composable
 private fun MinePreviewSkeleton(kind: MinePreviewKind, videoWidth: Dp, folderRow: Dp) {
-    val fill = MiuixTheme.colorScheme.surfaceContainerHigh
+    val fill = COUITheme.colorScheme.surfaceContainerHigh
     if (kind == MinePreviewKind.Favorites) {
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             repeat(MineFolderPreviewLimit) {
@@ -133,11 +133,11 @@ private fun MineFolderPreviews(section: MinePreviewSection, openAll: () -> Unit)
             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             AsyncImage(rememberImageRequest(folder.cover), null, contentScale = ContentScale.Crop,
                 modifier = Modifier.size(88.dp, 55.dp).clip(RoundedCornerShape(12.dp))
-                    .background(MiuixTheme.colorScheme.surfaceContainerHigh))
+                    .background(COUITheme.colorScheme.surfaceContainerHigh))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(folder.title, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 14.sp, lineHeight = 20.sp,
-                    color = MiuixTheme.colorScheme.onBackground)
-                Text("共 ${folder.count} 视频", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 12.sp, lineHeight = 16.sp, color = MiuixTheme.colorScheme.onBackgroundVariant)
+                    color = COUITheme.colorScheme.onBackground)
+                Text("共 ${folder.count} 视频", maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 12.sp, lineHeight = 16.sp, color = COUITheme.colorScheme.onBackgroundVariant)
             }
         }
     }
@@ -150,7 +150,7 @@ private fun MineVideoPreviews(section: MinePreviewSection, history: Boolean, nav
             Column(Modifier.width(width).clickable { navigation.onOpenVideo(entry.mineVideo(history)) },
                 verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(12.dp))
-                    .background(MiuixTheme.colorScheme.surfaceContainerHigh)) {
+                    .background(COUITheme.colorScheme.surfaceContainerHigh)) {
                     AsyncImage(rememberImageRequest(entry.cover), null, contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize())
                     if (entry.duration > 0) Text(formatDuration(entry.duration), color = Color.White,
@@ -159,14 +159,14 @@ private fun MineVideoPreviews(section: MinePreviewSection, history: Boolean, nav
                             .padding(horizontal = 4.dp, vertical = 2.dp))
                     if (history && entry.duration > 0 && entry.progress > 0) Box(Modifier.align(Alignment.BottomStart)
                         .fillMaxWidth((entry.progress.toFloat() / entry.duration).coerceIn(0f, 1f))
-                        .height(3.dp).background(MiuixTheme.colorScheme.primary))
+                        .height(3.dp).background(COUITheme.colorScheme.primary))
                 }
                 Text(entry.title, minLines = 2, maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = 12.sp, lineHeight = 18.sp,
-                    color = MiuixTheme.colorScheme.onBackground)
+                    color = COUITheme.colorScheme.onBackground)
                 Text(if (history && entry.progress < 0) "已看完" else if (history && entry.progress > 0)
                     "看到 ${entry.progress / 60}:${(entry.progress % 60).toString().padStart(2, '0')}" else entry.author,
                     minLines = 1, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 11.sp, lineHeight = 16.sp,
-                    color = MiuixTheme.colorScheme.onBackgroundVariant)
+                    color = COUITheme.colorScheme.onBackgroundVariant)
             }
         }
     }
@@ -175,5 +175,5 @@ private fun MineVideoPreviews(section: MinePreviewSection, history: Boolean, nav
 @Composable
 private fun MinePreviewMessage(message: String) {
     Text(message, Modifier.padding(vertical = 14.dp), fontSize = 13.sp,
-        color = MiuixTheme.colorScheme.onBackgroundVariant)
+        color = COUITheme.colorScheme.onBackgroundVariant)
 }

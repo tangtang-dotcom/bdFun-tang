@@ -23,18 +23,18 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.feature.mine.application.*
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.aritxonly.teak.common.icons.ResourceGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.ArrowRight
-import top.yukonga.miuix.kmp.icon.extended.Download
-import top.yukonga.miuix.kmp.icon.extended.Recent
-import top.yukonga.miuix.kmp.icon.extended.SearchDevice
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.ArrowRight
+import io.github.suqi8.coui.kmp.icon.extended.Download
+import io.github.suqi8.coui.kmp.icon.extended.Recent
+import io.github.suqi8.coui.kmp.icon.extended.SearchDevice
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal val MineBlue = Color(0xFF3C9BD9)
 
 @Composable
 internal fun MineQuickActions(cardShape: androidx.compose.ui.graphics.Shape, navigation: MineNavigation) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -44,23 +44,23 @@ internal fun MineQuickActions(cardShape: androidx.compose.ui.graphics.Shape, nav
         verticalAlignment = Alignment.CenterVertically,
     ) {
         QuickAction("离线缓存", Modifier.weight(1f), onClick = navigation.onOpenCache) {
-            androidx.compose.material3.Icon(MiuixIcons.Download, null, Modifier.size(26.dp), tint = MineBlue)
+            androidx.compose.material3.Icon(COUIIcons.Download, null, Modifier.size(26.dp), tint = MineBlue)
         }
         QuickAction("历史记录", Modifier.weight(1f), onClick = navigation.onOpenHistory) {
-            androidx.compose.material3.Icon(MiuixIcons.Recent, null, Modifier.size(26.dp), tint = MineBlue)
+            androidx.compose.material3.Icon(COUIIcons.Recent, null, Modifier.size(26.dp), tint = MineBlue)
         }
         QuickAction("我的收藏", Modifier.weight(1f), onClick = navigation.onOpenLibrary) {
             ResourceGlyph(res = TeakIcon.Star, tint = MineBlue, size = 26.dp)
         }
         QuickAction("稍后再看", Modifier.weight(1f), onClick = navigation.onOpenWatchLater) {
-            androidx.compose.material3.Icon(MiuixIcons.SearchDevice, null, Modifier.size(26.dp), tint = MineBlue)
+            androidx.compose.material3.Icon(COUIIcons.SearchDevice, null, Modifier.size(26.dp), tint = MineBlue)
         }
     }
 }
 
 @Composable
 internal fun StatCell(label: String, value: Long, modifier: Modifier = Modifier) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,7 +83,7 @@ private fun QuickAction(
     onClick: () -> Unit = {},
     icon: @Composable () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = modifier.clickable(interactionSource = null, indication = null, onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,7 +101,7 @@ internal fun MineRow(
     trailingText: String = "",
     onClick: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -120,7 +120,7 @@ internal fun MineRow(
                 Text(text = trailingText, color = colors.outline, fontSize = 12.sp)
                 Spacer(Modifier.width(4.dp))
             }
-            AppGlyph(MiuixIcons.Basic.ArrowRight, colors.outline, size = 12.dp)
+            AppGlyph(COUIIcons.Basic.ArrowRight, colors.outline, size = 12.dp)
         }
     }
 }

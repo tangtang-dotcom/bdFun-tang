@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.teak.common.chrome.TeakContinuousCornerShape
 import com.aritxonly.teak.common.settings.TeakSettingsCard
 import com.aritxonly.teak.common.settings.teakSectionSurface
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 关于页只改变卡片容器的不透明度，文字和控件保持完整对比度。 */
 @Composable
@@ -22,7 +22,7 @@ internal fun SettingsIndexGroupCard(title: String, aboutProgress: Float?, conten
         TeakSettingsCard(title = title, content = content)
         return
     }
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(Modifier.padding(top = TeakUiStyle.design.contentInset(12.dp))) {
         Text(title, color = colors.onBackgroundVariant, fontSize = 11.5.sp,
             modifier = Modifier.padding(start = TeakUiStyle.design.sectionTitleStart, top = TeakUiStyle.design.sectionTitleTop, bottom = 5.dp))

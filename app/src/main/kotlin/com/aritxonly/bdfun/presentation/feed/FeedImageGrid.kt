@@ -19,7 +19,7 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun FeedImageGrid(
@@ -28,7 +28,7 @@ internal fun FeedImageGrid(
     onOpen: (String, Rect, Float, List<Rect?>) -> Unit,
 ) {
     if (images.isEmpty()) return
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val density = androidx.compose.ui.platform.LocalDensity.current
     val singleRadiusPx = with(density) { 12.dp.toPx() }
     val gridRadiusPx = with(density) { 10.dp.toPx() }

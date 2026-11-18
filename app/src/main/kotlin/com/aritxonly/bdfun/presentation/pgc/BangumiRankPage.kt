@@ -59,16 +59,16 @@ import com.aritxonly.bdfun.presentation.common.FullBleedRow
 import com.aritxonly.bdfun.ui.FeedCardShape
 import com.aritxonly.bdfun.ui.TeakLoading
 import com.aritxonly.bdfun.ui.rememberImageRequest
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.ArrowRight
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.ArrowRight
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 番剧页小节标题：与榜单分节标题同一套字号/字重。 */
 @Composable
 internal fun BangumiSectionTitle(text: String) {
     Text(
         text = text,
-        color = MiuixTheme.colorScheme.onBackground,
+        color = COUITheme.colorScheme.onBackground,
         fontSize = 20.sp,
         lineHeight = 24.sp,
         fontWeight = FontWeight.Bold,
@@ -127,7 +127,7 @@ private fun RankSectionBlock(
 
 @Composable
 private fun RankSectionHeader(title: String, endPadding: Dp, onMore: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
         Box(
             Modifier
@@ -160,7 +160,7 @@ private fun RankSectionHeader(title: String, endPadding: Dp, onMore: () -> Unit)
             Text("查看更多", color = colors.onBackgroundVariant, fontSize = 13.sp)
             Spacer(Modifier.width(2.dp))
             androidx.compose.material3.Icon(
-                imageVector = MiuixIcons.Basic.ArrowRight,
+                imageVector = COUIIcons.Basic.ArrowRight,
                 contentDescription = null,
                 tint = colors.onBackgroundVariant,
                 modifier = Modifier.size(14.dp),
@@ -193,7 +193,7 @@ private fun RankCardRow(entries: List<BangumiRankEntry>, onOpenSeason: (Long) ->
 
 @Composable
 private fun RankCard(entry: BangumiRankEntry, width: Dp, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = Modifier
             .width(width)
@@ -349,10 +349,10 @@ private fun RankErrorText(message: String, onRetry: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Text(message, color = MiuixTheme.colorScheme.onBackgroundVariant, fontSize = 13.sp)
+        Text(message, color = COUITheme.colorScheme.onBackgroundVariant, fontSize = 13.sp)
         Text(
             text = "点击重试",
-            color = MiuixTheme.colorScheme.primary,
+            color = COUITheme.colorScheme.primary,
             fontSize = 13.sp,
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))

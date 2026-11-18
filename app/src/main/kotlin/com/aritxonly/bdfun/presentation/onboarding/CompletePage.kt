@@ -27,14 +27,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun CompletePage(onStart: () -> Unit) {
-    val surface = MiuixTheme.colorScheme.surfaceContainer
-    val accent = MiuixTheme.colorScheme.primary
+    val surface = COUITheme.colorScheme.surfaceContainer
+    val accent = COUITheme.colorScheme.primary
     val fallback = Brush.linearGradient(
         listOf(
             lerp(surface, accent, 0.25f),
@@ -113,7 +113,7 @@ private fun CompletePageTitle(
         fontSize = 40.sp,
         fontWeight = FontWeight.ExtraBold,
         textAlign = TextAlign.Center,
-        color = MiuixTheme.colorScheme.onBackground,
+        color = COUITheme.colorScheme.onBackground,
     )
 }
 
@@ -143,6 +143,6 @@ private fun CompletePageMessage(
             .waveGlint(ui.wave, ui.doneDistance, diameter, ui.wavePhase, glint, accent),
         fontSize = 24.sp,
         textAlign = TextAlign.Center,
-        color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+        color = COUITheme.colorScheme.onSurfaceVariantSummary,
     )
 }

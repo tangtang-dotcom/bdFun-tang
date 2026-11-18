@@ -30,10 +30,10 @@ import com.aritxonly.bdfun.BrandPink
 import com.aritxonly.bdfun.BuildConfig
 import com.aritxonly.bdfun.core.domain.update.UpdateRelease
 import com.aritxonly.bdfun.core.domain.update.releaseNoteLines
-import top.yukonga.miuix.kmp.basic.TextButton
+import io.github.suqi8.coui.kmp.basic.TextButton
 import com.aritxonly.teak.common.chrome.TeakLargeTitle
 import com.aritxonly.teak.common.chrome.TrackTeakPageScroll
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun ChangelogScreen(onBack: () -> Unit) {
@@ -42,7 +42,7 @@ fun ChangelogScreen(onBack: () -> Unit) {
 
 @Composable
 internal fun ChangelogContent(releases: List<UpdateRelease>, loading: Boolean, error: String?, onRetry: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val classic = TeakUiStyle.isClassic
     val cardShape = remember(classic) {
         TeakUiStyle.design.cardShape(RoundedCornerShape(22.dp))

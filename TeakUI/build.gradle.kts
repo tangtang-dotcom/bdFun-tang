@@ -29,18 +29,20 @@ kotlin {
 
 dependencies {
     testImplementation("junit:junit:4.13.2")
-    // Public API exposes Compose / Miuix types (Backdrop, Shape, MiuixTheme colors).
+    // Public API exposes Compose / COUI types (Backdrop, Shape, MiuixTheme colors).
     api(libs.compose.runtime)
     api(libs.compose.foundation)
     api(libs.compose.ui)
     api(libs.compose.animation)
     api(libs.compose.material3)
-    api(libs.miuix.ui)
-    api(libs.miuix.preference)
-    api(libs.miuix.glass)
-    api(libs.miuix.nav)
-    api(libs.miuix.blur)
-    api(libs.miuix.icons)
+    api(project(":third_party:teak-glass"))
+    api(libs.coui.ui)
+    api(libs.coui.preference)
+    api(libs.coui.nav)
+    api(libs.coui.blur)
+    api(libs.coui.icons)
+    api(libs.coui.shader)
+    api(libs.coui.squircle)
     api(libs.kyant.shapes)
 
     implementation(libs.coroutines.android)

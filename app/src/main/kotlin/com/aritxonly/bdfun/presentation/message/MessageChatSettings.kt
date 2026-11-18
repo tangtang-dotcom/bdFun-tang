@@ -12,7 +12,7 @@ import com.aritxonly.bdfun.feature.message.application.*
 import com.aritxonly.teak.common.modal.TeakActionSheet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private class ChatSettingsPresentation {
     var confirmation by mutableStateOf<ChatPreferenceAction?>(null)
@@ -21,7 +21,7 @@ private class ChatSettingsPresentation {
 @Composable
 internal fun MessageChatSettings(mid: Long, state: MessageToolsUiState, controller: MessageToolsStateHolder, scope: CoroutineScope) {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val ui = remember(controller) { ChatSettingsPresentation() }
     val chat = state.chat ?: return
     Column(Modifier.fillMaxWidth().padding(16.dp)) {
@@ -34,7 +34,7 @@ internal fun MessageChatSettings(mid: Long, state: MessageToolsUiState, controll
         toggles.forEach { (label, value, action) ->
             Row(Modifier.fillMaxWidth().padding(vertical = 16.dp), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                 Text(label, color = colors.onBackground, modifier = Modifier.weight(1f))
-                top.yukonga.miuix.kmp.basic.Switch(value, {
+                io.github.suqi8.coui.kmp.basic.Switch(value, {
                     if (action == ChatPreferenceAction.Block && !value || action == ChatPreferenceAction.Push && value) ui.confirmation = action
                     else scope.launch { controller.chatPreference(mid, action, !value)?.let(context::showToast) }
                 }, enabled = !state.busy && !state.loading)

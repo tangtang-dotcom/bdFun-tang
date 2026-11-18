@@ -17,13 +17,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.BrandPink
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.CommentComposerActionRow(
     content: CommentComposerContent, actions: CommentComposerActions,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val draft = content.snapshot.draft
     val sending = content.snapshot.sending
     val uploading = content.snapshot.uploading

@@ -12,14 +12,14 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.ui.*
 import com.aritxonly.teak.common.chrome.*
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.aritxonly.bdfun.feature.relations.application.*
 
 @Composable
 internal fun RelationFooter(controller: RelationFeedStateHolder, state: RelationFeedState, fans: Boolean,
     scope: kotlinx.coroutines.CoroutineScope) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     LaunchedEffect(state.loading, state.error, state.nextPage) {
         if (!state.loading && state.error == null && state.nextPage != null) scope.launch { controller.fetch() }
     }

@@ -28,7 +28,7 @@ import coil.compose.AsyncImage
 import com.aritxonly.bdfun.core.model.message.ChatMessage
 import com.aritxonly.bdfun.ui.EmoteText
 import com.aritxonly.bdfun.ui.rememberImageRequest
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun ChatBubble(
@@ -37,7 +37,7 @@ internal fun ChatBubble(
     myAvatar: String,
     emotes: Map<String, String> = emptyMap(),
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val mine = message.isMine
     val onMenu = LocalChatMessageMenu.current
     val onImage = LocalChatImageOpen.current

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.core.model.cache.CacheStatus
 import com.aritxonly.bdfun.core.model.cache.CachedVideo
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 
 @Composable
@@ -22,7 +22,7 @@ internal fun CacheRow(
     onOpen: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()

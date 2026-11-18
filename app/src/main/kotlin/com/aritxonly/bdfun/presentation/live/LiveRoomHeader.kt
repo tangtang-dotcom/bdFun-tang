@@ -32,9 +32,9 @@ import coil.compose.AsyncImage
 import com.aritxonly.bdfun.core.model.live.LiveRoomInfo
 import com.aritxonly.teak.common.navigation.TeakMorphMenuAnchor
 import com.aritxonly.teak.common.navigation.TeakMorphMenuState
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
-import top.yukonga.miuix.kmp.icon.extended.More
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.ChevronBackward
+import io.github.suqi8.coui.kmp.icon.extended.More
 
 @Composable
 internal fun LiveTopBar(
@@ -65,7 +65,7 @@ internal fun LiveTopBar(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = MiuixIcons.ChevronBackward,
+                imageVector = COUIIcons.ChevronBackward,
                 contentDescription = "返回",
                 tint = Color.White,
                 // 和收藏页等页面一致：38dp 热区 + 22dp 图标
@@ -100,7 +100,7 @@ internal fun LiveTopBar(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    imageVector = MiuixIcons.More,
+                    imageVector = COUIIcons.More,
                     contentDescription = "更多",
                     tint = Color.White,
                     modifier = Modifier.size(21.dp),

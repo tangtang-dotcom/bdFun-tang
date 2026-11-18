@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.chrome.teakGlassGlyphColor
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
 
 /* ---------------------------------------------------------------- glyphs */
 
@@ -16,10 +16,10 @@ internal val ShortcutGlyphSize = 28.dp
 
 @Composable
 internal fun MarkReadGlyph() {
-    AppGlyph(MiuixIcons.Community, teakGlassGlyphColor(), size = 21.dp)
+    AppGlyph(COUIIcons.Community, teakGlassGlyphColor(), size = 21.dp)
 }
 
 @Composable
 internal fun ThreeDotsGlyph() {
-    AppGlyph(MiuixIcons.More, teakGlassGlyphColor(), size = 21.dp)
+    AppGlyph(COUIIcons.More, teakGlassGlyphColor(), size = 21.dp)
 }

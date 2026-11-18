@@ -2,8 +2,8 @@ package com.aritxonly.bdfun.ui
 
 import com.aritxonly.teak.common.modal.TeakActionSheet
 
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Delete
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Delete
 import androidx.compose.runtime.Composable
 
 @Composable
@@ -43,14 +43,14 @@ internal fun MessageFeedSheet(
             val enabled = !busy && loadingByTab[target.first] != true
             if (menu.confirmMute) {
                 androidx.compose.material3.Text("这条内容的点赞将不再通知，但仍可在列表中查看。",
-                    color = top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onBackgroundVariant)
+                    color = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onBackgroundVariant)
                 ActionSheetRow("确认不再通知", enabled) { onMutate(false) }
                 ActionSheetRow("取消", enabled) { menu.confirmMute = false }
             } else if (menu.confirmDelete) {
                 if (kind == MessageFeedKind.Like) androidx.compose.material3.Text(
                     "删除后，有新的点赞时这条通知会重新出现在列表。",
-                    color = top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onBackgroundVariant)
-                ActionSheetRow("确认删除这条通知", enabled, MiuixIcons.Delete) {
+                    color = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onBackgroundVariant)
+                ActionSheetRow("确认删除这条通知", enabled, COUIIcons.Delete) {
                     onMutate(true)
                 }
                 ActionSheetRow("取消", enabled) { menu.confirmDelete = false }
@@ -58,7 +58,7 @@ internal fun MessageFeedSheet(
                 if (kind == MessageFeedKind.Like) ActionSheetRow(if (target.second.noticeState == 0) "不再通知" else "接收通知", enabled) {
                     if (target.second.noticeState == 0) menu.confirmMute = true else onMutate(false)
                 }
-                ActionSheetRow("删除通知", enabled, MiuixIcons.Delete) { menu.confirmDelete = true }
+                ActionSheetRow("删除通知", enabled, COUIIcons.Delete) { menu.confirmDelete = true }
             }
         }
     }

@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun HalfScreenMoreSheet(
@@ -51,7 +51,7 @@ fun HalfScreenMoreSheet(
 
 @Composable
 private fun HalfMoreQuickRow(onDismiss: () -> Unit, quick: HalfMoreQuickActions) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,7 +83,7 @@ private fun HalfMoreQuickRow(onDismiss: () -> Unit, quick: HalfMoreQuickActions)
 
 @Composable
 private fun HalfMorePlaybackSettings(state: HalfMoreState, settings: HalfMoreSettingsActions, timerMinutes: Int, accentColor: androidx.compose.ui.graphics.Color) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     HalfSpeedRow(
         speed = state.speed,
         accentColor = accentColor,
@@ -114,7 +114,7 @@ private fun HalfMorePlaybackSettings(state: HalfMoreState, settings: HalfMoreSet
 
 @Composable
 private fun HalfMoreExtraSettings(state: HalfMoreState, settings: HalfMoreSettingsActions, onDismiss: () -> Unit, accentColor: androidx.compose.ui.graphics.Color) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     HalfMoreSwitchRow(
         accentColor = accentColor,
         label = "后台听视频",

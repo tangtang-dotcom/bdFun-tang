@@ -43,7 +43,7 @@ import com.aritxonly.bdfun.ui.FeedCardShape
 import com.aritxonly.bdfun.ui.TeakLoading
 import com.aritxonly.bdfun.ui.rememberImageRequest
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 第一项固定是「最近追番」：即使列表为空/还在加载也保留这一节，
  *  这样网格的第 0 项永远不变，进页面就锚在顶部，不会因为数据晚到被带到榜单上。 */
@@ -100,7 +100,7 @@ internal fun LazyGridScope.bangumiPageStateItems(
 /** 番剧卡片：3:4 长封面，「xx万追番」在封面左下，UP 主位置换成「全xx话」。 */
 @Composable
 internal fun BangumiCardItem(item: BangumiCard, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = Modifier
             .clip(FeedCardShape)

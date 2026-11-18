@@ -43,12 +43,12 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import com.aritxonly.bdfun.R
 import kotlinx.coroutines.delay
-import top.yukonga.miuix.kmp.basic.Checkbox
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
-import top.yukonga.miuix.kmp.icon.extended.ChevronForward
-import top.yukonga.miuix.kmp.icon.extended.Close
+import io.github.suqi8.coui.kmp.basic.Checkbox
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.ChevronBackward
+import io.github.suqi8.coui.kmp.icon.extended.ChevronForward
+import io.github.suqi8.coui.kmp.icon.extended.Close
 
 /**
  * 投币页：整页浮层，布局与动效照搬 PiliPlus `lib/pages/video/pay_coins/view.dart`。
@@ -339,7 +339,7 @@ private fun CoinBottomRow(
             )
         }
         Icon(
-            imageVector = MiuixIcons.Close,
+            imageVector = COUIIcons.Close,
             contentDescription = "关闭",
             tint = Color.White,
             modifier = Modifier

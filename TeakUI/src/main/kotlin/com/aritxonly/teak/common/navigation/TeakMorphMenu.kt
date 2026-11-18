@@ -59,12 +59,12 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.BackdropEffectScope
-import top.yukonga.miuix.kmp.blur.blur
-import top.yukonga.miuix.kmp.blur.colorControls
-import top.yukonga.miuix.kmp.blur.drawBackdrop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.BackdropEffectScope
+import io.github.suqi8.coui.kmp.blur.blur
+import io.github.suqi8.coui.kmp.blur.colorControls
+import io.github.suqi8.coui.kmp.blur.drawBackdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -221,7 +221,7 @@ fun TeakMorphMenuHost(
     val density = LocalDensity.current
     val densityScale = density.density
     val cornerRadiusPx = with(density) { 24.dp.toPx() }
-    val dark = MiuixTheme.colorScheme.background.luminance() < 0.5f
+    val dark = COUITheme.colorScheme.background.luminance() < 0.5f
 
     val requestClose: () -> Unit = {
         if (morph.opening) {

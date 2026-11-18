@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import com.aritxonly.teak.common.interaction.blockTouches
 import com.aritxonly.teak.common.search.TeakSearchTransitionDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal data class BottomSearchTransition(
     val reveal: Float, val windowAlpha: Float, val maskAlpha: Float, val contentAlpha: Float,
@@ -19,7 +19,7 @@ internal data class BottomSearchTransition(
 internal fun BottomSearchFrame(transition: BottomSearchTransition, content: @Composable () -> Unit) {
     val liftPx = with(LocalDensity.current) { TeakSearchTransitionDefaults.ContentLift.toPx() }
     Box(Modifier.fillMaxSize().graphicsLayer { alpha = transition.windowAlpha.coerceIn(0f, 1f) }
-        .background(MiuixTheme.colorScheme.background.copy(alpha = transition.maskAlpha.coerceIn(0f, 1f)))) {
+        .background(COUITheme.colorScheme.background.copy(alpha = transition.maskAlpha.coerceIn(0f, 1f)))) {
         Box(Modifier.matchParentSize().blockTouches(true))
         Box(Modifier.fillMaxSize().graphicsLayer {
             translationY = (1f - transition.reveal.coerceIn(0f, 1f)) * liftPx

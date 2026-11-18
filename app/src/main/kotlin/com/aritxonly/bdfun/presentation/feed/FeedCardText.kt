@@ -11,11 +11,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.feed.FeedItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun FeedCardText(item: FeedItem, expanded: Boolean) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     if (item.moduleTag.isNotBlank()) {
         Text(item.moduleTag, color = colors.primary, fontSize = 12.sp,

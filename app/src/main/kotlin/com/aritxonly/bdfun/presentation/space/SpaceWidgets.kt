@@ -26,10 +26,10 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.ui.TeakLoading
 import com.aritxonly.bdfun.ui.formatCount
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal fun formatCountNoDecimal(value: Long): String =
     formatCount(value)
@@ -42,7 +42,7 @@ internal fun SpaceSectionHeader(
     modifier: Modifier = Modifier,
     onMore: (() -> Unit)? = null,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -68,7 +68,7 @@ internal fun SpaceSectionHeader(
                     fontSize = 11.sp,
                 )
                 Spacer(Modifier.width(2.dp))
-                AppGlyph(MiuixIcons.Basic.ArrowRight, colors.onBackgroundVariant, size = 10.dp)
+                AppGlyph(COUIIcons.Basic.ArrowRight, colors.onBackgroundVariant, size = 10.dp)
             }
         }
     }
@@ -90,7 +90,7 @@ internal fun SpaceSubmissionCard(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val classic = TeakUiStyle.isClassic
     val isFirst = index == 0
     val shape = if (classic) androidx.compose.ui.graphics.RectangleShape else RoundedCornerShape(
@@ -138,7 +138,7 @@ internal fun SpaceEmpty(text: String) {
     ) {
         Text(
             text = text,
-            color = MiuixTheme.colorScheme.onBackgroundVariant,
+            color = COUITheme.colorScheme.onBackgroundVariant,
             fontSize = 13.sp,
         )
     }
@@ -146,7 +146,7 @@ internal fun SpaceEmpty(text: String) {
 
 @Composable
 internal fun SpaceStat(label: String, value: Long, modifier: Modifier = Modifier) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = modifier.offset(y = 1.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

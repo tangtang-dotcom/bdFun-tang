@@ -27,12 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.data.CommentItem
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.runtime.getValue
 
 @Composable
 internal fun CommentListTitle(bare: Boolean, title: String, total: Int) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     if (!bare) {
         Row(
             modifier = Modifier
@@ -68,7 +68,7 @@ internal fun CommentSortRow(
     /** 视频详情竖屏主评论区：上下留白各收一点，避免「共 N 条评论」孤零零悬在中间。 */
     compactSpacing: Boolean = false,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,7 +135,7 @@ internal fun CommentListCard(
     index: Int, lastIndex: Int, item: CommentItem, state: CommentListViewState, actions: CommentListViewActions,
     flatList: Boolean = false,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val end = state.end
     val highlightRpid = state.highlightRpid
     val disliked = state.disliked

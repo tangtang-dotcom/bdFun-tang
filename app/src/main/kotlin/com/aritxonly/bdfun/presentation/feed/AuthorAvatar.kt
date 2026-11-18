@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun AuthorAvatar(
@@ -34,7 +34,7 @@ internal fun AuthorAvatar(
     badge: String? = null,
     onClick: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val ring = rememberManualProgress(if (selected) 1f else 0f, 200f)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

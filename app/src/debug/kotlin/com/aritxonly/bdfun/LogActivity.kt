@@ -49,7 +49,7 @@ import com.aritxonly.teak.common.settings.TeakSettingsPage
 import com.kyant.shapes.Capsule
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 class LogActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +71,7 @@ class LogActivity : ComponentActivity() {
 @Composable
 private fun LogScreen() {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val presentation = remember { LogPresentationStateHolder() }
     var tick by presentation::tick
     var preview by presentation::preview
@@ -132,7 +132,7 @@ private class LogPresentationStateHolder {
 @Composable
 private fun LogIntro() {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     Text(
         text = "复现问题前先点「开始新一轮抓取」，然后按平时操作复现；" +
@@ -148,7 +148,7 @@ private fun LogIntro() {
 @Composable
 private fun LogActions(onClear: () -> Unit) {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     TeakSettingsCard {
         TeakSettingsActionRow(title = "开始新一轮抓取", trailing = "清空旧日志") {
@@ -176,7 +176,7 @@ private fun LogActions(onClear: () -> Unit) {
 @Composable
 private fun LogFreezeActions() {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     TeakSettingsCard {
         TeakSettingsActionRow(
@@ -213,7 +213,7 @@ private fun LogFreezeActions() {
 @Composable
 private fun LogExport() {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     Box(
         modifier = Modifier
@@ -244,7 +244,7 @@ private fun LogExport() {
 @Composable
 private fun LogPreview(preview: String, count: Int) {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     Column(
         modifier = Modifier

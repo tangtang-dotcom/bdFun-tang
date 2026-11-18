@@ -2,17 +2,17 @@ package com.aritxonly.bdfun.ui
 
 import androidx.compose.runtime.Composable
 import com.aritxonly.bdfun.core.model.comment.CommentItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun CommentThreadMenuBasicRows(runtime: CommentThreadRuntime, input: CommentThreadInput, menuTarget: CommentItem) {
-    val colors = MiuixTheme.colorScheme
-    top.yukonga.miuix.kmp.glass.GlassPopupItem(
+    val colors = COUITheme.colorScheme
+    io.github.suqi8.coui.kmp.glass.GlassPopupItem(
         text = "回复",
         contentColor = colors.onBackground,
         onClick = { runtime.dismissMenu { runtime.transient.replyTarget = menuTarget } },
     )
-    top.yukonga.miuix.kmp.glass.GlassPopupItem(
+    io.github.suqi8.coui.kmp.glass.GlassPopupItem(
         text = "复制",
         contentColor = colors.onBackground,
         onClick = {
@@ -21,7 +21,7 @@ internal fun CommentThreadMenuBasicRows(runtime: CommentThreadRuntime, input: Co
             runtime.dismissMenu()
         },
     )
-    top.yukonga.miuix.kmp.glass.GlassPopupItem(
+    io.github.suqi8.coui.kmp.glass.GlassPopupItem(
         text = "自由复制",
         contentColor = colors.onBackground,
         onClick = {
@@ -30,7 +30,7 @@ internal fun CommentThreadMenuBasicRows(runtime: CommentThreadRuntime, input: Co
             runtime.dismissMenu()
         },
     )
-    top.yukonga.miuix.kmp.glass.GlassPopupItem(
+    io.github.suqi8.coui.kmp.glass.GlassPopupItem(
         text = "分享",
         contentColor = colors.onBackground,
         onClick = {

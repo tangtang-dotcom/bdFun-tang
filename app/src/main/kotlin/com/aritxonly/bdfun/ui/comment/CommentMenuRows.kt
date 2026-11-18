@@ -13,7 +13,7 @@ internal fun CommentMenuRow(
 ) {
 
     // 直接用设置页二级菜单同一套 Miuix 玻璃行：同样的高度、内边距、按压反馈和文字排版。
-    top.yukonga.miuix.kmp.glass.GlassPopupItem(
+    io.github.suqi8.coui.kmp.glass.GlassPopupItem(
         text = label,
         onClick = onClick,
         contentColor = tint,

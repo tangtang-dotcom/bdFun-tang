@@ -12,7 +12,7 @@ import com.aritxonly.bdfun.ui.showToast
 import com.aritxonly.teak.common.modal.TeakActionSheet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal val LocalChatMessageMenu = staticCompositionLocalOf<(ChatMessage) -> Unit> { {} }
 internal class ChatMessageMenuState {
@@ -39,9 +39,9 @@ internal fun PrivateChatMessageMenu(ui: ChatMessageMenuState, controller: Privat
         } else if (!ui.report) ActionSheetRow("举报", !ui.busy) { ui.report = true }
         else {
             Column {
-                Text("补充说明（选择“其他问题”时必填）", color = MiuixTheme.colorScheme.onBackgroundVariant)
+                Text("补充说明（选择“其他问题”时必填）", color = COUITheme.colorScheme.onBackgroundVariant)
                 BasicTextField(ui.description, { ui.description = it }, enabled = !ui.busy,
-                    textStyle = androidx.compose.ui.text.TextStyle(color = MiuixTheme.colorScheme.onBackground))
+                    textStyle = androidx.compose.ui.text.TextStyle(color = COUITheme.colorScheme.onBackground))
             }
             listOf(1 to "色情低俗", 2 to "政治敏感", 3 to "违法有害", 4 to "广告骚扰", 5 to "人身攻击", 6 to "诈骗", 0 to "其他问题").forEach { (reason, title) ->
                 ActionSheetRow(title, !ui.busy && (reason != 0 || ui.description.isNotBlank())) {

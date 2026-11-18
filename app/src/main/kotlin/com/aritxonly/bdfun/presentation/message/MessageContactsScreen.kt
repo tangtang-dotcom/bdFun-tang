@@ -18,7 +18,7 @@ import com.aritxonly.bdfun.feature.message.application.MessageTool
 import com.aritxonly.bdfun.navigateToSpace
 import com.aritxonly.teak.common.chrome.*
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private class ContactPresentationState(initial: Int) {
     var group by mutableIntStateOf(initial)
@@ -35,7 +35,7 @@ internal fun MessageContactsScreen(initialGroup: Int, onBack: () -> Unit) {
     val scope = rememberMessageTaskScope(controller, controller::close)
     val state by controller.state.collectAsState()
     val list = key(controller) { rememberLazyListState() }
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     val navigate = messageRouteAction()
     val title = if (initialGroup == 2) "黑名单" else "联系人"

@@ -20,15 +20,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.aritxonly.teak.common.icons.LucideIcons
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.icon.extended.Messages
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.extended.Messages
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MessageCircleButton(onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .size(34.dp)
@@ -39,7 +39,7 @@ internal fun MessageCircleButton(onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            imageVector = MiuixIcons.Messages,
+            imageVector = COUIIcons.Messages,
             contentDescription = "私信",
             tint = BrandPink,
             modifier = Modifier.size(18.dp),
@@ -60,7 +60,7 @@ internal fun FollowCapsule(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val shape = com.kyant.shapes.Capsule()
     Box(
         modifier = modifier

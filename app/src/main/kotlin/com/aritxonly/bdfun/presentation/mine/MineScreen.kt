@@ -3,7 +3,7 @@ package com.aritxonly.bdfun.ui
 import com.aritxonly.teak.common.theme.TeakUiStyle
 
 import androidx.compose.material3.Text
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -118,7 +118,7 @@ private fun MineShortcuts(navigation: MineNavigation) {
     val classic = TeakUiStyle.isClassic
     Column(verticalArrangement = Arrangement.spacedBy(TeakUiStyle.design.itemSpacing(12.dp, 6.dp))) {
         Text("常用功能", Modifier.padding(horizontal = if (classic) 16.dp else 7.dp), fontSize = 12.sp,
-            color = MiuixTheme.colorScheme.onBackgroundVariant)
+            color = COUITheme.colorScheme.onBackgroundVariant)
         MineQuickActions(
             TeakUiStyle.design.cardShape(ContinuousCornerShape(22.dp)),
             navigation,

@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun CommentThreadMenuModerationRows(runtime: CommentThreadRuntime, menuTarget: CommentItem) {
     val myMid = LocalVideoPageState.current.dependencies.comments.session.value?.mid ?: 0L
-    top.yukonga.miuix.kmp.glass.GlassPopupItem(
+    io.github.suqi8.coui.kmp.glass.GlassPopupItem(
         text = "举报",
         contentColor = Color(0xFFE5484D),
         onClick = {
@@ -23,7 +23,7 @@ internal fun CommentThreadMenuModerationRows(runtime: CommentThreadRuntime, menu
             }
         },
     )
-    top.yukonga.miuix.kmp.glass.GlassPopupItem(
+    io.github.suqi8.coui.kmp.glass.GlassPopupItem(
         text = "加入黑名单",
         contentColor = Color(0xFFE5484D),
         onClick = {
@@ -38,7 +38,7 @@ internal fun CommentThreadMenuModerationRows(runtime: CommentThreadRuntime, menu
         },
     )
     if (myMid > 0 && menuTarget.mid == myMid) {
-        top.yukonga.miuix.kmp.glass.GlassPopupItem(
+        io.github.suqi8.coui.kmp.glass.GlassPopupItem(
             text = "删除",
             contentColor = Color(0xFFE5484D),
             onClick = {

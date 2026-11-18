@@ -24,11 +24,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun VideoMetadataAuthor(content: VideoMetadataContent, interaction: com.aritxonly.bdfun.feature.video.application.VideoInteractionState, actions: VideoMetadataActions, appearance: VideoMetadataAppearance, slots: VideoMetadataSlots) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val detail = content.detail
     val video = content.video
     val upFollowers = content.upFollowers

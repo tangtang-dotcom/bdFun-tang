@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 
 @Composable
@@ -32,7 +32,7 @@ internal fun androidx.compose.foundation.layout.RowScope.HomeSearchSurface(searc
             modifier = Modifier
                 .then(if (wide) Modifier.width(searchWidth) else Modifier.weight(1f))
                 .height(40.dp)
-                .background(MiuixTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f), Capsule())
+                .background(COUITheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f), Capsule())
                 .then(
                     if (!searchActive) Modifier.clickable(
                         interactionSource = searchInteraction,

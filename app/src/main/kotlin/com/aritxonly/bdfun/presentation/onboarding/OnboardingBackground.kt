@@ -6,12 +6,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalConfiguration
-import top.yukonga.miuix.kmp.blur.LayerBackdrop
-import top.yukonga.miuix.kmp.blur.isRuntimeShaderSupported
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.effect.bg.BgEffectBackground
-import top.yukonga.miuix.kmp.effect.bg.DeviceType
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.LayerBackdrop
+import io.github.suqi8.coui.kmp.blur.isRuntimeShaderSupported
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.effect.bg.BgEffectBackground
+import io.github.suqi8.coui.kmp.effect.bg.DeviceType
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun OnboardingBackground(
@@ -20,7 +20,7 @@ internal fun OnboardingBackground(
     modifier: Modifier = Modifier,
     content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit = {},
 ) {
-    val surface = MiuixTheme.colorScheme.surfaceContainer
+    val surface = COUITheme.colorScheme.surfaceContainer
     val shader = remember { isRuntimeShaderSupported() }
     BgEffectBackground(
         dynamicBackground = playing,

@@ -23,8 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BuildConfig
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 保留 Deadliner 252dp 身份区、96dp 图标和版本层级；产品信息由 bdFun 提供。 */
 @Composable
@@ -39,8 +39,8 @@ internal fun SettingsAboutAppHeader(appName: String, onCheckUpdate: () -> Unit) 
         Image(icon, contentDescription = null, contentScale = ContentScale.Fit,
             modifier = Modifier.size(96.dp).clip(RoundedCornerShape(24.dp)))
         Text(appName, fontSize = 30.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center,
-            color = MiuixTheme.colorScheme.onSurface, modifier = Modifier.padding(top = 2.dp))
-        Text("v${BuildConfig.VERSION_NAME}", color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+            color = COUITheme.colorScheme.onSurface, modifier = Modifier.padding(top = 2.dp))
+        Text("v${BuildConfig.VERSION_NAME}", color = COUITheme.colorScheme.onSurfaceVariantSummary,
             fontSize = 14.sp, modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp))
         Spacer(Modifier.height(12.dp))
     }

@@ -6,8 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.core.model.settings.SettingValue
 import com.aritxonly.bdfun.feature.settings.application.IndexedSettingsStateHolder
-import top.yukonga.miuix.kmp.nav.core.*
-import top.yukonga.miuix.kmp.nav.transition.NavTransitions
+import io.github.suqi8.coui.kmp.nav.core.*
+import io.github.suqi8.coui.kmp.nav.transition.NavTransitions
 
 private data class SettingsPaneRoute(val category: String?, val detail: String? = null) : NavKey
 
@@ -33,7 +33,7 @@ internal fun SettingsPaneNavigation(session: SettingsBrowserSession, values: Map
         )
     }
     NavDisplay(stack, modifier, onBack = { if (!session.browser.back()) runtime.navigation.onBack() },
-        transition = if (runtime.settings.animationsEnabled) NavTransitions.MiuixDefault else NavTransitions.None,
+        transition = if (runtime.settings.animationsEnabled) NavTransitions.COUIDefault else NavTransitions.None,
         effects = effects) {
         entry<SettingsPaneRoute> { key ->
             val current = key == desired.last()

@@ -18,10 +18,10 @@ import com.aritxonly.bdfun.core.domain.SearchFilterState
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.navigation.TeakPagerTabs
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun ResultsTabHeader(
@@ -86,7 +86,7 @@ internal fun ResultsTabHeader(
 
 @Composable
 internal fun FunnelGlyph() {
-    AppGlyph(MiuixIcons.Filter, MiuixTheme.colorScheme.onBackgroundVariant, size = 17.dp)
+    AppGlyph(COUIIcons.Filter, COUITheme.colorScheme.onBackgroundVariant, size = 17.dp)
 }
 
 internal class SearchFilterAnchorStateHolder {

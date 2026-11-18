@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.aritxonly.teak.common.icons.LucideIcons
 import com.aritxonly.teak.common.material.TeakGlassIconButton
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun CommentComposerRow(content: CommentComposerContent, actions: CommentComposerActions, material: CommentComposerMaterial) {
@@ -26,7 +26,7 @@ internal fun CommentComposerRow(content: CommentComposerContent, actions: Commen
             recipe = recipe,
             backdrop = backdrop,
         ) {
-            AppGlyph(LucideIcons.FaceGrinning, size = 19.dp, tint = MiuixTheme.colorScheme.onBackgroundVariant)
+            AppGlyph(LucideIcons.FaceGrinning, size = 19.dp, tint = COUITheme.colorScheme.onBackgroundVariant)
         }
     }
 

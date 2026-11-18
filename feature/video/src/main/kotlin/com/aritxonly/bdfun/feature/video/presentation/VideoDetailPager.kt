@@ -27,7 +27,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
@@ -46,7 +46,7 @@ fun androidx.compose.foundation.layout.BoxScope.VideoDetailPager(
     tail: androidx.compose.foundation.lazy.LazyListScope.() -> Unit,
     comments: @Composable (androidx.compose.ui.unit.Dp) -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val fullscreen = state.fullscreen
     val pictureInPicture = state.pictureInPicture
     val splitPanes = state.splitPanes

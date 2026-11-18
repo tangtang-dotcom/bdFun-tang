@@ -12,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.aritxonly.bdfun.feature.library.application.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun LibrarySearchPage(content: LibrarySearchContent, actions: LibrarySearchActions) {
     val controller = remember { LibrarySearchStateHolder() }
     val state by controller.state.collectAsState()
     val events = LibrarySearchEvents(controller, actions)
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Dialog(onDismissRequest = actions.onBack, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
         val view = androidx.compose.ui.platform.LocalView.current
         val dialogWindow = (view.parent as? androidx.compose.ui.window.DialogWindowProvider)?.window

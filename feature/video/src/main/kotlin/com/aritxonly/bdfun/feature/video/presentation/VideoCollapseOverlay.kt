@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.ChevronBackward
 
 @Composable
 fun androidx.compose.foundation.layout.BoxScope.VideoCollapseOverlay(
@@ -107,7 +107,7 @@ private fun androidx.compose.foundation.layout.BoxScope.CollapsedChromeBar(
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    imageVector = MiuixIcons.ChevronBackward,
+                    imageVector = COUIIcons.ChevronBackward,
                     contentDescription = "返回",
                     tint = Color.White,
                     modifier = Modifier.size(20.dp),

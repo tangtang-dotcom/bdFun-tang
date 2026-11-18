@@ -22,13 +22,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.ui.formatCount
 import com.aritxonly.bdfun.ui.rememberImageRequest
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.aritxonly.bdfun.core.model.message.SharedVideoInfo
 
 @Composable
 internal fun ChatSharedVideoCover(info: SharedVideoInfo) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .fillMaxWidth()

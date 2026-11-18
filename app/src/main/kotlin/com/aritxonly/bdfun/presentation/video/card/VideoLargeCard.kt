@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.core.model.video.VideoItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun VideoLargeCard(
@@ -21,7 +21,7 @@ internal fun VideoLargeCard(
     progress: Float = 0f,
     onLongClick: (() -> Unit)? = null,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = modifier
             .fillMaxWidth()

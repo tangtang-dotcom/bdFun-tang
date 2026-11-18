@@ -30,7 +30,7 @@ import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.TeakGlassRecipes
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Immutable
 data class TeakBatchAction(
@@ -53,7 +53,7 @@ fun TeakBatchActionBar(
     onAction: (TeakBatchAction) -> Unit,
     modifier: Modifier = Modifier,
     selectedCount: Int = 0,
-    backdrop: top.yukonga.miuix.kmp.blur.Backdrop? = LocalTeakBackdrop.current,
+    backdrop: io.github.suqi8.coui.kmp.blur.Backdrop? = LocalTeakBackdrop.current,
 ) {
     var progress by remember { mutableFloatStateOf(if (visible) 1f else 0f) }
     androidx.compose.runtime.LaunchedEffect(visible) {
@@ -82,7 +82,7 @@ fun TeakBatchActionBar(
     }
     if (progress <= 0.005f && !visible) return
 
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val p = progress.coerceIn(0f, 1f)
     TeakGlassSurface(
         modifier = modifier

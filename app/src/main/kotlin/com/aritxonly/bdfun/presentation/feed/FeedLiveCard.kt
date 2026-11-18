@@ -22,11 +22,11 @@ import coil.compose.AsyncImage
 import com.kyant.shapes.Capsule
 import com.aritxonly.bdfun.core.model.feed.FeedLiveRecommendation
 import com.aritxonly.bdfun.navigateToLiveRoom
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun FeedLiveCard(live: FeedLiveRecommendation) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     Column(Modifier.fillMaxWidth().clip(ContinuousCornerShape(12.dp))
         .background(colors.surfaceContainerHigh).clickable(enabled = live.roomId > 0) {

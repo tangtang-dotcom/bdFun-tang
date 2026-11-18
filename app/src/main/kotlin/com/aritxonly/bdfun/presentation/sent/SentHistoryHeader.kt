@@ -13,13 +13,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.aritxonly.bdfun.feature.sent.application.*
 
 @Composable
 internal fun SentHistoryHeader() {
     val pageChrome = com.aritxonly.teak.common.chrome.LocalTeakPageScrollState.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)) {
         Spacer(Modifier.height(52.dp))
         Text(

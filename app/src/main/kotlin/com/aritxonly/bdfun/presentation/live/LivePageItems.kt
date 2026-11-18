@@ -49,7 +49,7 @@ import com.aritxonly.bdfun.ui.TeakLoading
 import com.aritxonly.bdfun.ui.rememberImageRequest
 import com.kyant.shapes.Capsule
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 第一行：我的关注里正在直播的 UP。
@@ -65,7 +65,7 @@ internal fun LazyGridScope.liveFollowSection(state: LivePageStateHolder, onOpenR
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(ContinuousCornerShape(18.dp))
-                    .background(MiuixTheme.colorScheme.surfaceContainer)
+                    .background(COUITheme.colorScheme.surfaceContainer)
                     .padding(horizontal = 10.dp, vertical = 8.dp),
             ) {
                 LazyRow(
@@ -143,7 +143,7 @@ internal fun LazyGridScope.livePageStateItems(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(FeedCardShape)
-                    .background(MiuixTheme.colorScheme.surfaceContainer)
+                    .background(COUITheme.colorScheme.surfaceContainer)
                     .clickable(interactionSource = null, indication = null) {
                         navigateToLogin(context)
                     }
@@ -151,7 +151,7 @@ internal fun LazyGridScope.livePageStateItems(
             ) {
                 Text(
                     "登录后在这里看到关注的直播",
-                    color = MiuixTheme.colorScheme.onBackgroundVariant,
+                    color = COUITheme.colorScheme.onBackgroundVariant,
                     fontSize = 13.sp,
                 )
             }
@@ -161,7 +161,7 @@ internal fun LazyGridScope.livePageStateItems(
 
 @Composable
 private fun LiveAreaChip(text: String, selected: Boolean, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     // 形状/尺寸和顶栏分段指示器保持一致：32dp 高、全圆角、选中粉色填充 + 白字。
     Box(
         modifier = Modifier
@@ -186,7 +186,7 @@ private fun LiveAreaChip(text: String, selected: Boolean, onClick: () -> Unit) {
 /** 直播卡片：结构同首页视频卡片，统计行换成「xx人看过」+ 直播内容。 */
 @Composable
 internal fun LiveGridCard(live: LiveCard, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = Modifier
             .clip(FeedCardShape)

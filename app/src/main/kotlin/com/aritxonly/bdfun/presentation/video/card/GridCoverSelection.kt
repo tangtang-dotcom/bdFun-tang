@@ -13,10 +13,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.GridCoverSelection(selectionEnabled: Boolean, selected: Boolean) {
@@ -29,13 +29,13 @@ internal fun androidx.compose.foundation.layout.BoxScope.GridCoverSelection(sele
                         .size(22.dp)
                         .clip(CircleShape)
                         .background(
-                            if (selected) MiuixTheme.colorScheme.primary else Color(0x66000000),
+                            if (selected) COUITheme.colorScheme.primary else Color(0x66000000),
                         )
                         .border(1.5.dp, Color.White.copy(alpha = 0.9f), CircleShape),
                     contentAlignment = Alignment.Center,
                 ) {
                     if (selected) {
-                        AppGlyph(MiuixIcons.Ok, size = 13.dp, tint = Color.White)
+                        AppGlyph(COUIIcons.Ok, size = 13.dp, tint = Color.White)
                     }
                 }
             }

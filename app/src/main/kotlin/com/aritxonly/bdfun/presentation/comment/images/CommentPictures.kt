@@ -20,12 +20,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CommentPictures(urls: List<String>, onOpen: (Int, Rect, Float, List<Rect?>) -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val density = LocalDensity.current
     val radiusPx = with(density) { CommentPictureRadius.toPx() }
     // 缩略图在窗口里的矩形要交给查看器做共享元素入场，所以这里逐张记录。

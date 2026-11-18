@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import com.aritxonly.teak.common.search.teakSearchUnderlay
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
-import top.yukonga.miuix.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
 
 @Composable
 internal fun MainScaffold(settings: SettingsBindings, shell: MainShellState, dark: Boolean, background: Color) {

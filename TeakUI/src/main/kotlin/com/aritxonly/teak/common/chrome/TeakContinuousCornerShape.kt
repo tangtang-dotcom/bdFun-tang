@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import top.yukonga.miuix.kmp.squircle.addSquircleRect
+import io.github.suqi8.coui.kmp.squircle.addSquircleRect
 
 /**
  * 连续曲率圆角（squircle），与 HyperOS / Miuix 的轮廓一致，

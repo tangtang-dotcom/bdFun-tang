@@ -23,7 +23,7 @@ import com.aritxonly.teak.common.material.TeakGlassRecipes
 import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 平玻璃配方：保留磨砂，折射只开一点点（试验值），高光收着用。
@@ -79,7 +79,7 @@ fun TeakGlassPanel(
     )
     // 玻璃面板只加一点点底灰：亮色主题压 2%，暗色主题提 3%（多了会发闷）
     val resolvedTintAlpha = tintAlpha.coerceIn(0f, 1f)
-    val tint = if (MiuixTheme.colorScheme.onBackground.luminance() > 0.5f) {
+    val tint = if (COUITheme.colorScheme.onBackground.luminance() > 0.5f) {
         Color.White.copy(alpha = 0.03f * resolvedTintAlpha)
     } else {
         Color.Black.copy(alpha = 0.02f * resolvedTintAlpha)

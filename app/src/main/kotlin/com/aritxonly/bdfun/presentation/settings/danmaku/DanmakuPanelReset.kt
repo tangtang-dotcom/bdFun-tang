@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.feature.settings.application.*
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
 
 @Composable
 internal fun DanmakuPanelReset(runtime: DanmakuPanelRuntime) {
@@ -46,5 +46,5 @@ internal fun DanmakuPanelReset(runtime: DanmakuPanelRuntime) {
 
 @Composable
 internal fun ResetGlyph() {
-    AppGlyph(MiuixIcons.Reset, DmSecondary, size = 13.dp)
+    AppGlyph(COUIIcons.Reset, DmSecondary, size = 13.dp)
 }

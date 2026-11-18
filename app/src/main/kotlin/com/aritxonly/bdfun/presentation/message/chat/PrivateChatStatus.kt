@@ -15,14 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun PrivateChatLoading() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
             "加载中…",
-            color = MiuixTheme.colorScheme.onBackgroundVariant,
+            color = COUITheme.colorScheme.onBackgroundVariant,
             fontSize = 13.sp,
         )
     }
@@ -34,13 +34,13 @@ internal fun PrivateChatLoadError(detail: String?, onRetry: () -> Unit) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 detail?.takeIf { it.isNotBlank() }?.let { "消息加载失败：$it" } ?: "消息加载失败",
-                color = MiuixTheme.colorScheme.onBackgroundVariant,
+                color = COUITheme.colorScheme.onBackgroundVariant,
                 fontSize = 13.sp,
             )
             Spacer(Modifier.height(10.dp))
             Text(
                 text = "点击重试",
-                color = MiuixTheme.colorScheme.primary,
+                color = COUITheme.colorScheme.primary,
                 fontSize = 13.sp,
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))

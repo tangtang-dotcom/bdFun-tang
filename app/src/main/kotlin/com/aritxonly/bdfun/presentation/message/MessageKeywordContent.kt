@@ -14,7 +14,7 @@ import com.aritxonly.bdfun.feature.message.application.*
 import com.aritxonly.teak.common.modal.TeakActionSheet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private class KeywordPresentationState {
     var delete by mutableStateOf<String?>(null)
@@ -22,7 +22,7 @@ private class KeywordPresentationState {
 
 @Composable
 internal fun MessageKeywordContent(state: MessageToolsUiState, controller: MessageToolsStateHolder, scope: CoroutineScope) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     val ui = remember(controller) { KeywordPresentationState() }
     Column(Modifier.fillMaxWidth().padding(16.dp)) {

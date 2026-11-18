@@ -37,7 +37,7 @@ import com.aritxonly.teak.common.chrome.TeakMotion
 import com.aritxonly.teak.common.material.*
 import com.aritxonly.teak.common.theme.TeakUiStyle
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import kotlin.math.roundToInt
 
 @Composable
@@ -118,7 +118,7 @@ private fun ScrollableSegmentLabel(
     current: State<Float>, onSelect: (Int) -> Unit, interactions: MutableInteractionSource,
 ) {
     val density = LocalDensity.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val classic = TeakUiStyle.isClassic
     val direction = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1f else 1f
     val blur = remember(density) {
@@ -164,7 +164,7 @@ private fun ScrollableSegmentIndicator(
     val density = LocalDensity.current
     val item = with(density) { geometry.item.toDp() }
     val classic = TeakUiStyle.isClassic
-    val color = MiuixTheme.colorScheme.primary
+    val color = COUITheme.colorScheme.primary
     val enabled = TeakMotion.enabled
     val pressScale = animateFloatAsState(
         if (pressed && enabled) FloatingTabMotionDefaults.PressedScale else 1f,

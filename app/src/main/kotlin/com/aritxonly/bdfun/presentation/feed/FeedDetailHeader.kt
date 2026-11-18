@@ -13,7 +13,7 @@ import com.aritxonly.bdfun.ui.FeedCard
 import com.aritxonly.bdfun.ui.FeedCardActions
 import com.aritxonly.bdfun.ui.FeedCardPresentation
 import com.aritxonly.teak.common.chrome.TeakLargeTitle
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal fun LazyListScope.dynamicDetailHeader(snapshot: FeedDetailUiState, actions: FeedDetailActions) {
     val detail = snapshot.detail
@@ -44,7 +44,7 @@ internal fun LazyListScope.dynamicDetailHeader(snapshot: FeedDetailUiState, acti
     item(key = "detail-comment-label") {
         Text(
             text = "评论",
-            color = MiuixTheme.colorScheme.onBackground,
+            color = COUITheme.colorScheme.onBackground,
             fontSize = 15.sp,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(start = 2.dp, top = 16.dp, bottom = 2.dp),

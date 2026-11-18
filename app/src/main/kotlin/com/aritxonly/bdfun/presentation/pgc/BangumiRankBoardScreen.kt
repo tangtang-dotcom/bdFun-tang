@@ -38,7 +38,7 @@ import com.aritxonly.bdfun.ui.FeedCardShape
 import com.aritxonly.bdfun.ui.TeakLoading
 import com.aritxonly.bdfun.ui.rememberImageRequest
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 单榜全量页：官方是进独立页面（RankFragment），这里用独立 Activity 对齐。
@@ -52,7 +52,7 @@ internal fun BangumiRankBoardScreen(
     val ui by holder.state.collectAsState()
     val scope = rememberCoroutineScope()
     LaunchedEffect(holder) { holder.ensureLoaded() }
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     when {
         ui.entries.isEmpty() && ui.loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -98,7 +98,7 @@ internal fun BangumiRankBoardScreen(
 
 @Composable
 private fun RankBoardRow(entry: com.aritxonly.bdfun.core.model.pgc.BangumiRankEntry, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()

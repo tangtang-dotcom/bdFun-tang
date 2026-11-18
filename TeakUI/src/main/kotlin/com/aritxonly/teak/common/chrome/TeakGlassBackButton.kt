@@ -21,9 +21,9 @@ import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.teak.common.material.TeakGlassRecipes
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.ChevronBackward
 
 /**
  * 页面级返回键：progress = 0 时只有箭头（无背景），滚出顶部后逐渐露出玻璃底。
@@ -77,7 +77,7 @@ fun TeakGlassBackButton(
         }
         // 统一使用 Miuix 的 ChevronBackward 图标，替代原来手画的折线。
         Icon(
-            imageVector = MiuixIcons.ChevronBackward,
+            imageVector = COUIIcons.ChevronBackward,
             contentDescription = "返回",
             tint = glyph,
             modifier = Modifier
@@ -89,7 +89,7 @@ fun TeakGlassBackButton(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .background(top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainer.copy(alpha = flatBackgroundAlpha.coerceIn(0f, 1f)), androidx.compose.foundation.shape.CircleShape)
+                    .background(io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainer.copy(alpha = flatBackgroundAlpha.coerceIn(0f, 1f)), androidx.compose.foundation.shape.CircleShape)
                     .clip(androidx.compose.foundation.shape.CircleShape)
                     .clickable(interactionSource = null, indication = null, onClick = onClick),
             )

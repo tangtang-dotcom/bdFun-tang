@@ -18,17 +18,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Close
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Close
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.CommentThreadFades(
     background: androidx.compose.ui.graphics.Color, headerHeight: androidx.compose.ui.unit.Dp,
     transient: CommentThreadPresentationStateHolder, callbacks: ThreadSheetCallbacks,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     // 顶部渐变从「评论详情」标题的垂直中线开始，往下渐隐到透明；
     // 标题固定在最上面，画在渐变之上，不会被内容盖住。
     Box(
@@ -74,7 +74,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.CommentThreadFades(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = MiuixIcons.Close,
+                imageVector = COUIIcons.Close,
                 contentDescription = "关闭",
                 tint = colors.onBackgroundVariant,
                 modifier = Modifier.size(22.dp),

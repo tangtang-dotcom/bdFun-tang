@@ -19,10 +19,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.aritxonly.bdfun.data.MessageItem
 import com.aritxonly.teak.common.icons.AppGlyph
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MessageResumeEffect(onResume: suspend () -> Unit) {
@@ -49,11 +49,11 @@ internal fun MessageResumeEffect(scope: kotlinx.coroutines.CoroutineScope, onRes
 internal fun MessageRowSurface(first: Boolean, last: Boolean, content: @Composable () -> Unit) {
     if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) {
         // 经典：整行平铺，不再画行分割线。
-        Box(Modifier.fillMaxWidth().background(MiuixTheme.colorScheme.surfaceContainer)) { content() }
+        Box(Modifier.fillMaxWidth().background(COUITheme.colorScheme.surfaceContainer)) { content() }
         return
     }
     val shape = remember(first, last) { MessageGroupShape(first, last) }
-    Box(Modifier.fillMaxWidth().clip(shape).background(MiuixTheme.colorScheme.surfaceContainer)) { content() }
+    Box(Modifier.fillMaxWidth().clip(shape).background(COUITheme.colorScheme.surfaceContainer)) { content() }
 }
 
 @Composable
@@ -63,18 +63,18 @@ internal fun MessagePageFooter(loading: Boolean, error: String?, hasMore: Boolea
     LaunchedEffect(loading, hasMore, error) { if (!loading && hasMore && error == null) onLoad() }
     Text(when { loading -> "加载中…"; error != null -> "$error · 点击重试";
         hasMore -> "加载更多"; empty -> "暂无消息"; else -> "没有更多了" },
-        color = MiuixTheme.colorScheme.onBackgroundVariant, fontSize = 13.sp, textAlign = TextAlign.Center,
+        color = COUITheme.colorScheme.onBackgroundVariant, fontSize = 13.sp, textAlign = TextAlign.Center,
         modifier = Modifier.fillMaxWidth().clickable(enabled = !loading && (error != null || hasMore), onClick = onLoad)
             .padding(vertical = 24.dp))
 }
 
 @Composable
 internal fun SystemNotificationRow(item: MessageItem, onMore: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(Modifier.fillMaxWidth().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(item.title, Modifier.weight(1f), color = colors.onSurfaceContainer, fontSize = 16.sp)
-            AppGlyph(MiuixIcons.More, size = 18.dp, modifier = Modifier.clickable(onClick = onMore).padding(12.dp), tint = colors.onBackgroundVariant)
+            AppGlyph(COUIIcons.More, size = 18.dp, modifier = Modifier.clickable(onClick = onMore).padding(12.dp), tint = colors.onBackgroundVariant)
         }
         // Notification bodies contain HTML links. Render text and links, never a WebView or script.
         androidx.compose.ui.viewinterop.AndroidView(

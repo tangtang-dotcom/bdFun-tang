@@ -9,14 +9,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Search
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Search
 
 @Composable
 internal fun MainBottomSearchButton(alpha: Float, onClick: () -> Unit) {
     TeakGlassIconButton(onClick = onClick, size = TeakFloatingTabBarDefaults.CurrentHeight,
         modifier = Modifier.graphicsLayer { this.alpha = alpha }) {
-        Icon(MiuixIcons.Search, contentDescription = "搜索", tint = MaterialTheme.colorScheme.onSurface,
+        Icon(COUIIcons.Search, contentDescription = "搜索", tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(TeakFloatingTabBarDefaults.DetachedIconSize))
     }
 }

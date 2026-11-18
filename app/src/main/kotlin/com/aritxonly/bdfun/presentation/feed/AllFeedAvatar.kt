@@ -22,14 +22,14 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
 import com.aritxonly.bdfun.BrandPinkDeep
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun AllFeedAvatar(selected: Boolean, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val ring = rememberManualProgress(if (selected) 1f else 0f, 200f)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,7 +57,7 @@ internal fun AllFeedAvatar(selected: Boolean, onClick: () -> Unit) {
                     ),
                 contentAlignment = Alignment.Center,
             ) {
-                AppGlyph(MiuixIcons.All, Color.White, size = 20.dp)
+                AppGlyph(COUIIcons.All, Color.White, size = 20.dp)
             }
             if (ring > 0.01f) {
                 Box(

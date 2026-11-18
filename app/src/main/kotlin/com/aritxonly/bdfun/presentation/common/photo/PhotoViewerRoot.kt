@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.graphics.Color
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import kotlinx.coroutines.flow.first
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 
 /**
  * 窗口级图片查看器宿主。

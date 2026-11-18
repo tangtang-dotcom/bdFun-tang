@@ -14,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.overlay.OverlayBottomSheet
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.overlay.OverlayBottomSheet
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun TermsSheet(show: Boolean, onDismiss: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     // 和归元同一个 Miuix 底部弹层：从底部弹出、顶部有拖动条和标题、可下拉/点外面收起。
     OverlayBottomSheet(
         show = show,

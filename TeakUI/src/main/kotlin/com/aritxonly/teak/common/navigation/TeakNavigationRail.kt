@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.material.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** Wide-window navigation uses the same hoisted route and page backdrop as the bottom dock. */
 @Composable
@@ -34,14 +34,14 @@ fun TeakNavigationRail(
             horizontalAlignment = Alignment.CenterHorizontally) {
             items.forEach { item ->
                 val selected = item.key == selectedKey
-                val color = if (selected) MiuixTheme.colorScheme.primary else MiuixTheme.colorScheme.onSurface
+                val color = if (selected) COUITheme.colorScheme.primary else COUITheme.colorScheme.onSurface
                 Column(Modifier.fillMaxWidth().heightIn(min = 64.dp)
                     .selectable(selected, enabled = item.enabled, role = Role.Tab,
                         onClick = { onItemSelected(item) }).padding(vertical = 10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(if (selected) item.selectedIcon else item.unselectedIcon,
                         contentDescription = null, tint = color, modifier = Modifier.size(26.dp))
-                    Text(item.label, color = color, style = MiuixTheme.textStyles.footnote2)
+                    Text(item.label, color = color, style = COUITheme.textStyles.footnote2)
                 }
             }
         }

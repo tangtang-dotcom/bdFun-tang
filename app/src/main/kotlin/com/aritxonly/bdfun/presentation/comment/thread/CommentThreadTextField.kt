@@ -12,14 +12,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun CommentThreadTextField(
     transient: CommentThreadPresentationStateHolder, target: com.aritxonly.bdfun.core.model.comment.CommentItem,
     focusRequester: FocusRequester,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     BasicTextField(
         value = transient.draft,
         onValueChange = { transient.draft = it },

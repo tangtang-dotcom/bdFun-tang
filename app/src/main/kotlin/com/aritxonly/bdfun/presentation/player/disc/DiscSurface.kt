@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun DiscSurface(runtime: DiscRuntime, visual: DiscVisual, modifier: Modifier) {
@@ -31,7 +31,7 @@ internal fun DiscSurface(runtime: DiscRuntime, visual: DiscVisual, modifier: Mod
 
 @Composable
 private fun discSurfaceModifier(runtime: DiscRuntime, visual: DiscVisual): Modifier {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val darkTheme = colors.background.luminance() < 0.5f
     return Modifier
         .size(runtime.size)

@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.compose.ui.focus.FocusRequester
 import com.aritxonly.bdfun.feature.comment.application.CommentComposerUiState
 import com.aritxonly.teak.common.material.GlassMaterialRecipe
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 internal data class CommentComposerContent(
     val snapshot: CommentComposerUiState,

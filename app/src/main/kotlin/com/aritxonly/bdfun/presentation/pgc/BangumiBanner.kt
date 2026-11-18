@@ -50,7 +50,7 @@ import com.aritxonly.bdfun.ui.rememberImageRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -284,7 +284,7 @@ private fun BangumiFanCard(
             }
             .zIndex(10f - distance)
             .clip(CardShape)
-            .background(MiuixTheme.colorScheme.surfaceContainer)
+            .background(COUITheme.colorScheme.surfaceContainer)
             .clickable(onClick = onClick),
     ) {
         AsyncImage(
@@ -362,7 +362,7 @@ private fun BangumiBannerPlaceholder() {
             .height(218.dp)
             .padding(top = 4.dp)
             .clip(RoundedCornerShape(14.dp))
-            .background(MiuixTheme.colorScheme.surfaceContainer),
+            .background(COUITheme.colorScheme.surfaceContainer),
     )
 }
 

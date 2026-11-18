@@ -16,10 +16,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.basic.ScrollBehavior
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.basic.TopAppBarDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.ScrollBehavior
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.basic.TopAppBarDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 分栏保留真实窗口大小供弹层定位；页面壳可显式沿用外层宽屏策略。 */
 val LocalWideFoldTopBarOverride = androidx.compose.runtime.staticCompositionLocalOf<Boolean?> { null }
@@ -42,7 +42,7 @@ fun AdaptiveMiuixScrollBehavior(canScroll: () -> Boolean = { true }): ScrollBeha
     val fixed = isWideFoldTopBar()
     val fixedState = rememberUpdatedState(fixed)
     val callerCanScroll = rememberUpdatedState(canScroll)
-    val upstream = top.yukonga.miuix.kmp.basic.MiuixScrollBehavior(
+    val upstream = io.github.suqi8.coui.kmp.basic.COUIScrollBehavior(
         canScroll = { !fixedState.value && callerCanScroll.value() },
     )
     // Upstream 0.9.4-rc01 onPostFling does not consult canScroll. A no-op connection
@@ -63,9 +63,9 @@ fun WideFoldTopAppBar(
     modifier: Modifier = Modifier,
     navigationIcon: (@Composable () -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
-    titleColor: Color = MiuixTheme.colorScheme.onSurface,
-    subtitleColor: Color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
-    titleTextStyle: TextStyle = MiuixTheme.textStyles.title2,
+    titleColor: Color = COUITheme.colorScheme.onSurface,
+    subtitleColor: Color = COUITheme.colorScheme.onSurfaceVariantSummary,
+    titleTextStyle: TextStyle = COUITheme.textStyles.title2,
     bottomContent: @Composable () -> Unit = {},
 ) {
     Column(modifier.fillMaxWidth()
@@ -82,7 +82,7 @@ fun WideFoldTopAppBar(
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.semantics { heading() })
                 if (subtitle.isNotEmpty()) {
-                    Text(subtitle, color = subtitleColor, style = MiuixTheme.textStyles.footnote1,
+                    Text(subtitle, color = subtitleColor, style = COUITheme.textStyles.footnote1,
                         maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
@@ -99,7 +99,7 @@ fun AdaptiveMiuixTopAppBar(
     title: String,
     largeTitle: String = title,
     modifier: Modifier = Modifier,
-    color: Color = MiuixTheme.colorScheme.surface,
+    color: Color = COUITheme.colorScheme.surface,
     scrollBehavior: ScrollBehavior? = null,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
@@ -109,7 +109,7 @@ fun AdaptiveMiuixTopAppBar(
         WideFoldTopAppBar(title = largeTitle, modifier = modifier.background(color),
             navigationIcon = navigationIcon, actions = actions, bottomContent = bottomContent)
     } else {
-        top.yukonga.miuix.kmp.basic.TopAppBar(title = title, largeTitle = largeTitle,
+        io.github.suqi8.coui.kmp.basic.TopAppBar(title = title, largeTitle = largeTitle,
             modifier = modifier, color = color, scrollBehavior = scrollBehavior,
             navigationIcon = navigationIcon, actions = actions, bottomContent = bottomContent)
     }

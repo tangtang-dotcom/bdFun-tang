@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.BrandPink
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal val MessageGreen = Color(0xFF3CCF8E)
 internal val MessagePink = Color(0xFFF45B86)
@@ -36,7 +36,7 @@ internal fun MessageShortcut(
     unread: Int = 0,
     glyph: @Composable () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
@@ -57,7 +57,7 @@ internal fun MessageShortcut(
 
 @Composable
 internal fun MessageTab(label: String, selected: Boolean, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))

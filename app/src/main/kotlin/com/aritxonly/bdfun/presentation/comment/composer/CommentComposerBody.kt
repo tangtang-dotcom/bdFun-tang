@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.teak.common.chrome.TeakChromeDefaults
 import com.aritxonly.teak.common.chrome.TeakComposerBackground
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun CommentComposerBody(
@@ -29,7 +29,7 @@ internal fun CommentComposerBody(
     val showEmoji = content.snapshot.showEmoji
     val uploading = content.snapshot.uploading
     val failed = content.snapshot.failed
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val density = LocalDensity.current
     val imeBottom = WindowInsets.ime.getBottom(density)
     val imeDp = with(density) { imeBottom.toDp().value }

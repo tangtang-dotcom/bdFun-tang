@@ -24,16 +24,16 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.navigation.createRouteIntent
 import com.aritxonly.bdfun.ui.showToast
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SpaceProfileDetails(
     content: SpaceScreenContent, actions: SpaceScreenActions,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val mid = content.mid
     val profile = content.snapshot.profile.space?.profile
     Column(
@@ -70,7 +70,7 @@ internal fun SpaceProfileNameActions(
     content: SpaceScreenContent, actions: SpaceScreenActions,
 ) {
     val context = actions.context
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val mid = content.mid
     val isSelf = content.isSelf
     val profile = content.snapshot.profile.space?.profile
@@ -107,7 +107,7 @@ internal fun SpaceProfileNameActions(
 internal fun SpaceOfficialProfile(
     content: SpaceScreenContent, actions: SpaceScreenActions,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val profile = content.snapshot.profile.space?.profile
     val verify = listOfNotNull(
         profile?.officialTitle?.takeIf { it.isNotBlank() },
@@ -116,7 +116,7 @@ internal fun SpaceOfficialProfile(
     if (verify.isNotBlank()) {
         Spacer(Modifier.height(10.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            AppGlyph(MiuixIcons.Ok, size = 11.dp, tint = Color(0xFF3B82F6))
+            AppGlyph(COUIIcons.Ok, size = 11.dp, tint = Color(0xFF3B82F6))
             Spacer(Modifier.width(4.dp))
             Text(
                 text = verify,
@@ -135,7 +135,7 @@ internal fun SpaceProfileCharge(
 ) {
     val context = actions.context
     val mid = content.mid
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val profile = content.snapshot.profile.space?.profile
     Row(
         modifier = Modifier

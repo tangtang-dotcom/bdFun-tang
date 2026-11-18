@@ -17,7 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import top.yukonga.miuix.kmp.basic.Scaffold
+import io.github.suqi8.coui.kmp.basic.Scaffold
 
 /** 首次引导与设置中的回放共用原页面顺序、宿主与切换动画。 */
 @Composable

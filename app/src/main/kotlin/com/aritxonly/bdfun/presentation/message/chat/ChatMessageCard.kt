@@ -16,12 +16,12 @@ import coil.compose.AsyncImage
 import com.aritxonly.bdfun.core.model.message.ChatMessageCard
 import com.aritxonly.bdfun.ui.rememberImageRequest
 import com.aritxonly.bdfun.ui.showToast
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun ChatMessageCardContent(card: ChatMessageCard) {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Column(Modifier.widthIn(max = 272.dp).clip(RoundedCornerShape(14.dp))
         .background(colors.surfaceContainerHigh).clickable(enabled = card.url.isNotBlank()) { openChatCard(context, card.url) }.padding(12.dp)) {
         if (card.image.isNotBlank()) AsyncImage(rememberImageRequest(card.image), "消息图片", modifier = Modifier.fillMaxWidth())

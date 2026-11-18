@@ -82,13 +82,13 @@ import com.aritxonly.teak.common.chrome.TrackTeakPageScroll
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.TeakGlassPanel
 import kotlinx.coroutines.delay
-import top.yukonga.miuix.kmp.basic.Scaffold
-import top.yukonga.miuix.kmp.basic.Switch
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
-import top.yukonga.miuix.kmp.basic.Surface
-import top.yukonga.miuix.kmp.glass.GlassDropdownPreference
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Scaffold
+import io.github.suqi8.coui.kmp.basic.Switch
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.basic.Surface
+import io.github.suqi8.coui.kmp.glass.GlassDropdownPreference
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private val CardShape = TeakContinuousCornerShape(22.dp)
 
@@ -120,7 +120,7 @@ fun TeakSettingsPage(
     //
     // 玻璃菜单不能采样包含它自己的整页 backdrop，否则会递归采样、卡死 GPU。
     // 给设置内容单独录一层 backdrop；弹出宿主在录层之外，只采样设置内容。
-    val settingsBackground = MiuixTheme.colorScheme.background
+    val settingsBackground = COUITheme.colorScheme.background
     val settingsBackdrop = rememberLayerBackdrop {
         drawRect(settingsBackground)
         drawContent()
@@ -163,7 +163,7 @@ fun TeakSettingsCard(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val classic = TeakUiStyle.isClassic
     Column(modifier = modifier.padding(top = if (classic) 8.dp else 12.dp)) {
         if (!title.isNullOrBlank()) {
@@ -194,7 +194,7 @@ fun TeakSettingsSwitchRow(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
-    top.yukonga.miuix.kmp.preference.SwitchPreference(
+    io.github.suqi8.coui.kmp.preference.SwitchPreference(
         title = title,
         summary = description.takeIf { it.isNotBlank() },
         checked = checked,
@@ -207,11 +207,11 @@ fun TeakSettingsValueRow(
     title: String,
     value: String,
 ) {
-    val colors = MiuixTheme.colorScheme
-    top.yukonga.miuix.kmp.basic.BasicComponent(
+    val colors = COUITheme.colorScheme
+    io.github.suqi8.coui.kmp.basic.BasicComponent(
         title = title,
         endActions = {
-            top.yukonga.miuix.kmp.basic.Text(
+            io.github.suqi8.coui.kmp.basic.Text(
                 text = value,
                 color = colors.onSurfaceVariantActions,
                 fontSize = 14.sp,
@@ -227,15 +227,15 @@ fun TeakSettingsActionRow(
     color: Color? = null,
     onClick: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
-    top.yukonga.miuix.kmp.preference.ArrowPreference(
+    val colors = COUITheme.colorScheme
+    io.github.suqi8.coui.kmp.preference.ArrowPreference(
         title = title,
-        titleColor = top.yukonga.miuix.kmp.basic.BasicComponentDefaults.titleColor(
+        titleColor = io.github.suqi8.coui.kmp.basic.BasicComponentDefaults.titleColor(
             color = color ?: colors.onBackground,
         ),
         endActions = {
             if (trailing.isNotBlank()) {
-                top.yukonga.miuix.kmp.basic.Text(
+                io.github.suqi8.coui.kmp.basic.Text(
                     text = trailing,
                     color = colors.onSurfaceVariantActions,
                     fontSize = 13.sp,
@@ -267,7 +267,7 @@ fun TeakSettingsDropdownRow(
     if (options.isEmpty()) return
     // 经典样式使用 Miuix 的普通 Overlay 下拉，平面菜单不带玻璃和圆角浮层。
     if (TeakUiStyle.isClassic) {
-        top.yukonga.miuix.kmp.preference.OverlayDropdownPreference(
+        io.github.suqi8.coui.kmp.preference.OverlayDropdownPreference(
             items = options,
             selectedIndex = selected.coerceIn(0, options.lastIndex),
             title = title,

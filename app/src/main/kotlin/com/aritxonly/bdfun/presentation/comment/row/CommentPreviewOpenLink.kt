@@ -17,14 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.core.model.comment.CommentItem
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun CommentPreviewOpenLink(item: CommentItem, onOpen: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,6 +40,6 @@ internal fun CommentPreviewOpenLink(item: CommentItem, onOpen: () -> Unit) {
             fontWeight = FontWeight.Normal,
         )
         Spacer(Modifier.width(2.dp))
-        AppGlyph(MiuixIcons.Basic.ArrowRight, size = 11.dp, tint = colors.onBackgroundVariant)
+        AppGlyph(COUIIcons.Basic.ArrowRight, size = 11.dp, tint = colors.onBackgroundVariant)
     }
 }

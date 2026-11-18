@@ -21,7 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 平板/宽屏直播：照视频详情页的左右分屏。
@@ -74,10 +74,10 @@ internal fun LiveRoomRender.WideLiveLayout(
                     .width(detailsWidth)
                     .fillMaxHeight()
                     .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom))
-                    .background(MiuixTheme.colorScheme.background),
+                    .background(COUITheme.colorScheme.background),
             ) {
                 androidx.compose.foundation.layout.Box(
-                    modifier = Modifier.fillMaxWidth().background(MiuixTheme.colorScheme.surfaceContainer),
+                    modifier = Modifier.fillMaxWidth().background(COUITheme.colorScheme.surfaceContainer),
                 ) {
                     LiveTopBar(
                         room = room,

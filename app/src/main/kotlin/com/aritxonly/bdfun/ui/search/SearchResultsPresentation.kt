@@ -8,13 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal data class SearchResultsPresentation(
     val pager: androidx.compose.foundation.pager.PagerState, val position: androidx.compose.runtime.State<Float>,
     val videos: androidx.compose.foundation.lazy.grid.LazyGridState, val users: androidx.compose.foundation.lazy.grid.LazyGridState,
-    val backdrop: top.yukonga.miuix.kmp.blur.LayerBackdrop,
+    val backdrop: io.github.suqi8.coui.kmp.blur.LayerBackdrop,
 )
 
 @Composable
@@ -35,7 +35,7 @@ internal fun rememberSearchResultsPresentation(tab: Int, onTabChange: (Int) -> U
     TrackTeakPageScroll(if (pagerState.currentPage == 0) videoListState else userListState)
     // 给结果内容单独录一层：Tab 栏是它的兄弟节点，不在录制范围内，
     // 因此 Tab 的玻璃可以安全采样，不会形成自引用。
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val tabBackdrop = rememberLayerBackdrop {
         drawRect(colors.background)
         drawContent()

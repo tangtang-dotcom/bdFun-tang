@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.chrome.TeakTopGlassButton
 import com.aritxonly.teak.common.navigation.TeakPagerTabs
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.More
-import top.yukonga.miuix.kmp.icon.extended.Search
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.More
+import io.github.suqi8.coui.kmp.icon.extended.Search
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal class SpaceChromeState {
     var wide by mutableStateOf(false)
@@ -39,7 +39,7 @@ internal class SpaceChromeState {
 
 @Composable
 internal fun SpaceTopChrome(state: SpaceChromeState, onBack: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val pageGlyph = colors.onBackground
     val bannerGlyph = if (state.bannerIsDark) Color.White else Color.Black
     val glyph by androidx.compose.animation.animateColorAsState(
@@ -57,10 +57,10 @@ internal fun SpaceTopChrome(state: SpaceChromeState, onBack: () -> Unit) {
     }
     val actions: @Composable androidx.compose.foundation.layout.RowScope.(Color) -> Unit = { tint ->
         TeakTopGlassButton(onClick = {}) {
-            Icon(MiuixIcons.Search, contentDescription = "搜索", tint = tint, modifier = Modifier.size(20.dp))
+            Icon(COUIIcons.Search, contentDescription = "搜索", tint = tint, modifier = Modifier.size(20.dp))
         }
         TeakTopGlassButton(onClick = {}) {
-            Icon(MiuixIcons.More, contentDescription = "更多", tint = tint, modifier = Modifier.size(20.dp))
+            Icon(COUIIcons.More, contentDescription = "更多", tint = tint, modifier = Modifier.size(20.dp))
         }
     }
     val tabs: @Composable (Dp) -> Unit = { itemWidth ->

@@ -16,14 +16,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun SpaceWideTopChrome(
     state: SpaceChromeState, onBack: () -> Unit, glyph: Color, pageGlyph: Color,
     tabs: @Composable (Dp) -> Unit, actions: @Composable androidx.compose.foundation.layout.RowScope.(Color) -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     Row(Modifier.fillMaxWidth()) {
         androidx.compose.runtime.CompositionLocalProvider(

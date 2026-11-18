@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Row
-import top.yukonga.miuix.kmp.icon.extended.Search
+import io.github.suqi8.coui.kmp.icon.extended.Search
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBar
@@ -19,7 +19,7 @@ import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import com.aritxonly.teak.common.navigation.TeakFloatingTabItem
 import com.aritxonly.teak.common.navigation.TeakFloatingTabLayout
 import com.aritxonly.teak.common.interaction.blockTouches
-import top.yukonga.miuix.kmp.icon.MiuixIcons
+import io.github.suqi8.coui.kmp.icon.COUIIcons
 
 internal val MainWideNavigationEdgePadding = 20.dp
 
@@ -47,7 +47,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainWideNavigation(
             onClick = onSearch,
             size = TeakFloatingTabBarDefaults.CurrentHeight,
         ) {
-            Icon(top.yukonga.miuix.kmp.icon.MiuixIcons.Search,
+            Icon(io.github.suqi8.coui.kmp.icon.COUIIcons.Search,
                 contentDescription = "搜索", tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(TeakFloatingTabBarDefaults.DetachedIconSize))
         }

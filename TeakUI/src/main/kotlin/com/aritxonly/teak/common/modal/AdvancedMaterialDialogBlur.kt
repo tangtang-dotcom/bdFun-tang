@@ -11,13 +11,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateMapOf
-import top.yukonga.miuix.kmp.blur.LayerBackdrop
+import io.github.suqi8.coui.kmp.blur.LayerBackdrop
 
 @Stable
 class AdvancedMaterialDialogBlurHostState {
     internal val dialogs = mutableStateMapOf<Any, RetainedMiuixDialog>()
 
-    internal fun present(key: Any, request: MiuixDialogRequest) {
+    internal fun present(key: Any, request: COUIDialogRequest) {
         val existing = dialogs[key]
         if (existing != null) {
             existing.request = request

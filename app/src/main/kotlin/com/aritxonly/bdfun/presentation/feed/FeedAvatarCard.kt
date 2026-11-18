@@ -38,14 +38,14 @@ import com.aritxonly.bdfun.core.model.feed.FeedLiveUser
 import com.aritxonly.bdfun.core.model.user.UserProfile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun FeedAvatarCard(
     state: FeedState,
     modifier: Modifier = Modifier,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val haptics = rememberTeakHaptics()
@@ -134,7 +134,7 @@ private fun LazyListScope.dynamicAvatarItems(
     if (state.authorsLoading) item(key = "up-loading") { TeakLoading(size = 28.dp) }
     state.authorsError?.let { message ->
         item(key = "up-error") {
-            Text(message, color = MiuixTheme.colorScheme.primary, fontSize = 12.sp,
+            Text(message, color = COUITheme.colorScheme.primary, fontSize = 12.sp,
                 modifier = Modifier.width(100.dp).clickable {
                     scope.launch { if (state.authorsHasMore) state.loadMoreAuthors() else state.refreshAuthors() }
                 }.padding(8.dp))
@@ -142,7 +142,7 @@ private fun LazyListScope.dynamicAvatarItems(
     }
     if (state.authorsHasMore && !state.authorsLoading && state.authorsError == null) {
         item(key = "up-more") {
-            Text("更多 UP", color = MiuixTheme.colorScheme.primary, modifier = Modifier.clickable {
+            Text("更多 UP", color = COUITheme.colorScheme.primary, modifier = Modifier.clickable {
                 scope.launch { state.loadMoreAuthors() }
             }.padding(12.dp))
         }

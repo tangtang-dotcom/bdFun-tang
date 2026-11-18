@@ -23,7 +23,7 @@ import com.aritxonly.bdfun.AppGraph
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun FeedAuthorSidebar(
@@ -32,7 +32,7 @@ internal fun FeedAuthorSidebar(
     topPadding: androidx.compose.ui.unit.Dp = 0.dp,
     bottomPadding: androidx.compose.ui.unit.Dp = 0.dp,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val authorState = rememberLazyListState()

@@ -15,14 +15,14 @@ import com.aritxonly.bdfun.ui.*
 import com.aritxonly.teak.common.chrome.*
 import com.aritxonly.teak.common.navigation.TeakPagerTabs
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.aritxonly.bdfun.feature.relations.application.*
 
 @Composable
 internal fun RelationFeedList(runtime: RelationScreenRuntime) {
     val context = LocalContext.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val controller = runtime.controller
     val state = runtime.state
     val listState = runtime.listState

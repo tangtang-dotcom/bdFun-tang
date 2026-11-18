@@ -17,11 +17,11 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.material.miuixControlFeedback
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
-import top.yukonga.miuix.kmp.basic.Button as MiuixButton
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
-import top.yukonga.miuix.kmp.basic.ButtonColors
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Button as COUIButton
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults
+import io.github.suqi8.coui.kmp.basic.ButtonColors
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * MIUIX 0.9.4-rc01 Button owns layout, accessibility and activation. The existing
@@ -39,14 +39,14 @@ fun TeakGlassButton(
     minHeight: Dp = 48.dp,
     insideMargin: PaddingValues = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
     colors: ButtonColors? = null,
-    textStyle: TextStyle = MiuixTheme.textStyles.button,
+    textStyle: TextStyle = COUITheme.textStyles.button,
     backdrop: Backdrop? = LocalTeakBackdrop.current,
     content: @Composable RowScope.() -> Unit,
 ) {
     val shape = if (capsule) RoundedCornerShape(50) else RoundedCornerShape(cornerRadius)
     val material = LocalTeakMaterialSpec.current
     val resolvedColors = colors ?: if (prominent) ButtonDefaults.buttonColorsPrimary()
-        else ButtonDefaults.buttonColors(contentColor = MiuixTheme.colorScheme.onSurface)
+        else ButtonDefaults.buttonColors(contentColor = COUITheme.colorScheme.onSurface)
     val contentColor = if (enabled) resolvedColors.contentColor else resolvedColors.disabledContentColor
     // An opaque semantic surface keeps controls readable without a sampled backdrop.
     val tint = when {
@@ -70,7 +70,7 @@ fun TeakGlassButton(
             tintStyle = if (prominent && enabled) GlassTintStyle.SeedChromatic else GlassTintStyle.Neutral,
             backdrop = backdrop,
         ) {}
-        MiuixButton(
+        COUIButton(
             onClick = onClick,
             enabled = enabled,
             cornerRadius = if (capsule) minHeight / 2 else cornerRadius,

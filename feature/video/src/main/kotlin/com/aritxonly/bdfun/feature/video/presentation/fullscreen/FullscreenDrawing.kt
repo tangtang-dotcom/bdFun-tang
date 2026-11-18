@@ -6,34 +6,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.icons.AppGlyph
 import com.aritxonly.teak.common.icons.LucideIcons
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.*
-import top.yukonga.miuix.kmp.icon.extended.*
-import top.yukonga.miuix.kmp.icon.extended.ChevronBackward
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.*
+import io.github.suqi8.coui.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.extended.ChevronBackward
 
 @Composable
 fun BackChevron(tint: Color = Color.White) {
-    AppGlyph(MiuixIcons.ChevronBackward, tint, size = 23.5.dp)
+    AppGlyph(COUIIcons.ChevronBackward, tint, size = 23.5.dp)
 }
 
 @Composable
 internal fun MoreGlyph(tint: Color = Color.White) {
-    AppGlyph(MiuixIcons.More, tint, size = 20.dp)
+    AppGlyph(COUIIcons.More, tint, size = 20.dp)
 }
 
 @Composable
 internal fun CloseGlyph(tint: Color = Color.White.copy(alpha = 0.7f)) {
-    AppGlyph(MiuixIcons.Close, tint, size = 18.dp)
+    AppGlyph(COUIIcons.Close, tint, size = 18.dp)
 }
 
 @Composable
 internal fun CheckGlyph(tint: Color = Color.White) {
-    AppGlyph(MiuixIcons.Ok, tint, size = 15.dp)
+    AppGlyph(COUIIcons.Ok, tint, size = 15.dp)
 }
 
 @Composable
 internal fun ChevronRightGlyph(tint: Color = Color.White.copy(alpha = 0.4f)) {
-    AppGlyph(MiuixIcons.Basic.ArrowRight, tint, size = 14.dp)
+    AppGlyph(COUIIcons.Basic.ArrowRight, tint, size = 14.dp)
 }
 
 @Composable

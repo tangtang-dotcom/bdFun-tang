@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.data.SearchUser
 import com.aritxonly.bdfun.data.VideoItem
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
-import top.yukonga.miuix.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
 
 @Composable
 internal fun SearchResults(

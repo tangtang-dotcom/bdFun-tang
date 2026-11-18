@@ -36,7 +36,7 @@ import com.aritxonly.teak.common.material.TeakGlassSurface
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.kyant.shapes.Capsule
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -97,7 +97,7 @@ fun TeakPagerTabs(
 ) {
     val advancedMaterial = LocalTeakMaterialSpec.current
     val recipe = TeakGlassRecipes.floatingNavigation(advancedMaterial.fineTuning)
-    val colors = top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme
+    val colors = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme
 
     // 有连续位置时直接跟位置，不再套第二层弹簧：
     // 之前的做法每帧重启弹簧循环，实际速度被拖得极慢。

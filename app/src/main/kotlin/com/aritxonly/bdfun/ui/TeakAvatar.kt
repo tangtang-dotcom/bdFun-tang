@@ -20,9 +20,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.ContactsCircle
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.ContactsCircle
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 顶部头像：圆形裁切 + 细圈；未登录给占位图标。 */
 @Composable
@@ -32,7 +32,7 @@ fun TeakAvatar(
     modifier: Modifier = Modifier,
     size: Dp = 36.dp,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val isDark = MaterialTheme.colorScheme.onSurface.luminance() > 0.5f
     Box(
         modifier = modifier
@@ -52,7 +52,7 @@ fun TeakAvatar(
             )
         } else {
             Icon(
-                imageVector = MiuixIcons.ContactsCircle,
+                imageVector = COUIIcons.ContactsCircle,
                 contentDescription = "未登录",
                 tint = colors.onBackgroundVariant,
                 modifier = Modifier.size(size * 0.58f),

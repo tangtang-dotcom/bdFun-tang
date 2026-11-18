@@ -10,13 +10,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import com.aritxonly.teak.common.material.TeakMaterialFineTuning
 import com.aritxonly.teak.common.material.TeakMaterialTuning
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.BlendColorEntry
-import top.yukonga.miuix.kmp.blur.BlurBlendMode
-import top.yukonga.miuix.kmp.blur.BlurColors
-import top.yukonga.miuix.kmp.blur.BlurDefaults
-import top.yukonga.miuix.kmp.blur.BlurDefaults.blurColors
-import top.yukonga.miuix.kmp.blur.textureBlur
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.BlendColorEntry
+import io.github.suqi8.coui.kmp.blur.BlurBlendMode
+import io.github.suqi8.coui.kmp.blur.BlurColors
+import io.github.suqi8.coui.kmp.blur.BlurDefaults
+import io.github.suqi8.coui.kmp.blur.BlurDefaults.blurColors
+import io.github.suqi8.coui.kmp.blur.textureBlur
 
 @Immutable
 data class TeakMaterialSpec(

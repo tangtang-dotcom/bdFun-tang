@@ -45,7 +45,7 @@ fun FeedTopBar(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .background(top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainer.copy(alpha = 0.62f)),
+                    .background(io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainer.copy(alpha = 0.62f)),
             )
         }
 

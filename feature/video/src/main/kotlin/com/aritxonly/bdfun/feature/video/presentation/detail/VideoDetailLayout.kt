@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun VideoDetailLayout(
@@ -20,7 +20,7 @@ fun VideoDetailLayout(
 ) {
     val fullscreen by pageUi.fullscreen
     val playing by pageUi.playing
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val pictureInPicture = presentation.pictureInPicture
     val paneLayout = presentation.paneLayout
     val immersiveStatusBar = presentation.immersiveStatusBar

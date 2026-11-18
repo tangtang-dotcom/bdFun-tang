@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import kotlinx.coroutines.delay
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 全局共用的骨架屏：灰色块 + 一道白色高光从左往右扫。
@@ -48,12 +48,12 @@ fun rememberTeakSkeletonSweep(): Float {
 
 /** 骨架灰块的基准色；浅色主题略深，深色主题略亮，保证块始终"看得见"。 */
 @Composable
-fun teakSkeletonBase(): Color = MiuixTheme.colorScheme.onBackground.copy(alpha = 0.10f)
+fun teakSkeletonBase(): Color = COUITheme.colorScheme.onBackground.copy(alpha = 0.10f)
 
 /** 扫光高光：深色主题用更亮的灰，浅色主题才用白光。 */
 @Composable
 fun teakSkeletonHighlight(): Color {
-    val isDark = MiuixTheme.colorScheme.onBackground.luminance() > 0.5f
+    val isDark = COUITheme.colorScheme.onBackground.luminance() > 0.5f
     return if (isDark) Color.White.copy(alpha = 0.20f) else Color.White.copy(alpha = 0.85f)
 }
 

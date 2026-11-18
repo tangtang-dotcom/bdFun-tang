@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kyant.shapes.Capsule
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.HomeFeedStatus(
     state: HomeFeedState, scope: kotlinx.coroutines.CoroutineScope, host: HomePresentationHost,
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
         // 首屏加载已经由网格里的骨架屏承担，这里不再叠一个转圈。
 
         state.error?.let { message ->

@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.aritxonly.bdfun.core.model.comment.CommentItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.runtime.getValue
 
 @Composable
@@ -15,7 +15,7 @@ internal fun CommentThreadReplyCard(
     transient: CommentThreadPresentationStateHolder, callbacks: ThreadSheetCallbacks,
 ) {
     val likes = LocalVideoPageState.current.dependencies.comments.likes
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val rowBackground by androidx.compose.animation.animateColorAsState(
         targetValue = if (reply.rpid == transient.flashRpid) {
             colors.onBackground.copy(alpha = 0.10f)

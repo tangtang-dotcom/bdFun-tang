@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.core.model.comment.CommentItem
 import com.aritxonly.bdfun.feature.comment.application.CommentActionsStateHolder
 import kotlinx.coroutines.*
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 菜单延时清理与页面同生命周期；复制/分享的系统交互留在表现层。 */
 internal class CommentMenuStateHolder(
@@ -124,7 +124,7 @@ internal class CommentMenuStateHolder(
 
 @Composable
 internal fun CommentMenu(menu: CommentMenuStateHolder, myMid: Long) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val target = menu.target
     TeakGlassMenu(
         visible = menu.visible && target != null, onDismiss = menu::dismiss,

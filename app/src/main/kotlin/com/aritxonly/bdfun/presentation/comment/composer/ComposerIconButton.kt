@@ -1,8 +1,8 @@
 package com.aritxonly.bdfun.ui
 
 import com.aritxonly.teak.common.icons.AppGlyph
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Image
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -47,7 +47,7 @@ fun ComposerIconButton(
         if (kind == ComposerIcon.Send) {
             AppGlyph(TeakIcon.Send, color, size = 19.dp)
         } else {
-            AppGlyph(MiuixIcons.Image, color, size = 19.dp)
+            AppGlyph(COUIIcons.Image, color, size = 19.dp)
         }
     }
 }

@@ -20,10 +20,10 @@ import com.aritxonly.teak.common.navigation.TeakBatchAction
 import com.aritxonly.teak.common.navigation.TeakBatchActionBar
 import com.aritxonly.teak.common.navigation.TeakMorphMenuAnchor
 import com.aritxonly.teak.common.navigation.TeakMorphMenuState
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.More
-import top.yukonga.miuix.kmp.icon.extended.Search
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.More
+import io.github.suqi8.coui.kmp.icon.extended.Search
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun LibraryTopActions(menuState: TeakMorphMenuState) {
@@ -100,8 +100,8 @@ fun LibraryBatchOverlay() {
 
 @Composable
 internal fun LibrarySearchGlyph() {
-    top.yukonga.miuix.kmp.basic.Icon(
-        imageVector = top.yukonga.miuix.kmp.icon.MiuixIcons.Search,
+    io.github.suqi8.coui.kmp.basic.Icon(
+        imageVector = io.github.suqi8.coui.kmp.icon.COUIIcons.Search,
         contentDescription = "搜索",
         tint = teakGlassGlyphColor(),
         modifier = Modifier.size(22.dp),
@@ -110,8 +110,8 @@ internal fun LibrarySearchGlyph() {
 
 @Composable
 internal fun LibraryThreeDotsGlyph() {
-    top.yukonga.miuix.kmp.basic.Icon(
-        imageVector = top.yukonga.miuix.kmp.icon.MiuixIcons.More,
+    io.github.suqi8.coui.kmp.basic.Icon(
+        imageVector = io.github.suqi8.coui.kmp.icon.COUIIcons.More,
         contentDescription = "更多",
         tint = teakGlassGlyphColor(),
         modifier = Modifier.size(22.dp),
@@ -120,7 +120,7 @@ internal fun LibraryThreeDotsGlyph() {
 
 @Composable
 internal fun LibraryMenuRow(label: String, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     Box(
         modifier = Modifier
             .fillMaxWidth()

@@ -3,7 +3,7 @@ package com.aritxonly.teak.common.modal
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import top.yukonga.miuix.kmp.basic.Scaffold
+import io.github.suqi8.coui.kmp.basic.Scaffold
 
 /** 全局弹层位于页面录制层之外；嵌套主题复用同一宿主。 */
 @Composable

@@ -20,42 +20,12 @@ rootProject.name = "bdFun"
 include(":app")
 include(":core:model")
 include(":TeakUI")
+
+// COUI 的 glass 模块：coui 上游没有发布，这里从其同源实现（Apache-2.0）移植，包名保持 io.github.suqi8.coui.kmp.glass
+include(":third_party:teak-glass")
 include(":danmaku-engine")
 
-// Miuix 使用本地源码构建（Apache-2.0）。
-// 仓库不包含该源码；请把 Miuix 源码放在项目旁边的 miuix-src/ 目录，
-// 或通过环境变量 MIUIX_SOURCE=/path/to/miuix 指定。
-// 找不到源码时，会使用 dependencyResolutionManagement 里的 Maven 依赖。
-val miuixSource = file(
-    System.getenv("MIUIX_SOURCE")
-        ?: gradle.startParameter.projectProperties["miuixSource"]
-        ?: file(".local/miuix-45645854cd46c32275c5666e3aafa9980d8f104e")
-            .takeIf { it.resolve("settings.gradle.kts").isFile }?.path
-        ?: "../miuix-src/miuix-45645854cd46c32275c5666e3aafa9980d8f104e",
-)
-if (miuixSource.resolve("settings.gradle.kts").isFile) {
-    includeBuild(miuixSource) {
-        dependencySubstitution {
-            listOf(
-                "miuix-core" to ":miuix-core",
-                "miuix-shader" to ":miuix-shader",
-                "miuix-squircle" to ":miuix-squircle",
-                "miuix-ui" to ":miuix-ui",
-                "miuix-blur" to ":miuix-blur",
-                "miuix-preference" to ":miuix-preference",
-                "miuix-icons" to ":miuix-icons",
-                "miuix-glass" to ":miuix-glass",
-                "miuix-glass-icons" to ":miuix-glass-icons",
-                "miuix-nav" to ":miuix-nav",
-            ).forEach { (artifact, projectPath) ->
-                substitute(module("top.yukonga.miuix.kmp:$artifact"))
-                    .using(project(projectPath))
-                substitute(module("top.yukonga.miuix.kmp:${artifact}-android"))
-                    .using(project(projectPath))
-            }
-        }
-    }
-}
+// COUI KMP（Miuix 的 ColorOS 皮肤重写版）从 Maven Central 引入，见 gradle/libs.versions.toml。
 
 include(":core:common")
 

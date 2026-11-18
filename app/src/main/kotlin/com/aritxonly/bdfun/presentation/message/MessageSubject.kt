@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.core.model.message.MessageItem
 import com.aritxonly.teak.common.chrome.TeakContinuousCornerShape
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 封面只占卡片头部右上角，回复与原评论仍可使用下方完整宽度。 */
 @Composable
@@ -27,7 +27,7 @@ internal fun MessageCardHeader(item: MessageItem, aggregate: Boolean = false) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(width = 80.dp, height = 50.dp)
                     .clip(TeakContinuousCornerShape(10.dp))
-                    .background(MiuixTheme.colorScheme.surfaceContainerHigh),
+                    .background(COUITheme.colorScheme.surfaceContainerHigh),
             )
         }
     }

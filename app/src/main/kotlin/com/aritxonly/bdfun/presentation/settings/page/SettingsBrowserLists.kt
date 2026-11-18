@@ -16,9 +16,9 @@ import com.aritxonly.bdfun.core.model.settings.*
 import com.aritxonly.bdfun.feature.settings.application.*
 import com.aritxonly.teak.common.settings.TeakSettingsCard
 import com.aritxonly.teak.common.chrome.*
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.preference.ArrowPreference
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.preference.ArrowPreference
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal data class SettingsBrowserSession(
     val browser: SettingsBrowserStateHolder,
@@ -49,7 +49,7 @@ internal fun SettingsCategoryList(session: SettingsBrowserSession, modifier: Mod
                     entries.forEach { (entry, category) ->
                         val selected = session.wide && session.selected?.route == category.route
                         ArrowPreference(title = category.name, startAction = { SettingsCategoryIcon(entry) },
-                            modifier = if (selected) Modifier.background(MiuixTheme.colorScheme.primary.copy(alpha = .08f)) else Modifier,
+                            modifier = if (selected) Modifier.background(COUITheme.colorScheme.primary.copy(alpha = .08f)) else Modifier,
                             onClick = { session.browser.open(category.route) })
                     }
                 }
@@ -92,12 +92,12 @@ internal fun SettingsCategoryContent(session: SettingsBrowserSession, values: Ma
 internal fun SettingsSearchResults(session: SettingsBrowserSession, hits: List<SettingsSearchHit>, modifier: Modifier, runtime: SettingsPageRuntime) {
     val list = rememberLazyListState()
     if (session.navigation.searching) TrackTeakPageScroll(list)
-    LazyColumn(modifier.imePadding().background(MiuixTheme.colorScheme.surface), state = list, contentPadding = settingsListPadding()) {
+    LazyColumn(modifier.imePadding().background(COUITheme.colorScheme.surface), state = list, contentPadding = settingsListPadding()) {
         item { TeakLargeTitle("搜索设置") }
         if (session.navigation.query.isBlank()) {
-            item { Text("搜索名称、说明或关键词", Modifier.padding(20.dp), color = MiuixTheme.colorScheme.onSurfaceVariantSummary) }
+            item { Text("搜索名称、说明或关键词", Modifier.padding(20.dp), color = COUITheme.colorScheme.onSurfaceVariantSummary) }
         } else if (hits.isEmpty()) {
-            item { Text("没有找到相关设置", Modifier.padding(20.dp), color = MiuixTheme.colorScheme.onSurfaceVariantSummary) }
+            item { Text("没有找到相关设置", Modifier.padding(20.dp), color = COUITheme.colorScheme.onSurfaceVariantSummary) }
         } else {
             items(hits, key = { it.setting.prefName }) { hit ->
                 TeakSettingsCard {
@@ -132,7 +132,7 @@ internal fun SettingsIndexedGroup(group: SettingsGroup, session: SettingsBrowser
                 val requester = remember { BringIntoViewRequester() }
                 LaunchedEffect(highlight) { if (highlight) { withFrameNanos { }; requester.bringIntoView() } }
                 Column(Modifier.bringIntoViewRequester(requester).then(
-                    if (highlight) Modifier.background(MiuixTheme.colorScheme.primary.copy(alpha = .1f)) else Modifier)) {
+                    if (highlight) Modifier.background(COUITheme.colorScheme.primary.copy(alpha = .1f)) else Modifier)) {
                     IndexedSettingComponent(setting, values[setting.prefName], runtime, controller)
                 }
             }

@@ -14,7 +14,7 @@ import com.aritxonly.bdfun.core.model.message.*
 import com.aritxonly.bdfun.core.navigation.Route
 import com.aritxonly.bdfun.feature.message.application.MessageSessionsUiState
 import com.aritxonly.bdfun.navigation.createRouteIntent
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun MessageInboxToolbar(snapshot: MessageSessionsUiState, menu: MessageSessionMenuStateHolder) {
@@ -24,13 +24,13 @@ internal fun MessageInboxToolbar(snapshot: MessageSessionsUiState, menu: Message
         .padding(top = 18.dp, start = if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) 16.dp else 0.dp,
             end = if (com.aritxonly.teak.common.theme.TeakUiStyle.isClassic) 8.dp else 0.dp),
         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-        Text("私信", color = MiuixTheme.colorScheme.onBackgroundVariant, modifier = Modifier.weight(1f))
+        Text("私信", color = COUITheme.colorScheme.onBackgroundVariant, modifier = Modifier.weight(1f))
         snapshot.outside.forEach { item ->
-            Text(item.title, color = MiuixTheme.colorScheme.primary, modifier = Modifier.clickable {
+            Text(item.title, color = COUITheme.colorScheme.primary, modifier = Modifier.clickable {
                 messageMenuAction(context, item, menu, navigate)
             }.padding(12.dp))
         }
-        if (snapshot.outside.none { it.type == 8 }) Text("联系人", color = MiuixTheme.colorScheme.primary,
+        if (snapshot.outside.none { it.type == 8 }) Text("联系人", color = COUITheme.colorScheme.primary,
             modifier = Modifier.clickable { navigate(Route.MessageTools("contacts")) }.padding(12.dp))
     }
 }

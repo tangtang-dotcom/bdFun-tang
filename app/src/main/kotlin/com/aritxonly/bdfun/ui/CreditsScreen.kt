@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.teak.common.settings.TeakSettingsCard
 import com.aritxonly.teak.common.settings.TeakSettingsPage
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.icon.basic.ArrowRight
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.icon.basic.ArrowRight
 
 private data class CreditProject(
     val name: String,
@@ -49,7 +49,7 @@ private val CreditProjects = listOf(
 
 @Composable
 fun CreditsScreen() {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
 
@@ -82,29 +82,29 @@ fun CreditsScreen() {
 /** 与设置页箭头行同一套 Miuix 行：标题 + 灰色链接 + 右侧箭头。 */
 @Composable
 private fun CreditRow(project: CreditProject, onClick: () -> Unit) {
-    val colors = MiuixTheme.colorScheme
-    top.yukonga.miuix.kmp.basic.BasicComponent(
+    val colors = COUITheme.colorScheme
+    io.github.suqi8.coui.kmp.basic.BasicComponent(
         onClick = onClick,
         endActions = {
-            top.yukonga.miuix.kmp.basic.Icon(
-                imageVector = top.yukonga.miuix.kmp.icon.MiuixIcons.Basic.ArrowRight,
+            io.github.suqi8.coui.kmp.basic.Icon(
+                imageVector = io.github.suqi8.coui.kmp.icon.COUIIcons.Basic.ArrowRight,
                 contentDescription = null,
                 tint = colors.onSurfaceVariantActions,
                 modifier = Modifier.size(width = 10.dp, height = 16.dp),
             )
         },
     ) {
-        top.yukonga.miuix.kmp.basic.Text(
+        io.github.suqi8.coui.kmp.basic.Text(
             text = project.name,
-            fontSize = MiuixTheme.textStyles.headline1.fontSize,
+            fontSize = COUITheme.textStyles.headline1.fontSize,
             fontWeight = androidx.compose.ui.text.font.FontWeight.Medium,
             color = colors.onBackground,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        top.yukonga.miuix.kmp.basic.Text(
+        io.github.suqi8.coui.kmp.basic.Text(
             text = project.url,
-            fontSize = MiuixTheme.textStyles.body2.fontSize,
+            fontSize = COUITheme.textStyles.body2.fontSize,
             color = colors.onSurfaceVariantSummary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

@@ -81,7 +81,7 @@ import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.sin
 import kotlin.math.sqrt
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 二级窗口内容当前是否接受点击：
@@ -178,7 +178,7 @@ fun TeakDropdownPanel(
     val screenHeight = configuration.screenHeightDp.dp
     val backdrop = LocalTeakBackdrop.current
     val materialSpec = LocalTeakMaterialSpec.current
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
 
     val fullWidth = minOf(width, screenWidth - 32.dp)
     val finalHeight = if (fullHeightPx > 0) {

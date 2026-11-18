@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.bdfun.BrandPink
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Messages
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Messages
 
 @Composable
 internal fun HomeTopBarRight(content: HomeTopBarContent, search: HomeTopBarSearch,
@@ -31,7 +31,7 @@ internal fun HomeTopBarRight(content: HomeTopBarContent, search: HomeTopBarSearc
                     .clickable(interactionSource = null, indication = null, onClick = onOpenMessages),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(MiuixIcons.Messages, contentDescription = "消息", tint = BrandPink,
+                Icon(COUIIcons.Messages, contentDescription = "消息", tint = BrandPink,
                     modifier = Modifier.size(19.dp))
             }
         }
@@ -42,7 +42,7 @@ internal fun HomeTopBarRight(content: HomeTopBarContent, search: HomeTopBarSearc
                 flatBackgroundAlpha = com.aritxonly.teak.common.material.TeakGlassDefaults.flatBackgroundAlpha(),
                 onClick = onOpenMessages, size = 40.dp, recipe = recipe, backdrop = backdrop,
             ) {
-                Icon(MiuixIcons.Messages, contentDescription = "消息", tint = BrandPink,
+                Icon(COUIIcons.Messages, contentDescription = "消息", tint = BrandPink,
                     modifier = Modifier.size(19.dp))
             }
         }
