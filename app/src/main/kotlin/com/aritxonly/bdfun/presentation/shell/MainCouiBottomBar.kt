@@ -89,7 +89,7 @@ internal fun BoxScope.MainCouiBottomBar(
     var manualDisc by remember { mutableStateOf<Boolean?>(null) }
     // 播放开始/结束自动翻面；手动切换后以手动为准，直到播放状态变化。
     LaunchedEffect(playing) { manualDisc = null }
-    val discMode = manualDisc ?: playing
+    val discMode = if (!playing) false else manualDisc ?: true  // 没播放时永远是搜索模式
 
     // 设置页（最后一个 tab）永远收起，不管有没有唱片。
     val showSlot = selectedIndex < destinations.lastIndex
@@ -176,7 +176,7 @@ internal fun BoxScope.MainCouiBottomBar(
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .offset(x = dockWidth + CouiDockDefaults.plusGap - DiscShadowRoom)
+                    .offset(x = dockWidth + slotReserve - CouiDockDefaults.plusSize - DiscShadowRoom)
                     .size(CouiDockDefaults.plusSize + DiscShadowRoom * 2)
                     .graphicsLayer {
                         alpha = discAlpha
@@ -218,7 +218,11 @@ internal fun BoxScope.MainCouiBottomBar(
                             detectVerticalDragGestures(
                                 onDragStart = { total = 0f },
                                 onDragEnd = {
-                                    if (abs(total) > 20.dp.toPx()) manualDisc = !discMode
+                                    if (abs(total) > 20.dp.toPx()) {
+                                        // 只有正在播放时才允许翻到唱片；否则滑回去只有搜索。
+                                        if (discMode) manualDisc = false
+                                        else if (playing) manualDisc = true
+                                    }
                                     total = 0f
                                 },
                                 onVerticalDrag = { _, delta -> total += delta },
