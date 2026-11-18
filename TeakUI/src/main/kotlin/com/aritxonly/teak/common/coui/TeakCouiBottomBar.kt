@@ -4,9 +4,14 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.itos.coui.backdrop.CouiBackdrop
+import androidx.compose.ui.graphics.Color
+import com.itos.coui.effect.CouiFloatingRenderer
 import com.itos.coui.icons.CouiIcons
+import com.itos.coui.shape.CouiCapsuleShape
+import com.itos.coui.shape.CouiShape
 import com.itos.coui.navigation.CouiNavigationItem
 import com.itos.coui.navigation.NavigationBar
 import com.itos.coui.theme.CouiColorScheme
@@ -37,6 +42,7 @@ fun TeakCouiBottomBar(
     selectedKey: String,
     onSelect: (String) -> Unit,
     backdrop: CouiBackdrop,
+    renderer: CouiFloatingRenderer,
     modifier: Modifier = Modifier,
     dark: Boolean = CouiTheme.isDark,
     onSearch: (() -> Unit)? = null,
@@ -47,13 +53,21 @@ fun TeakCouiBottomBar(
         NavigationBar(
             modifier = modifier,
             backdrop = backdrop,
+            renderer = renderer,
             items = items.map { CouiNavigationItem(title = it.label, icon = it.icon, selectedIcon = it.selectedIcon) },
             selectedIndex = selectedIndex,
             rightIcon = if (onSearch != null) CouiIcons.Outlined.Search else null,
             rightDescription = if (onSearch != null) "搜索" else null,
             rightVisible = onSearch != null,
             onRightClick = onSearch,
+            rightContainerColor = teakCouiColorScheme().accent,
+            // 宿主色板：选中用强调色、未选中用次要前景，避免默认黑白在浅底上差 18% 看不出来。
+            selectedColor = teakCouiColorScheme().accent,
+            unselectedColor = teakCouiColorScheme().onSurfaceVariant.copy(alpha = 0.75f),
             dark = dark,
+            lightColor = Color.White,
+            circleShape = CouiShape(999.dp, cornerWeight = 2f),
+            capsuleShape = CouiCapsuleShape,
             onSelection = { index -> items.getOrNull(index)?.let { onSelect(it.key) } },
         )
     }

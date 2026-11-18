@@ -57,9 +57,11 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
                     .fillMaxSize()
                     // 采样源只挂一套：COUI 风格用 couiBackdrop，其它风格用 Miuix layerBackdrop。
                     // 两套同时挂会互相抢采样，底栏材质会打架。
+                    // Miuix 玻璃（顶栏、图标材质）要 layerBackdrop；COUI 底栏要 couiBackdrop。
+                    // 两个录制器互不干扰，都是对同一份正文内容录屏，所以可以同时挂。
+                    .layerBackdrop(backdrop)
                     .then(
-                        if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop)
-                        else Modifier.layerBackdrop(backdrop),
+                        if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop) else Modifier,
                     )
                     // COUI 要求采样源自身有真实不透明底色（透明窗口不会被录成源），
                     // 这一层放在 couiBackdrop 之后 = 在录制层内部绘制。
