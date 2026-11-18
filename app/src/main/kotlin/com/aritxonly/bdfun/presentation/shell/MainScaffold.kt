@@ -60,7 +60,10 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
                     .then(
                         if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop)
                         else Modifier.layerBackdrop(backdrop),
-                    ),
+                    )
+                    // COUI 要求采样源自身有真实不透明底色（透明窗口不会被录成源），
+                    // 这一层放在 couiBackdrop 之后 = 在录制层内部绘制。
+                    .background(background),
             ) {
                 // 三个 tab：横向相连的 pager（可拖拽，切换是同一套非线性动画）
                 // 外面包一层更大的触摸阈值，手指轻抖不会误翻页。
