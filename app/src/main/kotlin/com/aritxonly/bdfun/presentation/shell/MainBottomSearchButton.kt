@@ -11,12 +11,18 @@ import com.aritxonly.teak.common.material.TeakGlassIconButton
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.Search
+import com.itos.coui.icons.CouiIcons
+import com.aritxonly.teak.common.theme.TeakUiStyle
 
 @Composable
 internal fun MainBottomSearchButton(alpha: Float, onClick: () -> Unit) {
     TeakGlassIconButton(onClick = onClick, size = TeakFloatingTabBarDefaults.CurrentHeight,
         modifier = Modifier.graphicsLayer { this.alpha = alpha }) {
-        Icon(MiuixIcons.Search, contentDescription = "搜索", tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(TeakFloatingTabBarDefaults.DetachedIconSize))
+        Icon(
+            if (TeakUiStyle.isCoui) CouiIcons.Outlined.Search else MiuixIcons.Search,
+            contentDescription = "搜索",
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(TeakFloatingTabBarDefaults.DetachedIconSize),
+        )
     }
 }

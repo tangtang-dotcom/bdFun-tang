@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import com.aritxonly.teak.common.icons.rememberAntialiasedIconPainter
+import com.aritxonly.teak.common.theme.TeakUiStyle
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.layout.size
 import com.aritxonly.teak.common.navigation.TeakFloatingTabItem
@@ -85,12 +86,15 @@ internal fun rememberMainShellState(background: Color): MainShellState {
         drawRect(background)
         drawContent()
     }
+    // COUI 风格换一套底栏图标；其它风格保持原来的 Miuix 图标。
+    val couiTabGlyphs = TeakUiStyle.isCoui
     val tabItems = destinations.map { destination ->
+        val glyph = if (couiTabGlyphs) couiTabGlyph(destination.key, destination.icon) else destination.icon
         TeakFloatingTabItem(
             key = destination.key,
             label = destination.label,
-            selectedIcon = rememberAntialiasedIconPainter(rememberVectorPainter(destination.icon)),
-            unselectedIcon = rememberAntialiasedIconPainter(rememberVectorPainter(destination.icon)),
+            selectedIcon = rememberAntialiasedIconPainter(rememberVectorPainter(glyph)),
+            unselectedIcon = rememberAntialiasedIconPainter(rememberVectorPainter(glyph)),
             iconScale = if (destination.key == "home") 0.95f else 1f,
         )
     }

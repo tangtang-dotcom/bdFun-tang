@@ -3,56 +3,60 @@ package com.aritxonly.teak.common.coui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Box
-import androidx.compose.ui.draw.drawWithContent
 
 /**
- * COUI（ColorOS 凝光）底栏材质。
+ * COUI（ColorOS 凝光）底栏的着色层。
  *
- * ColorOS 原厂是把底栏做成一层硬件合成表面，直接对**背景内容**做 luminosity + overlay 混色
- * （`CouiFloatingMaterial` 的两段色 + 边缘光 + 内发光）。这里用等价的手绘公式复现：
- * - 底色取原厂 secondColor 的提亮值，并给 92% 不透明度（原厂靠采样提亮，这里靠自发光，避免矩形采样带）
- * - 顶边 0.75dp 高光描边（原厂 edgeAlpha 0.25/0.8 的近似）
- * - 顶部内发光竖向渐变（原厂 innerGlowAlpha 0.1/0.03）
- * - 12dp 投影（原厂阴影由原生 tessellator 生成，跨机型会失真，这里用 Compose elevation）
+ * ColorOS 原厂把底栏做成一层硬件合成表面：对背景内容做 blur -> luminosity -> overlay/color-dodge
+ * 两段混色，再叠 0.25/0.8 的边缘光和 0.1/0.03 的内发光。
+ * 这里保留底栏原有的玻璃采样（Miuix backdrop blur，等价于原厂的 blur 那一步），
+ * 只把「凝光」那两段混色换成等价的自发光着色：高亮度半透明白 + 顶边高光 + 顶部内发光。
+ * 好处是完全没有矩形采样 patch（原厂的采样层在非校准机型上会露出一条矩形色带）。
  */
-fun Modifier.couiNavigationMaterial(isDark: Boolean, shape: Shape): Modifier = this
-    .shadow(elevation = 12.dp, shape = shape, clip = false)
+fun Modifier.couiNavigationTint(isDark: Boolean, shape: Shape): Modifier = this
     .clip(shape)
-    .background(if (isDark) Color(0xF21B1B1B) else Color(0xF2FAFAFA))
+    .background(
+        if (isDark) Color(0xCC1B1B1B) else Color(0xE8FFFFFF),
+    )
+    .background(
+        // 原厂 firstColor 的混色方向：浅色偏 COLOR_DODGE（提亮），深色偏 OVERLAY（压深）。
+        Brush.verticalGradient(
+            listOf(
+                Color.White.copy(alpha = if (isDark) 0.06f else 0.35f),
+                Color.Transparent,
+            ),
+        ),
+    )
     .border(
         width = 0.75.dp,
         brush = Brush.verticalGradient(
             listOf(
-                Color.White.copy(alpha = if (isDark) 0.22f else 0.90f),
-                Color.White.copy(alpha = if (isDark) 0.04f else 0.35f),
+                Color.White.copy(alpha = if (isDark) 0.28f else 0.95f),
+                Color.White.copy(alpha = if (isDark) 0.05f else 0.45f),
             ),
         ),
         shape = shape,
     )
     .drawWithContent {
         drawContent()
-        // 顶部内发光：原厂材质里 innerGlow 把上沿再提亮一档，让悬浮条“有厚度”。
+        // 顶部内发光：让悬浮条上沿有厚度感。
         drawRect(
             brush = Brush.verticalGradient(
-                0f to Color.White.copy(alpha = if (isDark) 0.07f else 0.40f),
-                0.55f to Color.Transparent,
+                0f to Color.White.copy(alpha = if (isDark) 0.10f else 0.55f),
+                0.45f to Color.Transparent,
             ),
         )
     }
 
-/** COUI 底栏的圆角（原厂 FloatingToolbarDefaults.CornerRadius = 24dp）。 */
+/** COUI 底栏圆角（原厂 FloatingToolbarDefaults.CornerRadius = 24dp）。 */
 val CouiNavigationCornerRadius = 24.dp
 
-/** 供盒子式布局使用的默认形状。 */
 val CouiNavigationShape: Shape = RoundedCornerShape(CouiNavigationCornerRadius)

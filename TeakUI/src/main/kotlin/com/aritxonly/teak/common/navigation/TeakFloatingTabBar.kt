@@ -18,7 +18,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import com.aritxonly.teak.common.coui.couiNavigationMaterial
+import com.aritxonly.teak.common.coui.couiNavigationTint
 import com.aritxonly.teak.common.theme.TeakUiStyle
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -190,14 +190,19 @@ fun TeakFloatingTabBar(
             modifier = Modifier
                 .fillMaxSize()
                 .offset { IntOffset(panelOffsetPx.roundToInt(), 0) }
+                .teakFloatingNavigationShadow(
+                    shape = TeakFloatingTabBarDefaults.ContainerShape,
+                    isDark = isDark,
+                )
                 .then(
+                    // COUI 风格：玻璃之上再叠一层「凝光」着色。
                     if (TeakUiStyle.isCoui) {
-                        Modifier
-                    } else {
-                        Modifier.teakFloatingNavigationShadow(
-                            shape = TeakFloatingTabBarDefaults.ContainerShape,
+                        Modifier.couiNavigationTint(
                             isDark = isDark,
+                            shape = TeakFloatingTabBarDefaults.ContainerShape,
                         )
+                    } else {
+                        Modifier
                     },
                 ),
         ) {
@@ -346,27 +351,16 @@ fun TeakFloatingTabBar(
                     }
                 }
                         }
-            if (TeakUiStyle.isCoui) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .couiNavigationMaterial(
-                            isDark = isDark,
-                            shape = TeakFloatingTabBarDefaults.ContainerShape,
-                        ),
-                ) { containerContent() }
-            } else {
-                TeakGlassSurface(
-                    modifier = Modifier.fillMaxSize(),
-                    shape = TeakFloatingTabBarDefaults.ContainerShape,
-                    recipe = TeakGlassRecipes.floatingNavigation(advancedMaterial.fineTuning),
-                    interaction = GlassMaterialInteraction(
-                        refractionScale = if (motion.isPressed) 1.06f else 1f,
-                        highlightScale = if (motion.isPressed) 1.04f else 1f,
-                    ),
-                    backdrop = backdrop,
-                ) { containerContent() }
-            }
+            TeakGlassSurface(
+                modifier = Modifier.fillMaxSize(),
+                shape = TeakFloatingTabBarDefaults.ContainerShape,
+                recipe = TeakGlassRecipes.floatingNavigation(advancedMaterial.fineTuning),
+                interaction = GlassMaterialInteraction(
+                    refractionScale = if (motion.isPressed) 1.06f else 1f,
+                    highlightScale = if (motion.isPressed) 1.04f else 1f,
+                ),
+                backdrop = backdrop,
+            ) { containerContent() }
         }
     }
 }
