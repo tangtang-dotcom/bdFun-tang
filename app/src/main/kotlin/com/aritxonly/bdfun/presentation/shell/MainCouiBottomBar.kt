@@ -2,7 +2,12 @@ package com.aritxonly.bdfun
 
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.coui.TeakCouiBarItem
 import com.aritxonly.teak.common.coui.TeakCouiBottomBar
 import com.aritxonly.teak.common.interaction.blockTouches
@@ -42,7 +47,12 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainCouiBottomBar(
         selectedKey = selectedKey,
         onSelect = onSelect,
         backdrop = backdrop,
-        modifier = Modifier.align(androidx.compose.ui.Alignment.BottomCenter)
+        modifier = Modifier
+            .align(androidx.compose.ui.Alignment.BottomCenter)
+            .navigationBarsPadding()
+            .padding(start = 12.dp, end = 12.dp, bottom = 6.dp)
+            .widthIn(max = 420.dp)
+            .fillMaxWidth()
             .then(modifier)
             .then(if (covered) Modifier.blockTouches(true) else Modifier),
         dark = dark,
