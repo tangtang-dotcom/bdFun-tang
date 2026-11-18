@@ -14,7 +14,6 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(
     settings: SettingsBindings,
     shell: MainShellState,
     dark: Boolean,
-    couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val ui = shell.ui
@@ -81,7 +80,6 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(
         },
         onBottomSearch = { shell.bottom.open() },
         onOpenVideo = { navigateToVideo(context, it) },
-        couiBackdrop = couiBackdrop,
     )
 
 }

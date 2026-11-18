@@ -16,9 +16,6 @@ import com.aritxonly.teak.common.search.teakSearchUnderlay
 import com.aritxonly.teak.common.navigation.TeakFloatingTabBarDefaults
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
 import top.yukonga.miuix.kmp.blur.layerBackdrop
-import com.aritxonly.teak.common.theme.TeakUiStyle
-import com.itos.coui.backdrop.couiBackdrop
-import com.itos.coui.backdrop.rememberCouiBackdrop
 
 @Composable
 internal fun MainScaffold(settings: SettingsBindings, shell: MainShellState, dark: Boolean, background: Color) {
@@ -37,8 +34,6 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
     val backdrop = shell.backdrops.main
     val wideNavigation = shell.backdrops.wideNavigation
     val floatingBottomSpacing = if (isWideFoldTopBar()) 0.dp else 4.dp
-    // COUI 风格才有第二块采样源；其它风格保持 null，不做任何多余采样。
-    val couiBackdrop = if (TeakUiStyle.isCoui) rememberCouiBackdrop() else null
     val pageFloat = (tabPagerState.currentPage + tabPagerState.currentPageOffsetFraction)
         .coerceAtLeast(0f)
     Box(
@@ -54,8 +49,7 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .layerBackdrop(backdrop)
-                    .then(if (couiBackdrop != null) Modifier.couiBackdrop(couiBackdrop) else Modifier),
+                    .layerBackdrop(backdrop),
             ) {
                 // 三个 tab：横向相连的 pager（可拖拽，切换是同一套非线性动画）
                 // 外面包一层更大的触摸阈值，手指轻抖不会误翻页。
@@ -95,7 +89,7 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
                 scaleX = 1f - 0.4f * progress
                 scaleY = scaleX
                 alpha = 1f - progress
-        }) { MainShellNavigation(settings, shell, dark, couiBackdrop) }
+        }) { MainShellNavigation(settings, shell, dark) }
         MainBottomSearchLayer(settings, shell)
         // 换页时返回键回到"纯箭头"状态（pageKey / pageEnter 在上面声明）
 

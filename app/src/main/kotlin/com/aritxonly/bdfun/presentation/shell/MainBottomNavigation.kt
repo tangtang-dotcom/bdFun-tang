@@ -13,7 +13,6 @@ import com.aritxonly.teak.common.theme.TeakUiStyle
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
 import com.aritxonly.bdfun.core.model.video.VideoItem
 import com.aritxonly.teak.common.interaction.blockTouches
-import com.itos.coui.backdrop.CouiBackdrop
 
 @Composable
 internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
@@ -22,7 +21,6 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     shellDestinationList: List<Destination>,
     onBarItem: (TeakFloatingTabItem) -> Unit, onSearch: () -> Unit, onOpenVideo: (VideoItem) -> Unit,
     onBottomSearch: () -> Unit,
-    couiBackdrop: CouiBackdrop? = null,
 ) {
     val visual = rememberMainBottomNavigationVisual(settings, dark, wideNavigation, searchVisible, tabItems.size)
     if (visual.tabBarAlpha > 0.01f) {
@@ -34,7 +32,8 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
                 selectedKey = selectedKey,
                 visual = visual,
                 dark = dark,
-                couiBackdrop = couiBackdrop,
+                showSearch = true,
+                onSearch = onBottomSearch,
                 onSelect = { key -> tabItems.firstOrNull { it.key == key }?.let(onBarItem) },
             )
         } else if (wideNavigation) {

@@ -8,6 +8,7 @@ import android.view.Window
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -71,6 +72,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.material.LocalTeakMaterialSpec
 import com.aritxonly.teak.common.material.TeakGlassPanel
+import com.aritxonly.teak.common.theme.TeakUiStyle
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.flow.first
@@ -125,6 +127,9 @@ fun TeakDropdownPanel(
 ) {
     var mounted by remember { mutableStateOf(false) }
     var fullHeightPx by remember { mutableStateOf(0) }
+    // COUI 风格换一套进出场：COUI 菜单用 260ms 的三次贝塞尔缓动 + 轻微缩放，
+    // 不是 Miuix 那套双弹簧 + 方向性裁剪展开。
+    val couiMotion = TeakUiStyle.isCoui
     // 和 Miuix ListPopupDefaults 完全相同的两条进度：
     // 缩放 / 裁剪展开用 spring(0.82, 362.5)，透明度进场 200ms、退场 150ms。
     val fraction = remember { Animatable(0f) }
@@ -143,28 +148,32 @@ fun TeakDropdownPanel(
                 launch {
                     fraction.animateTo(
                         targetValue = 1f,
-                        animationSpec = spring(
-                            dampingRatio = 0.82f,
-                            stiffness = 362.5f,
-                            visibilityThreshold = 0.0001f,
-                        ),
+                        animationSpec = if (couiMotion) {
+                            tween(durationMillis = 260, easing = CouiMenuEnterEasing)
+                        } else {
+                            spring(dampingRatio = 0.82f, stiffness = 362.5f, visibilityThreshold = 0.0001f)
+                        },
                     )
                 }
-                alpha.animateTo(1f, tween(durationMillis = 200))
+                alpha.animateTo(
+                    targetValue = 1f,
+                    animationSpec = if (couiMotion) tween(260, easing = CouiMenuEnterEasing)
+                    else tween(durationMillis = 200),
+                )
             }
         } else if (mounted) {
             kotlinx.coroutines.coroutineScope {
                 launch {
                     fraction.animateTo(
                         targetValue = 0f,
-                        animationSpec = spring(
-                            dampingRatio = 0.82f,
-                            stiffness = 362.5f,
-                            visibilityThreshold = 0.0001f,
-                        ),
+                        animationSpec = if (couiMotion) {
+                            tween(durationMillis = 180, easing = FastOutLinearInEasing)
+                        } else {
+                            spring(dampingRatio = 0.82f, stiffness = 362.5f, visibilityThreshold = 0.0001f)
+                        },
                     )
                 }
-                alpha.animateTo(0f, tween(durationMillis = 150))
+                alpha.animateTo(0f, tween(durationMillis = if (couiMotion) 180 else 150))
             }
             mounted = false
         }
@@ -225,7 +234,8 @@ fun TeakDropdownPanel(
             else -> 0.5f
         },
     )
-    val shape = RoundedCornerShape(24.dp)
+    val panelCorner = if (couiMotion) 28.dp else 24.dp
+    val shape = RoundedCornerShape(panelCorner)
     val panelAlpha = alpha.value
     val shadowAlpha = alpha.value
 
@@ -290,7 +300,8 @@ fun TeakDropdownPanel(
                         .width(fullWidth)
                         .height(finalHeight)
                         .graphicsLayer {
-                            val scale = 0.15f + 0.85f * fraction.value
+                            val scale = if (couiMotion) 0.94f + 0.06f * fraction.value
+                            else 0.15f + 0.85f * fraction.value
                             scaleX = scale
                             scaleY = scale
                             this.alpha = shadowAlpha
@@ -310,17 +321,21 @@ fun TeakDropdownPanel(
                         .width(fullWidth)
                         .height(finalHeight)
                         .graphicsLayer {
-                            val scale = 0.15f + 0.85f * fraction.value
+                            val scale = if (couiMotion) 0.94f + 0.06f * fraction.value
+                            else 0.15f + 0.85f * fraction.value
                             scaleX = scale
                             scaleY = scale
                             this.alpha = panelAlpha
                             this.transformOrigin = transformOrigin
                         }
-                        .dropdownClipReveal(
-                            fraction = { fraction.value },
-                            showBelow = showBelow,
-                            showAbove = showAbove,
-                            corner = 24.dp,
+                        // COUI 菜单不做方向性裁剪展开，只做整体缩放淡入，所以这里跳过它。
+                        .then(
+                            if (couiMotion) Modifier else Modifier.dropdownClipReveal(
+                                fraction = { fraction.value },
+                                showBelow = showBelow,
+                                showAbove = showAbove,
+                                corner = panelCorner,
+                            ),
                         )
                         .clip(shape)
                         .background(Color.White),
@@ -374,6 +389,9 @@ fun matchSystemBars(dialogWindow: Window?, hostWindow: Window?) {
         }
     }
 }
+
+/** COUI 菜单的进场曲线：emphasis decelerate，和 CouiDialogDefaults 同一族。 */
+private val CouiMenuEnterEasing = CubicBezierEasing(0.3f, 0f, 0.1f, 1f)
 
 /**
  * Miuix ListPopupContent 同款方向性裁剪：
