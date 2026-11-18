@@ -53,6 +53,9 @@ internal fun BoxScope.MainCouiBottomBar(
     val scheme = teakCouiColorScheme()
     val density = LocalDensity.current
     val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    // SleepDown 的 CouiHomeDockChrome 里 plusVisible = selectedIndex < 2：
+    // 最后一个 tab（设置/我的）不再显示右侧圆形按钮，库会自己播收起动画。
+    val plusVisible = onSearch != null && selectedIndex < destinations.lastIndex
 
     BoxWithConstraints(
         Modifier
@@ -99,8 +102,8 @@ internal fun BoxScope.MainCouiBottomBar(
                     selectedIndex = selectedIndex,
                     style = style,
                     plusStyle = plusStyle,
-                    plusVisible = onSearch != null,
-                    plusEnabled = onSearch != null,
+                    plusVisible = plusVisible,
+                    plusEnabled = plusVisible,
                     menuWidth = dockWidth,
                     onSelection = { index -> destinations.getOrNull(index)?.let { onSelect(it.key) } },
                     onPlusClick = { onSearch?.invoke() },
