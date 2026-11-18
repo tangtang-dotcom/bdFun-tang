@@ -147,6 +147,7 @@ fun CouiDockBar(
     showPlusSurface: () -> Boolean = { true },
     onSelection: (Int) -> Unit,
     plusInputModifier: Modifier = Modifier,
+    plusContent: (@Composable () -> Unit)? = null,
     onPlusClick: (Rect) -> Unit,
 ) {
     require(items.isNotEmpty() && selectedIndex in items.indices)
@@ -263,6 +264,7 @@ fun CouiDockBar(
                 contentLayer = plusContentLayer,
                 style = plusStyle,
                 enabled = plusEnabled && plusVisible,
+                content = plusContent,
                 scale = { plusScale.value },
                 motion = plusMotion,
                 press = plusPress,
@@ -283,6 +285,7 @@ internal fun CouiDockPlusContent(
     motion: CouiTouchMotion,
     press: CouiPressMotion,
     onOpenMenu: () -> Unit,
+    content: (@Composable () -> Unit)? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val (lightInput, drawLight) = rememberCouiSpotlight(
@@ -312,11 +315,15 @@ internal fun CouiDockPlusContent(
             ) else Modifier),
         contentAlignment = Alignment.Center,
     ) {
-        Icon(
-            modifier = Modifier.size(24.dp),
-            imageVector = style.icon,
-            contentDescription = style.iconDescription,
-            tint = style.iconTint,
-        )
+        if (content != null) {
+            content()
+        } else {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                imageVector = style.icon,
+                contentDescription = style.iconDescription,
+                tint = style.iconTint,
+            )
+        }
     }
 }

@@ -1,23 +1,17 @@
 package com.aritxonly.bdfun
 
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -34,7 +29,6 @@ import com.aritxonly.bdfun.core.model.video.VideoItem
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
 import com.aritxonly.bdfun.ui.BackgroundPlayDisc
 import com.aritxonly.bdfun.ui.BackgroundPlayback
-import com.aritxonly.bdfun.ui.DiscShadowRoom
 import com.aritxonly.teak.common.coui.teakCouiColorScheme
 import com.itos.coui.backdrop.CouiBackdrop
 import com.itos.coui.effect.CouiFloatingRenderer
@@ -52,11 +46,10 @@ import kotlin.math.abs
 /**
  * COUI 风格底栏。
  *
- * 搜索键完全交给库：CouiDockBar 自己的 plus 面（CouiDockPlusStyle + translucentMaterial），
- * 所以它的出现/收起动画就是 SleepDown 里那颗按钮的原生动画，一行都没重写。
- *
- * 唱片不占库的 plus 面，而是画在同一个槽位（menuWidth + plusGap）的独立层里；
- * 下滑手势在两颗之间切换。唱片层比 56dp 多留一圈 DiscShadowRoom，避免方形裁剪。
+ * 搜索键 = CouiDockBar 的 plus 面（库原生材质 + 原生收起动画）。
+ * 唱片也画在同一个 plus 面里（plusContent），因此它和搜索键共用：
+ * 同一颗节点、同一份材质、同一根 attachmentSpring、同一套 press/跟手动画。
+ * 下滑切换由 plusInputModifier 上挂的手势处理，轻点仍交给库的 clickable。
  */
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi(34)
@@ -87,28 +80,11 @@ internal fun BoxScope.MainCouiBottomBar(
 
     val playing = visual.discSlot > 0.01f
     var manualDisc by remember { mutableStateOf<Boolean?>(null) }
-    // 播放开始/结束自动翻面；手动切换后以手动为准，直到播放状态变化。
     LaunchedEffect(playing) { manualDisc = null }
-    val discMode = if (!playing) false else manualDisc ?: true  // 没播放时永远是搜索模式
-
+    // 没播放时永远显示搜索键，不允许翻出空唱片。
+    val discMode = if (!playing) false else manualDisc ?: true
     // 设置页（最后一个 tab）永远收起，不管有没有唱片。
     val showSlot = selectedIndex < destinations.lastIndex
-    // 槽位整体占位宽度：和库内 CouiDockBar 的 plus 槽完全同一根弹簧（68dp ↔ 0）。
-    val slotReserve by animateDpAsState(
-        targetValue = if (showSlot) CouiDockDefaults.plusSlot else 0.dp,
-        animationSpec = CouiDockDefaults.attachmentSpring(),
-        label = "CouiDockSlotReserve",
-    )
-    val discAlpha by animateFloatAsState(
-        targetValue = if (showSlot && discMode) 1f else 0f,
-        animationSpec = CouiDockDefaults.attachmentSpring(),
-        label = "CouiDiscAlpha",
-    )
-    val discScale by animateFloatAsState(
-        targetValue = if (showSlot && discMode) 1f else 0.5f,
-        animationSpec = CouiDockDefaults.attachmentSpring(),
-        label = "CouiDiscScale",
-    )
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val available = (maxWidth - 36.dp).coerceAtLeast(0.dp)
@@ -120,9 +96,7 @@ internal fun BoxScope.MainCouiBottomBar(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = bottomInset + 8.dp)
-                .graphicsLayer { translationY = imeCompensation.toFloat() }
-                .width(dockWidth + slotReserve)
-                .height(CouiDockDefaults.barHeight),
+                .graphicsLayer { translationY = imeCompensation.toFloat() },
         ) {
             CouiTheme(darkTheme = dark, colorScheme = scheme) {
                 val style = remember(dark, scheme.accent, scheme.onSurfaceVariant, contour, density.density) {
@@ -157,82 +131,56 @@ internal fun BoxScope.MainCouiBottomBar(
                     }
                 }
                 CouiDockBar(
-                    modifier = Modifier.align(Alignment.CenterStart),
+                    modifier = Modifier,
                     backdrop = backdrop,
                     renderer = renderer,
                     items = items,
                     selectedIndex = selectedIndex.coerceIn(0, destinations.lastIndex),
                     style = style,
                     plusStyle = plusStyle,
-                    // 库的 plus 面只在「搜索模式 + 该页需要槽位」时出现，动画全在库内。
-                    plusVisible = showSlot && !discMode,
-                    plusEnabled = showSlot && !discMode,
+                    // plus 面的可见性 = 槽位是否显示：搜索和唱片共用这一个面。
+                    plusVisible = showSlot,
+                    plusEnabled = showSlot,
                     menuWidth = dockWidth,
                     onSelection = { index -> destinations.getOrNull(index)?.let { onSelect(it.key) } },
-                    onPlusClick = { onBottomSearch() },
-                )
-            }
-            // 唱片层：比 56dp 多留一圈阴影空间，graphicsLayer 不会把阴影裁成方块。
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .offset(x = dockWidth + slotReserve - CouiDockDefaults.plusSize - DiscShadowRoom)
-                    .size(CouiDockDefaults.plusSize + DiscShadowRoom * 2)
-                    .graphicsLayer {
-                        alpha = discAlpha
-                        scaleX = discScale
-                        scaleY = discScale
+                    onPlusClick = {
+                        if (discMode) BackgroundPlayback.video?.let(onOpenVideo) else onBottomSearch()
                     },
-                contentAlignment = Alignment.Center,
-            ) {
-                BackgroundPlayDisc(
-                    settings = settings,
-                    dependencies = AppGraph.discDependencies,
-                    modifier = Modifier.size(CouiDockDefaults.plusSize),
-                    size = CouiDockDefaults.plusSize,
-                    outerSize = CouiDockDefaults.plusSize,
-                    breathEnabled = false,
-                    shadowEnabled = false,
-                    onOpenFallback = onOpenVideo,
-                )
-                // 点击唱片打开视频（手势层只吃拖动，点击交给这里）
-                if (discMode && showSlot) {
-                    Box(
-                        Modifier
-                            .size(CouiDockDefaults.plusSize)
-                            .pointerInput(discMode) {
-                                detectTapGestures { BackgroundPlayback.video?.let(onOpenVideo) }
-                            },
-                    )
-                }
-            }
-            // 槽位手势层：只覆盖 56dp 搜索/唱片区域，点击和下滑都在这里处理。
-            if (showSlot) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .offset(x = dockWidth + CouiDockDefaults.plusGap)
-                        .size(CouiDockDefaults.plusSize)
-                        .pointerInput(discMode) {
+                    plusInputModifier = Modifier.pointerInput(discMode, playing) {
+                        // Initial pass 先看手势：不抢轻点（库的 clickable/press 动画照常），
+                        // 只在纵向拖动超过 20dp 后消费并切换，避免被库的 consumeDrag 吃掉。
+                        awaitEachGesture {
+                            val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
                             var total = 0f
-                            detectVerticalDragGestures(
-                                onDragStart = { total = 0f },
-                                onDragEnd = {
-                                    if (abs(total) > 20.dp.toPx()) {
-                                        // 只有正在播放时才允许翻到唱片；否则滑回去只有搜索。
-                                        if (discMode) manualDisc = false
-                                        else if (playing) manualDisc = true
-                                    }
-                                    total = 0f
-                                },
-                                onVerticalDrag = { _, delta -> total += delta },
+                            var fired = false
+                            while (true) {
+                                val event = awaitPointerEvent(PointerEventPass.Initial)
+                                val change = event.changes.firstOrNull { it.id == down.id } ?: break
+                                total += change.position.y - change.previousPosition.y
+                                if (!fired && abs(total) > 20.dp.toPx()) {
+                                    fired = true
+                                    if (discMode) manualDisc = false
+                                    else if (playing) manualDisc = true
+                                }
+                                if (fired) change.consume()
+                                if (!change.pressed) break
+                            }
+                        }
+                    },
+                    plusContent = if (discMode) {
+                        {
+                            BackgroundPlayDisc(
+                                settings = settings,
+                                dependencies = AppGraph.discDependencies,
+                                modifier = Modifier.fillMaxSize(),
+                                size = CouiDockDefaults.plusSize,
+                                outerSize = CouiDockDefaults.plusSize,
+                                breathEnabled = false,
+                                shadowEnabled = false,
+                                onOpenFallback = onOpenVideo,
                             )
                         }
-                        .pointerInput(discMode) {
-                            detectTapGestures {
-                                if (discMode) BackgroundPlayback.video?.let(onOpenVideo) else onBottomSearch()
-                            }
-                        },
+                    } else null,
                 )
             }
         }
