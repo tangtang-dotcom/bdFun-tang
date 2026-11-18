@@ -61,8 +61,10 @@ internal fun MainDockStack(
     visual: MainBottomNavigationVisual,
     onSearch: () -> Unit,
     onOpenVideo: (VideoItem) -> Unit,
+    searchContent: (@Composable () -> Unit)? = null,
+    slotSize: Dp = TeakFloatingTabBarDefaults.CurrentHeight,
 ) {
-    val slot = TeakFloatingTabBarDefaults.CurrentHeight
+    val slot = slotSize
     val discAvailable = visual.discSlot > 0.01f
     val density = LocalDensity.current
     val scope = rememberCoroutineScope()
@@ -98,9 +100,9 @@ internal fun MainDockStack(
                 )
             },
     ) {
-        DockFrontCard(state, slot, slotPx, if (incomingOnTop) 0f else 1f, settings, onSearch, onOpenVideo)
+        DockFrontCard(state, slot, slotPx, if (incomingOnTop) 0f else 1f, settings, onSearch, onOpenVideo, searchContent)
         if (transitioning) {
-            DockBackCard(state, slot, if (incomingOnTop) 1f else 0f, settings, onSearch, onOpenVideo)
+            DockBackCard(state, slot, if (incomingOnTop) 1f else 0f, settings, onSearch, onOpenVideo, searchContent)
         }
     }
 }
@@ -114,6 +116,7 @@ private fun DockFrontCard(
     settings: SettingsBindings,
     onSearch: () -> Unit,
     onOpenVideo: (VideoItem) -> Unit,
+    searchContent: (@Composable () -> Unit)?,
 ) {
     val isDisc = state.currentIsDisc
     Box(Modifier.fillMaxSize().zIndex(zIndex), contentAlignment = Alignment.Center) {
@@ -148,7 +151,7 @@ private fun DockFrontCard(
                 },
             contentAlignment = Alignment.Center,
         ) {
-            DockCard(isDisc, slot, settings, onSearch, onOpenVideo)
+            DockCard(isDisc, slot, settings, onSearch, onOpenVideo, searchContent)
         }
     }
 }
@@ -161,6 +164,7 @@ private fun DockBackCard(
     settings: SettingsBindings,
     onSearch: () -> Unit,
     onOpenVideo: (VideoItem) -> Unit,
+    searchContent: (@Composable () -> Unit)?,
 ) {
     Box(Modifier.fillMaxSize().zIndex(zIndex), contentAlignment = Alignment.Center) {
         Box(
@@ -179,7 +183,7 @@ private fun DockBackCard(
                 },
             contentAlignment = Alignment.Center,
         ) {
-            DockCard(state.incomingIsDisc, slot, settings, onSearch, onOpenVideo)
+            DockCard(state.incomingIsDisc, slot, settings, onSearch, onOpenVideo, searchContent)
         }
     }
 }
@@ -191,6 +195,7 @@ private fun DockCard(
     settings: SettingsBindings,
     onSearch: () -> Unit,
     onOpenVideo: (VideoItem) -> Unit,
+    searchContent: (@Composable () -> Unit)?,
 ) {
     // 触摸全部由最上层的堆叠手势层接管，卡片本身不再接收点击。
     // 阴影画在卡片外、但仍在放大后的动画图层内；只有唱片内容需要按圆裁切。
@@ -218,6 +223,8 @@ private fun DockCard(
                     onOpenFallback = onOpenVideo,
                 )
             }
+        } else if (searchContent != null) {
+            searchContent()
         } else {
             MainBottomSearchButton(alpha = 1f, onClick = onSearch)
         }

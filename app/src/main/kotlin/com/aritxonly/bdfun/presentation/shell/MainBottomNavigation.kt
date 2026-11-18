@@ -27,15 +27,16 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     if (TeakUiStyle.isCoui && couiBackdrop != null && android.os.Build.VERSION.SDK_INT >= 34) {
         // COUI 风格：底栏交给 COUI-Kit 的 CouiDockBar（材质 + 融球 + 跟手形变都是库自带的）。
         MainCouiBottomBar(
+            settings = settings,
+            visual = visual,
             destinations = destinations,
             selectedKey = selectedKey,
             dark = dark,
             backdrop = couiBackdrop,
             onSelect = { key -> tabItems.firstOrNull { it.key == key }?.let(onBarItem) },
-            onSearch = if (searchVisible) onBottomSearch else null,
+            onBottomSearch = onBottomSearch,
+            onOpenVideo = onOpenVideo,
         )
-        // 唱片仍由上游的 MainNavigationDisc 绘制（COUI 底栏只接管菜单/搜索，不吞掉唱片）。
-        if (visual.discSlot > 0.01f) MainNavigationDisc(settings, visual, onOpenVideo)
         return
     }
     if (visual.tabBarAlpha > 0.01f) {
