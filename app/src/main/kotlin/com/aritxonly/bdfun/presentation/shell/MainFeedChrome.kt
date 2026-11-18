@@ -13,6 +13,7 @@ import com.aritxonly.bdfun.ui.FeedTopBar
 internal fun androidx.compose.foundation.layout.BoxScope.MainFeedChrome(
     shell: MainShellState,
     pageFloat: Float,
+    couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
 ) {
     val session = shell.feeds.session ?: return
     val dynamicFeed = shell.feeds.dynamic
@@ -23,6 +24,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainFeedChrome(
         surface = shell.chrome.dynamic,
         // 动态页顶栏没有搜索框，搜索页盖上来时跟着搜索进度淡掉，不要硬切。
         fadesWhenSearchOpens = true,
+        couiBackdrop = couiBackdrop,
     ) {
         FeedTopBar(
             state = dynamicFeed,

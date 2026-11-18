@@ -95,9 +95,9 @@ private fun MainScaffoldContent(settings: SettingsBindings, shell: MainShellStat
         }
         // 两个顶栏都挂在采集层之外：底栏搜索的一镜到底会把内容整体上移并模糊，
         // 顶栏只跟着缩放和淡出，不应该再跟着上下位移一次，否则会双重运动。
-        MainHomeChrome(settings, shell, pageFloat)
-        MainMineChrome(shell, pageFloat)
-        MainFeedChrome(shell, pageFloat)
+        MainHomeChrome(settings, shell, pageFloat, couiBackdrop)
+        MainMineChrome(shell, pageFloat, couiBackdrop)
+        MainFeedChrome(shell, pageFloat, couiBackdrop)
 
         if (couiBackdrop != null) {
             // COUI 风格：底栏按 Src patch 直接合成到窗口，自身不能套 graphicsLayer，

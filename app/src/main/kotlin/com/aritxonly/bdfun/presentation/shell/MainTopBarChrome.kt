@@ -13,6 +13,9 @@ import com.aritxonly.teak.common.chrome.ProgressiveTopBarMaterial
 import com.aritxonly.teak.common.chrome.TeakPageScrollState
 import com.aritxonly.teak.common.material.LocalTeakBackdrop
 import com.aritxonly.teak.common.search.TeakSearchTransitionDefaults
+import com.itos.coui.backdrop.CouiBackdrop
+import com.itos.coui.theme.CouiTheme
+import com.itos.coui.topappbar.TopAppBarSurface
 import kotlin.math.abs
 
 /**
@@ -36,6 +39,7 @@ internal fun BoxScope.MainTopBarChrome(
     surface: TeakPageScrollState,
     /** 本页没有搜索框时（动态页），搜索页盖上来要把顶栏一起淡掉，而不是硬切。 */
     fadesWhenSearchOpens: Boolean = false,
+    couiBackdrop: CouiBackdrop? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val ui = shell.ui
@@ -62,24 +66,46 @@ internal fun BoxScope.MainTopBarChrome(
             surface.materialProgress
         },
     ) {
-        ProgressiveTopBarMaterial(
-            underlayLiftPx = liftPx,
-            underlayBlurPx = underlayBlurPx,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .graphicsLayer {
-                    alpha = pageAlpha * (1f - bottom.bottomTopBarAlpha.value) * searchFade
-                },
-        ) {
-            Box(
-                modifier = Modifier.graphicsLayer {
-                    val searchScale = 1f - 0.1f * bottom.bottomSearchProgress.value
-                    scaleX = searchScale
-                    scaleY = searchScale
-                    translationX = -(pageFloat - pageIndex) * size.width * 0.92f
-                },
+        val chromeAlpha = pageAlpha * (1f - bottom.bottomTopBarAlpha.value) * searchFade
+        if (couiBackdrop != null && com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
+            // COUI 风格：材质层换成库的 TopAppBarSurface（采样 + 渐进模糊 + 渐变遮罩），
+            // 布局和搜索一镜到底的变换仍沿用原来的实现，只换材质来源。
+            TopAppBarSurface(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .graphicsLayer { alpha = chromeAlpha },
+                backdrop = couiBackdrop,
+                dark = CouiTheme.isDark,
             ) {
-                content()
+                Box(
+                    modifier = Modifier.graphicsLayer {
+                        val searchScale = 1f - 0.1f * bottom.bottomSearchProgress.value
+                        scaleX = searchScale
+                        scaleY = searchScale
+                        translationX = -(pageFloat - pageIndex) * size.width * 0.92f
+                    },
+                ) {
+                    content()
+                }
+            }
+        } else {
+            ProgressiveTopBarMaterial(
+                underlayLiftPx = liftPx,
+                underlayBlurPx = underlayBlurPx,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .graphicsLayer { alpha = chromeAlpha },
+            ) {
+                Box(
+                    modifier = Modifier.graphicsLayer {
+                        val searchScale = 1f - 0.1f * bottom.bottomSearchProgress.value
+                        scaleX = searchScale
+                        scaleY = searchScale
+                        translationX = -(pageFloat - pageIndex) * size.width * 0.92f
+                    },
+                ) {
+                    content()
+                }
             }
         }
     }

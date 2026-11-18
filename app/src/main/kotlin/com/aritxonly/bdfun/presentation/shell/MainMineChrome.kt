@@ -14,10 +14,18 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import com.aritxonly.bdfun.ui.MineTopAppBar
 import com.aritxonly.teak.common.chrome.LocalTopBarScrollProgress
 import com.aritxonly.teak.common.chrome.ProgressiveTopBarMaterial
+import com.aritxonly.teak.common.theme.TeakUiStyle
+import com.itos.coui.backdrop.CouiBackdrop
+import com.itos.coui.theme.CouiTheme
+import com.itos.coui.topappbar.TopAppBarSurface
 
 /** 渐进模糊和按钮都位于采样树外；宽屏顶栏仅保留模糊，设置入口属于不采样的资料栏。 */
 @Composable
-internal fun BoxScope.MainMineChrome(shell: MainShellState, pageFloat: Float) {
+internal fun BoxScope.MainMineChrome(
+    shell: MainShellState,
+    pageFloat: Float,
+    couiBackdrop: CouiBackdrop? = null,
+) {
     val widthDp = LocalWindowInfo.current.containerSize.width / LocalDensity.current.density
     if (pageFloat <= 1.01f) return
     val context = LocalContext.current
@@ -29,11 +37,20 @@ internal fun BoxScope.MainMineChrome(shell: MainShellState, pageFloat: Float) {
         onDispose { if (previous != null) window?.isStatusBarContrastEnforced = previous }
     }
     CompositionLocalProvider(LocalTopBarScrollProgress provides shell.chrome.mine.materialProgress) {
-        ProgressiveTopBarMaterial(modifier = Modifier.align(Alignment.TopCenter).graphicsLayer {
+        val mineModifier = Modifier.align(Alignment.TopCenter).graphicsLayer {
             translationX = (2f - pageFloat) * size.width
             alpha = (pageFloat - 1f).coerceIn(0f, 1f)
-        }) {
+        }
+        val mineContent: @Composable () -> Unit = {
             MineTopAppBar(showSettings = widthDp < 600f) { navigateToSettings(context) }
+        }
+        if (couiBackdrop != null && TeakUiStyle.isCoui) {
+            // COUI 风格：材质层直接用库的顶栏采样面（渐进模糊 + 渐变遮罩）。
+            TopAppBarSurface(modifier = mineModifier, backdrop = couiBackdrop, dark = CouiTheme.isDark) {
+                mineContent()
+            }
+        } else {
+            ProgressiveTopBarMaterial(modifier = mineModifier) { mineContent() }
         }
     }
 }

@@ -16,6 +16,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainHomeChrome(
     settings: SettingsBindings,
     shell: MainShellState,
     pageFloat: Float,
+    couiBackdrop: com.itos.coui.backdrop.CouiBackdrop? = null,
 ) {
     val ui = shell.ui
     val homeFeed = shell.feeds.home
@@ -37,6 +38,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainHomeChrome(
         pageIndex = 0,
         pageFloat = pageFloat,
         surface = activeChrome,
+        couiBackdrop = couiBackdrop,
     ) {
         MainHomeBarContent(
             settings, shell,
