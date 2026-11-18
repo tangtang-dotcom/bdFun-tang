@@ -1,36 +1,44 @@
 package com.aritxonly.bdfun
 
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.aritxonly.bdfun.core.model.video.VideoItem
 import com.aritxonly.bdfun.feature.settings.presentation.SettingsBindings
+import com.aritxonly.bdfun.ui.BackgroundPlayDisc
+import com.aritxonly.bdfun.ui.BackgroundPlayback
+import com.aritxonly.bdfun.ui.DiscShadowRoom
 import com.aritxonly.teak.common.coui.teakCouiColorScheme
 import com.itos.coui.backdrop.CouiBackdrop
 import com.itos.coui.effect.CouiFloatingRenderer
 import com.itos.coui.effect.LocalCouiContourGlowEnabled
 import com.itos.coui.floatingactionbutton.CouiFabDefaults
-import com.itos.coui.floatingactionbutton.Fab
 import com.itos.coui.icons.CouiIcons
 import com.itos.coui.navigation.CouiDockBar
 import com.itos.coui.navigation.CouiDockDefaults
@@ -38,13 +46,16 @@ import com.itos.coui.navigation.CouiDockItem
 import com.itos.coui.navigation.CouiDockPlusStyle
 import com.itos.coui.navigation.CouiDockStyle
 import com.itos.coui.theme.CouiTheme
+import kotlin.math.abs
 
 /**
- * COUI 风格底栏：菜单胶囊 = CouiDockBar（库原生材质/描边/阴影/跟手形变），
- * 右侧 56dp 槽位 = 上游 MainDockStack（搜索↔唱片两张卡，下滑切换、后台播放自动翻面）。
+ * COUI 风格底栏。
  *
- * 槽位收起：完全复刻 CouiDockBar 内部 plus 的动画参数 —— 宽度 68dp→0、alpha 1→0、scale 1→0.5，
- * 全部走 CouiDockDefaults.attachmentSpring()，因此和库自带 plus 面的收起手感一致。
+ * 搜索键完全交给库：CouiDockBar 自己的 plus 面（CouiDockPlusStyle + translucentMaterial），
+ * 所以它的出现/收起动画就是 SleepDown 里那颗按钮的原生动画，一行都没重写。
+ *
+ * 唱片不占库的 plus 面，而是画在同一个槽位（menuWidth + plusGap）的独立层里；
+ * 下滑手势在两颗之间切换。唱片层比 56dp 多留一圈 DiscShadowRoom，避免方形裁剪。
  */
 @OptIn(ExperimentalLayoutApi::class)
 @RequiresApi(34)
@@ -73,23 +84,23 @@ internal fun BoxScope.MainCouiBottomBar(
     val bottomInset = with(density) { systemBottomPx.toDp() }
     val imeCompensation = (WindowInsets.ime.getBottom(density) - systemBottomPx).coerceAtLeast(0)
 
-    // 与库内 CouiDockBar 的 plus 面完全相同的收起规则与弹簧。
-    // 设置页（最后一个 tab）永远收起，不管有没有唱片在播。
+    val playing = visual.discSlot > 0.01f
+    var manualDisc by remember { mutableStateOf<Boolean?>(null) }
+    // 播放开始/结束自动翻面；手动切换后以手动为准，直到播放状态变化。
+    LaunchedEffect(playing) { manualDisc = null }
+    val discMode = manualDisc ?: playing
+
+    // 设置页（最后一个 tab）永远收起，不管有没有唱片。
     val showSlot = selectedIndex < destinations.lastIndex
-    val slotWidth by animateDpAsState(
-        targetValue = if (showSlot) CouiDockDefaults.plusSlot else 0.dp,
+    val discAlpha by animateFloatAsState(
+        targetValue = if (showSlot && discMode) 1f else 0f,
         animationSpec = CouiDockDefaults.attachmentSpring(),
-        label = "CouiDockStackSlot",
+        label = "CouiDiscAlpha",
     )
-    val slotAlpha by animateFloatAsState(
-        targetValue = if (showSlot) 1f else 0f,
+    val discScale by animateFloatAsState(
+        targetValue = if (showSlot && discMode) 1f else 0.5f,
         animationSpec = CouiDockDefaults.attachmentSpring(),
-        label = "CouiDockStackAlpha",
-    )
-    val slotScale by animateFloatAsState(
-        targetValue = if (showSlot) 1f else 0.5f,
-        animationSpec = CouiDockDefaults.attachmentSpring(),
-        label = "CouiDockStackScale",
+        label = "CouiDiscScale",
     )
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
@@ -98,12 +109,24 @@ internal fun BoxScope.MainCouiBottomBar(
             CouiDockDefaults.menuWidth,
             (available - CouiDockDefaults.plusSlot).coerceAtLeast(120.dp),
         )
-        Row(
+        Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = bottomInset + 8.dp)
-                .graphicsLayer { translationY = imeCompensation.toFloat() },
-            verticalAlignment = Alignment.Bottom,
+                .graphicsLayer { translationY = imeCompensation.toFloat() }
+                .width(dockWidth + CouiDockDefaults.plusSlot)
+                .height(CouiDockDefaults.barHeight)
+                .pointerInput(discMode) {
+                    var total = 0f
+                    detectVerticalDragGestures(
+                        onDragStart = { total = 0f },
+                        onDragEnd = {
+                            if (abs(total) > 20.dp.toPx()) manualDisc = !discMode
+                            total = 0f
+                        },
+                        onVerticalDrag = { _, delta -> total += delta },
+                    )
+                },
         ) {
             CouiTheme(darkTheme = dark, colorScheme = scheme) {
                 val style = remember(dark, scheme.accent, scheme.onSurfaceVariant, contour, density.density) {
@@ -138,60 +161,53 @@ internal fun BoxScope.MainCouiBottomBar(
                     }
                 }
                 CouiDockBar(
-                    modifier = Modifier.width(dockWidth),
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .width(dockWidth),
                     backdrop = backdrop,
                     renderer = renderer,
                     items = items,
                     selectedIndex = selectedIndex.coerceIn(0, destinations.lastIndex),
                     style = style,
                     plusStyle = plusStyle,
-                    plusVisible = false,
-                    plusEnabled = false,
+                    // 库的 plus 面只在「搜索模式 + 该页需要槽位」时出现，动画全在库内。
+                    plusVisible = showSlot && !discMode,
+                    plusEnabled = showSlot && !discMode,
                     menuWidth = dockWidth,
                     onSelection = { index -> destinations.getOrNull(index)?.let { onSelect(it.key) } },
-                    onPlusClick = {},
+                    onPlusClick = { onBottomSearch() },
                 )
             }
+            // 唱片层：比 56dp 多留一圈阴影空间，graphicsLayer 不会把阴影裁成方块。
             Box(
                 modifier = Modifier
-                    .width(slotWidth)
-                    .height(CouiDockDefaults.barHeight),
-                contentAlignment = Alignment.CenterEnd,
+                    .align(Alignment.CenterStart)
+                    .offset(x = dockWidth + CouiDockDefaults.plusGap)
+                    .size(CouiDockDefaults.plusSize + DiscShadowRoom * 2)
+                    .graphicsLayer {
+                        alpha = discAlpha
+                        scaleX = discScale
+                        scaleY = discScale
+                    },
+                contentAlignment = Alignment.Center,
             ) {
-                // 始终保持组合：收起只是把宽度/透明度收到 0，不销毁 MainDockStack，
-                // 否则重新展开时它会先回到「搜索卡」再翻成「唱片卡」，出现闪一下搜索图标的 bug。
-                Box(
-                    modifier = Modifier
-                        .width(CouiDockDefaults.plusSize)
-                        .height(CouiDockDefaults.plusSize)
-                        .graphicsLayer {
-                            alpha = slotAlpha
-                            scaleX = slotScale
-                            scaleY = slotScale
-                        },
-                ) {
-                    MainDockStack(
-                            settings = settings,
-                            visual = visual,
-                            onSearch = onBottomSearch,
-                            onOpenVideo = onOpenVideo,
-                            slotSize = CouiDockDefaults.plusSize,
-                            searchContent = {
-                                CouiTheme(darkTheme = dark, colorScheme = scheme) {
-                                    Fab(
-                                        modifier = Modifier.fillMaxSize(),
-                                        backdrop = backdrop,
-                                        onClick = onBottomSearch,
-                                        dark = dark,
-                                        contentLabel = "搜索",
-                                    ) {
-                                        androidx.compose.material3.Icon(
-                                            imageVector = CouiIcons.Search,
-                                            contentDescription = "搜索",
-                                            tint = scheme.onAccent,
-                                        )
-                                    }
-                                }
+                BackgroundPlayDisc(
+                    settings = settings,
+                    dependencies = AppGraph.discDependencies,
+                    modifier = Modifier.size(CouiDockDefaults.plusSize),
+                    size = CouiDockDefaults.plusSize,
+                    outerSize = CouiDockDefaults.plusSize,
+                    breathEnabled = false,
+                    shadowEnabled = false,
+                    onOpenFallback = onOpenVideo,
+                )
+                // 点击唱片打开视频（手势层只吃拖动，点击交给这里）
+                if (discMode && showSlot) {
+                    Box(
+                        Modifier
+                            .size(CouiDockDefaults.plusSize)
+                            .pointerInput(discMode) {
+                                detectTapGestures { BackgroundPlayback.video?.let(onOpenVideo) }
                             },
                     )
                 }
