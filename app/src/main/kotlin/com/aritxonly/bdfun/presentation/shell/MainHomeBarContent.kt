@@ -31,7 +31,9 @@ internal fun MainHomeBarContent(settings: SettingsBindings, shell: MainShellStat
     // HyperOS 4：分段替换搜索框；哔哩哔哩（官方）与经典：搜索框保留，分段放在它下面一行。
     val tabs = when {
         bottomSearch -> null
-        TeakStyle.fromStoredValue(settings.interfaceStyle).layout.hasBottomSearch -> HomeTopBarTabs(
+        // COUI 风格：顶栏按 HyperOS 4 的排版，分段居中、不再放顶部搜索框。
+        TeakStyle.fromStoredValue(settings.interfaceStyle).layout.hasBottomSearch ||
+            settings.interfaceStyle == 3 -> HomeTopBarTabs(
             options = channels.map { it.title },
             selected = channelIndex,
             position = ui.homeSectionPosition,
