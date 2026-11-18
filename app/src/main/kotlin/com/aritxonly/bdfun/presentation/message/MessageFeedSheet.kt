@@ -18,6 +18,22 @@ internal fun MessageFeedSheet(
     if (kind == MessageFeedKind.Reply || kind == MessageFeedKind.Like) {
         val target = menu.selected
         val enabled = target != null && !busy && loadingByTab[target.first] != true
+        if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
+            com.aritxonly.teak.common.coui.TeakCouiTextDialog(
+                show = target != null,
+                onDismissRequest = { if (!busy) menu.selected = null },
+                title = "删除通知？",
+                message = if (kind == MessageFeedKind.Like)
+                    "删除后，有新的点赞时这条通知会重新出现在列表。" else "确认删除这条通知？",
+                confirmText = "删除",
+                onConfirm = { onMutate(true) },
+                confirmEnabled = enabled,
+                dismissText = "取消",
+                onDismissClick = { menu.selected = null },
+                dismissEnabled = !busy,
+            )
+            return
+        }
         com.aritxonly.teak.common.modal.AlertDialog(
             show = target != null,
             onDismissRequest = { if (!busy) menu.selected = null },

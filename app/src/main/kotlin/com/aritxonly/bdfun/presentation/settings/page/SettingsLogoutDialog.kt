@@ -9,6 +9,24 @@ import com.aritxonly.teak.common.modal.TextButton
 @Composable
 internal fun SettingsLogoutDialog(browser: SettingsBrowserStateHolder, onLogout: () -> Unit) {
     val state by browser.state.collectAsState()
+    if (com.aritxonly.teak.common.theme.TeakUiStyle.isCoui) {
+        com.aritxonly.teak.common.coui.TeakCouiTextDialog(
+            show = state.confirmLogout,
+            onDismissRequest = browser::cancelLogout,
+            title = "退出登录？",
+            message = "确认退出当前账号？",
+            confirmText = "退出登录",
+            onConfirm = {
+                if (browser.state.value.confirmLogout) {
+                    browser.cancelLogout()
+                    onLogout()
+                }
+            },
+            dismissText = "取消",
+            onDismissClick = browser::cancelLogout,
+        )
+        return
+    }
     AlertDialog(show = state.confirmLogout, onDismissRequest = browser::cancelLogout,
         miuixTitle = "退出登录？", miuixSummary = "确认退出当前账号？",
         confirmButton = {
