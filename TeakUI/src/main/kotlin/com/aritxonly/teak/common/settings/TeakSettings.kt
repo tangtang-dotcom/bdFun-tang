@@ -195,6 +195,39 @@ fun TeakSettingsSwitchRow(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
+    if (TeakUiStyle.isCoui) {
+        // COUI 风格：库没有 preference 组件，用库的 Switch + 自绘行，间距与官方设置页一致。
+        val colors = MiuixTheme.colorScheme
+        androidx.compose.foundation.layout.Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 56.dp)
+                .padding(horizontal = 16.dp, vertical = 10.dp),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+        ) {
+            androidx.compose.foundation.layout.Column(
+                modifier = Modifier.weight(1f),
+            ) {
+                top.yukonga.miuix.kmp.basic.Text(
+                    text = title,
+                    color = colors.onBackground,
+                    fontSize = 16.sp,
+                )
+                if (description.isNotBlank()) {
+                    top.yukonga.miuix.kmp.basic.Text(
+                        text = description,
+                        color = colors.onSurfaceVariantActions,
+                        fontSize = 13.sp,
+                    )
+                }
+            }
+            com.itos.coui.switch.Switch(
+                checked = checked,
+                onCheckedChange = onCheckedChange,
+            )
+        }
+        return
+    }
     top.yukonga.miuix.kmp.preference.SwitchPreference(
         title = title,
         summary = description.takeIf { it.isNotBlank() },

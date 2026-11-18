@@ -84,9 +84,9 @@ internal class SegmentSelectionSession(selected: Int) {
     }
     fun finish(cancelled: Boolean, selected: Int, onRelease: Boolean, submit: (Int) -> Unit) {
         if (!touching) return
+        touching = false
         if (!cancelled && onRelease && preview != selected) submit(preview)
         if (cancelled) preview = selected
-        touching = false
     }
 }
 

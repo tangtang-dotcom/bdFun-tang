@@ -39,6 +39,7 @@ dependencies {
     api(libs.compose.animation)
     implementation(libs.compose.runtime)
     implementation(libs.androidx.core)
+    implementation("androidx.core:core-ktx:1.18.0")
     implementation(libs.androidx.dynamicanimation)
     implementation(libs.coroutines.android)
 }

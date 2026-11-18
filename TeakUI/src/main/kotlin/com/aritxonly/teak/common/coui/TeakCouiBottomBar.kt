@@ -3,6 +3,7 @@ package com.aritxonly.teak.common.coui
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -12,8 +13,9 @@ import com.itos.coui.effect.CouiFloatingRenderer
 import com.itos.coui.icons.CouiIcons
 import com.itos.coui.shape.CouiCapsuleShape
 import com.itos.coui.shape.CouiShape
-import com.itos.coui.navigation.CouiNavigationItem
-import com.itos.coui.navigation.NavigationBar
+import com.itos.coui.navigation.CouiDockCapsule
+import com.itos.coui.navigation.CouiDockItem
+import com.itos.coui.navigation.CouiDockStyle
 import com.itos.coui.theme.CouiColorScheme
 import com.itos.coui.theme.CouiTheme
 
@@ -49,18 +51,26 @@ fun TeakCouiBottomBar(
 ) {
     if (items.isEmpty()) return
     val selectedIndex = items.indexOfFirst { it.key == selectedKey }.coerceAtLeast(0)
+    val density = androidx.compose.ui.platform.LocalDensity.current.density
     CouiTheme(darkTheme = dark, colorScheme = teakCouiColorScheme()) {
-        NavigationBar(
+        val scheme = CouiTheme.colorScheme
+        // 完全照 SleepDown 的 CouiDockCapsule：材质、阴影、跟手形变、按压反馈都在库里。
+        val style = remember(dark, scheme.accent, scheme.onSurfaceVariant, density) {
+            CouiDockStyle.reference(
+                dark = dark,
+                selectedColor = scheme.accent,
+                unselectedColor = scheme.onSurfaceVariant.copy(alpha = 184f / 255f),
+                density = density,
+                contourGlowEnabled = true,
+            )
+        }
+        CouiDockCapsule(
             modifier = modifier,
             backdrop = backdrop,
             renderer = renderer,
-            items = items.map { CouiNavigationItem(title = it.label, icon = it.icon, selectedIcon = it.selectedIcon) },
+            items = items.map { CouiDockItem(title = it.label, icon = it.icon, selectedIcon = it.selectedIcon) },
             selectedIndex = selectedIndex,
-            rightIcon = if (onSearch != null) CouiIcons.Outlined.Search else null,
-            rightDescription = if (onSearch != null) "搜索" else null,
-            rightVisible = onSearch != null,
-            onRightClick = onSearch,
-            dark = dark,
+            style = style,
             onSelection = { index -> items.getOrNull(index)?.let { onSelect(it.key) } },
         )
     }

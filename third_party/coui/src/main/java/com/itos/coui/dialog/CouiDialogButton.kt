@@ -76,24 +76,27 @@ internal fun DialogButton(
     val resolvedColors = colors ?: if (style == CouiDialogActionStyle.Secondary) DialogButtonDefaults.secondaryColors(dark, material)
         else error("主操作必须由宿主显式提供配色")
     val source = interactionSource ?: remember { MutableInteractionSource() }
-    val motion = rememberCouiTouchMotion(enabled)
-    val density = LocalDensity.current.density
-    val press = rememberCouiPressMotion()
-    val (lightInput, drawLight) = rememberCouiSpotlight(interactive = enabled, dark = dark,
-        preset = if (style == CouiDialogActionStyle.Primary) SpotlightPreset.OpaqueMedium1 else SpotlightPreset.OpaqueMedium2,
-        cancelOnConsumedMove = true)
-    Box(modifier.heightIn(min = CouiDialogDefaults.buttonHeight).graphicsLayer {
-        scaleX = motion.scaleX.value + press.scale.value - 1f
-        scaleY = motion.scaleY.value + press.scale.value - 1f
-        translationX = motion.translationX.value
-        translationY = motion.translationY.value
-    }.couiTouchMotion(motion, enabled, cancelOnConsumedMove = true)
-        .couiPressMotion(press, enabled, cancelOnConsumedMove = true).then(lightInput)
-        .clip(DialogButtonDefaults.shape).drawWithContent {
-            drawContent()
-            drawLight?.invoke(this)
-        }.dialogButtonSurface(dark, enabled, if (enabled) resolvedColors.surface else resolvedColors.disabledSurface, style)
-        .couiButtonFeedback(dark, source, enabled, pressFeedback = !material)
+    val decoration = run {
+        val motion = rememberCouiTouchMotion(enabled)
+        val density = LocalDensity.current.density
+        val press = rememberCouiPressMotion()
+        val (lightInput, drawLight) = rememberCouiSpotlight(interactive = enabled, dark = dark,
+            preset = if (style == CouiDialogActionStyle.Primary) SpotlightPreset.OpaqueMedium1 else SpotlightPreset.OpaqueMedium2,
+            cancelOnConsumedMove = true)
+            Modifier.graphicsLayer {
+            scaleX = motion.scaleX.value + press.scale.value - 1f
+            scaleY = motion.scaleY.value + press.scale.value - 1f
+            translationX = motion.translationX.value
+            translationY = motion.translationY.value
+        }.couiTouchMotion(motion, enabled, cancelOnConsumedMove = true)
+            .couiPressMotion(press, enabled, cancelOnConsumedMove = true).then(lightInput)
+            .clip(DialogButtonDefaults.shape).drawWithContent {
+                drawContent()
+                drawLight?.invoke(this)
+            }.dialogButtonSurface(dark, enabled, if (enabled) resolvedColors.surface else resolvedColors.disabledSurface, style)
+            .couiButtonFeedback(dark, source, enabled, pressFeedback = !material)
+    }
+    Box(modifier.heightIn(min = CouiDialogDefaults.buttonHeight).then(decoration)
         .clickable(source, indication = null, enabled = enabled, role = Role.Button, onClick = onClick)
         .padding(horizontal = CouiDialogDefaults.buttonHorizontalPadding, vertical = 4.dp), contentAlignment = Alignment.Center) {
         DialogText(text = text, kind = DialogTextKind.Button, color = if (enabled) resolvedColors.content else resolvedColors.disabledContent)

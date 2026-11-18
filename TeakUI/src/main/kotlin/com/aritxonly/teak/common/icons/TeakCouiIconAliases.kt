@@ -29,31 +29,31 @@ import top.yukonga.miuix.kmp.icon.extended.Filter as OriginalFilter
  */
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.Close: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.Close else MiuixIcons.OriginalClose
+    @Composable get() = if (TeakUiStyle.isCoui) MiuixIcons.OriginalClose else MiuixIcons.OriginalClose
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.Search: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Outlined.Search else MiuixIcons.OriginalSearch
+    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Search else MiuixIcons.OriginalSearch
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.More: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.More else MiuixIcons.OriginalMore
+    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.More else MiuixIcons.OriginalMore
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.Settings: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.Setting else MiuixIcons.OriginalSettings
+    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Settings else MiuixIcons.OriginalSettings
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.ChevronBackward: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.Back else MiuixIcons.OriginalChevronBackward
+    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Back else MiuixIcons.OriginalChevronBackward
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.ChevronForward: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.Next else MiuixIcons.OriginalChevronForward
+    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Next else MiuixIcons.OriginalChevronForward
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.Album: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.Album else MiuixIcons.OriginalAlbum
+    @Composable get() = if (TeakUiStyle.isCoui) MiuixIcons.OriginalAlbum else MiuixIcons.OriginalAlbum
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.Home: ImageVector
@@ -65,7 +65,7 @@ val MiuixIcons.Lock: ImageVector
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.Contacts: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.Users else MiuixIcons.OriginalContacts
+    @Composable get() = if (TeakUiStyle.isCoui) MiuixIcons.OriginalContacts else MiuixIcons.OriginalContacts
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.ContactsCircle: ImageVector
@@ -73,7 +73,7 @@ val MiuixIcons.ContactsCircle: ImageVector
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.SearchDevice: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.Scan else MiuixIcons.OriginalSearchDevice
+    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.SearchField else MiuixIcons.OriginalSearchDevice
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.Tune: ImageVector
@@ -81,4 +81,4 @@ val MiuixIcons.Tune: ImageVector
 
 /** COUI 风格用 COUI 图标，其它风格保持 Miuix 原图。 */
 val MiuixIcons.Filter: ImageVector
-    @Composable get() = if (TeakUiStyle.isCoui) CouiIcons.Filled.ListFilter else MiuixIcons.OriginalFilter
+    @Composable get() = if (TeakUiStyle.isCoui) MiuixIcons.OriginalFilter else MiuixIcons.OriginalFilter

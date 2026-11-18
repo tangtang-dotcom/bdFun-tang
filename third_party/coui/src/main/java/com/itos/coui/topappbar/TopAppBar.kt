@@ -1,6 +1,7 @@
 package com.itos.coui.topappbar
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -9,22 +10,16 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.takeOrElse
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.LoadedFontFamily
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
@@ -32,12 +27,14 @@ import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.dp
 import com.itos.coui.backdrop.CouiBackdrop
 import com.itos.coui.backdrop.LocalCouiBackdrop
+import com.itos.coui.text.CouiTextKind
+import com.itos.coui.text.rememberCouiTextStyle
 import com.itos.coui.theme.CouiTheme
 import com.itos.coui.theme.ProvideCouiContent
 import com.itos.coui.theme.LocalCouiDarkTheme
 import kotlin.math.roundToInt
 
-/** 完整紧凑顶栏；内部处理安全区和槽位布局，点击行为由宿主提供。 */
+/** 紧凑顶栏。contentModifier 在系统边距之后调整槽位，背景仍从顶栏顶部绘制。 */
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,
@@ -50,12 +47,20 @@ fun TopAppBar(
     backdrop: CouiBackdrop = checkNotNull(LocalCouiBackdrop.current) {
         "顶栏需要显式 backdrop 或 ProvideCouiBackdrop 作用域"
     },
+    contentModifier: Modifier = Modifier,
+    centerTitle: Boolean = false,
+    contentBelowTitle: (@Composable (CouiBackdrop) -> Unit)? = null,
 ) {
     TopAppBarSurface(modifier.fillMaxWidth(), backdrop,
+        bottomExtension = if (contentBelowTitle == null) CouiTopAppBarDefaults.bottomExtension else 32.dp,
         gradientColor = colors.backgroundColor, dark = dark) {
         CompositionLocalProvider(LocalCouiDarkTheme provides dark) {
-            AppBarLayout(title, navigationIcon, actions, colors, windowInsets,
-                CouiTopAppBarDefaults.height, CouiTopAppBarDefaults.height, null)
+            Column {
+                AppBarLayout(title, navigationIcon, actions, colors, windowInsets,
+                    CouiTopAppBarDefaults.height, CouiTopAppBarDefaults.height, null,
+                    modifier = contentModifier, centerTitle = centerTitle)
+                contentBelowTitle?.invoke(LocalCouiToolbarBackdrop.current ?: backdrop)
+            }
         }
     }
 }
@@ -64,9 +69,8 @@ fun TopAppBar(
  * 大标题缩为固定小标题；省略 scrollBehavior 时保持展开。
  * 连接挂到正文祖先，正文通过 scrollBehavior.state.contentPadding 补偿逻辑滚动与可见弹簧的差值。
  * 高度不含 windowInsets；expandedHeight 必须大于正数 collapsedHeight。
- * expandedTitleStyle 配置展开标题，collapsedTitleStyle 在完全收起时覆盖展开样式。
- * 收起默认按起始侧导航槽是否占用空间选择字号。
- * 显式字号必须是有限正数 sp；title 槽位须继承组件提供的样式。
+ * 字号为 Unspecified 时沿用预设：展开跟随 HomeTitle，收起使用固定 dp。
+ * 显式字号必须是有限正数 sp；title 槽位须继承组件提供的字号。
  */
 @Composable
 fun LargeTopAppBar(
@@ -83,21 +87,19 @@ fun LargeTopAppBar(
     backdrop: CouiBackdrop = checkNotNull(LocalCouiBackdrop.current) {
         "顶栏需要显式 backdrop 或 ProvideCouiBackdrop 作用域"
     },
-    expandedTitleStyle: TextStyle = TextStyle.Default,
-    collapsedTitleStyle: TextStyle = TextStyle.Default,
+    expandedTitleSize: TextUnit = TextUnit.Unspecified,
+    collapsedTitleSize: TextUnit = TextUnit.Unspecified,
 ) {
     require(expandedHeight.value.isFinite() && collapsedHeight.value.isFinite() &&
         collapsedHeight > 0.dp && expandedHeight > collapsedHeight) {
         "展开高度必须大于收起高度，且高度必须是有限正数"
     }
-    val expandedSize = expandedTitleStyle.fontSize
-    val collapsedSize = collapsedTitleStyle.fontSize
-    require(expandedSize == TextUnit.Unspecified ||
-        expandedSize.isSp && expandedSize.value.isFinite() && expandedSize.value > 0f) {
+    require(expandedTitleSize == TextUnit.Unspecified ||
+        expandedTitleSize.isSp && expandedTitleSize.value.isFinite() && expandedTitleSize.value > 0f) {
         "展开字号必须为 Unspecified 或有限正数 sp"
     }
-    require(collapsedSize == TextUnit.Unspecified ||
-        collapsedSize.isSp && collapsedSize.value.isFinite() && collapsedSize.value > 0f) {
+    require(collapsedTitleSize == TextUnit.Unspecified ||
+        collapsedTitleSize.isSp && collapsedTitleSize.value.isFinite() && collapsedTitleSize.value > 0f) {
         "收起字号必须为 Unspecified 或有限正数 sp"
     }
     val density = LocalDensity.current
@@ -118,7 +120,7 @@ fun LargeTopAppBar(
         }) {
         CompositionLocalProvider(LocalCouiDarkTheme provides dark) {
             AppBarLayout(title, navigationIcon, actions, colors, windowInsets, expandedHeight, collapsedHeight, state,
-                expandedTitleStyle, collapsedTitleStyle)
+                expandedTitleSize, collapsedTitleSize)
         }
     }
 }
@@ -133,24 +135,34 @@ private fun AppBarLayout(
     expandedHeight: Dp,
     collapsedHeight: Dp,
     state: CouiCollapsingAppBarState?,
-    expandedTitleStyle: TextStyle = TextStyle.Default,
-    collapsedTitleStyle: TextStyle = TextStyle.Default,
+    expandedTitleSize: TextUnit = TextUnit.Unspecified,
+    collapsedTitleSize: TextUnit = TextUnit.Unspecified,
+    modifier: Modifier = Modifier,
+    centerTitle: Boolean = false,
 ) {
     val large = expandedHeight > collapsedHeight
     val density = LocalDensity.current
-    val compactTitleStyle = CouiTopAppBarDefaults.titleTextStyle()
-    val defaultTitleStyle = if (large) CouiTopAppBarDefaults.expandedTitleTextStyle() else compactTitleStyle
-    val expandedStyle = defaultTitleStyle.copy(color = colors.titleColor)
-        .withTitleOverrides(expandedTitleStyle, density, defaultTitleStyle.fontFamily)
-    val collapsedSize = collapsedTitleStyle.fontSize
-    val collapsedOverrides = if (collapsedSize == TextUnit.Unspecified) collapsedTitleStyle
-        else collapsedTitleStyle.copy(fontSize = TextUnit.Unspecified)
-    val useCollapsedStyle = collapsedOverrides != TextStyle.Default &&
-        remember(state) { derivedStateOf { state?.collapsedFraction == 1f } }.value
-    val titleStyle = if (useCollapsedStyle) {
-        expandedStyle.withTitleOverrides(collapsedTitleStyle, density, defaultTitleStyle.fontFamily)
-    } else expandedStyle
-    Layout(modifier = Modifier.windowInsetsPadding(windowInsets), content = {
+    val direction = LocalLayoutDirection.current
+    val defaultTitleStyle = rememberCouiTextStyle(if (large) CouiTextKind.HomeTitle else CouiTextKind.Toolbar)
+    val titleStyle = if (large && expandedTitleSize != TextUnit.Unspecified) {
+        // 同步行高与字号的像素比例，保留原字体度量及系统非线性字体缩放。
+        val lineHeight = with(density) {
+            (defaultTitleStyle.lineHeight.toPx() * expandedTitleSize.toPx() /
+                defaultTitleStyle.fontSize.toPx()).toSp()
+        }
+        defaultTitleStyle.copy(fontSize = expandedTitleSize, lineHeight = lineHeight)
+    } else defaultTitleStyle
+    val fraction = state?.collapsedFraction ?: 0f
+    val progress = if (large) CouiCollapsingAppBarDefaults.titleEasing.transform(fraction) else 0f
+    val scale = if (large) {
+        val collapsedScale = with(density) {
+            val collapsedPixels = if (collapsedTitleSize == TextUnit.Unspecified)
+                CouiCollapsingAppBarDefaults.collapsedTitleSize.toPx() else collapsedTitleSize.toPx()
+            collapsedPixels / titleStyle.fontSize.toPx()
+        }
+        1f + (collapsedScale - 1f) * progress
+    } else 1f
+    Layout(modifier = Modifier.windowInsetsPadding(windowInsets).then(modifier), content = {
         Box {
             CompositionLocalProvider(LocalCouiToolbarContentColor provides colors.navigationIconColor) {
                 ProvideCouiContent(color = colors.navigationIconColor, content = navigationIcon)
@@ -161,8 +173,13 @@ private fun AppBarLayout(
                 ProvideCouiContent(color = colors.actionIconColor) { actions() }
             }
         }
-        Box(Modifier.semantics { heading() }) {
-            ProvideCouiContent(color = titleStyle.color.takeOrElse { colors.titleColor }, textStyle = titleStyle,
+        Box(Modifier.semantics { heading() }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            transformOrigin = TransformOrigin(if (direction == LayoutDirection.Rtl) 1f else 0f, 0f)
+            clip = true
+        }) {
+            ProvideCouiContent(color = colors.titleColor, textStyle = titleStyle.copy(color = colors.titleColor),
                 mergeTextStyle = false, content = title)
         }
     }) { nodes, constraints ->
@@ -174,25 +191,17 @@ private fun AppBarLayout(
         val offset = (state?.offsetPx ?: 0f).coerceIn(0f, range.toFloat())
         val height = constraints.constrainHeight((expanded - offset).roundToInt())
         val toolbarHeight = if (large) minOf(collapsed, height) else height
-        val padding = CouiTopAppBarDefaults.horizontalPadding.roundToPx().coerceAtMost(width / 2)
+        val horizontalPadding = if (centerTitle) 16.dp else CouiTopAppBarDefaults.horizontalPadding
+        val padding = horizontalPadding.roundToPx().coerceAtMost(width / 2)
         val gap = CouiTopAppBarDefaults.titleGap.roundToPx()
         val slotWidth = (width - 2 * padding).coerceAtLeast(0)
         val navigation = nodes[0].measure(Constraints(maxWidth = slotWidth, maxHeight = toolbarHeight))
         val action = nodes[1].measure(Constraints(maxWidth = slotWidth - navigation.width, maxHeight = toolbarHeight))
-        val hasNavigationIcon = navigation.width > 0
-        val progress = if (large)
-            CouiCollapsingAppBarDefaults.titleEasing.transform(state?.collapsedFraction ?: 0f) else 0f
-        val scale = if (large) {
-            val targetSize = if (collapsedSize != TextUnit.Unspecified) collapsedSize
-                else if (hasNavigationIcon) compactTitleStyle.fontSize else CouiTopAppBarDefaults.titleOnlyCollapsedSize
-            val collapsedScale = with(density) { targetSize.toPx() / titleStyle.fontSize.toPx() }
-            if (useCollapsedStyle) collapsedScale else 1f + (collapsedScale - 1f) * progress
-        } else 1f
-        val compactStart = if (large && !hasNavigationIcon) CouiCollapsingAppBarDefaults.titleOnlyStart.toPx()
-            else (padding + navigation.width + if (hasNavigationIcon) gap else 0).toFloat()
+        val compactStart = if (large && navigation.width == 0) CouiCollapsingAppBarDefaults.titleOnlyStart.toPx()
+            else (padding + navigation.width + if (navigation.width > 0) gap else 0).toFloat()
         val compactEnd = padding + action.width + if (action.width > 0) gap else 0
         val expandedStart = CouiTopAppBarDefaults.expandedTitleStart.toPx()
-        val curvedTitle = large && hasNavigationIcon
+        val curvedTitle = large && navigation.width > 0
         // 弧线偏移在两端的位置与变化率均为零，保留标题原有的起步和收尾节奏。
         val arcEnvelope = progress * (1f - progress)
         val arcOffset = if (curvedTitle) 0.8f * arcEnvelope * arcEnvelope else 0f
@@ -202,9 +211,9 @@ private fun AppBarLayout(
         val end = if (large && action.width == 0) CouiCollapsingAppBarDefaults.titleOnlyStart.toPx()
             else compactEnd.toFloat()
         // 用缩放后的可见宽度限制标题，避免收起时覆盖导航或操作按钮。
-        val titleWidth = ((width - start - end).coerceAtLeast(0f) / scale).roundToInt()
+        val titleInsets = if (centerTitle) 2f * maxOf(start, end) else start + end
+        val titleWidth = ((width - titleInsets).coerceAtLeast(0f) / scale).roundToInt()
         val titleNode = nodes[2].measure(Constraints(maxWidth = titleWidth, maxHeight = (height / scale).toInt()))
-        val titleOrigin = TransformOrigin(if (layoutDirection == LayoutDirection.Rtl) 1f else 0f, 0f)
         layout(width, height) {
             val navigationY = (toolbarHeight - navigation.height) / 2
             navigation.placeRelative(padding, navigationY, zIndex = 1f)
@@ -220,33 +229,10 @@ private fun AppBarLayout(
                     expandedY + (range + collapsedY - expandedY) * progress - offset
                 }
             } else (height - titleNode.height) / 2f
-            titleNode.placeRelativeWithLayer(start.roundToInt(),
+            val titleX = if (centerTitle) (width - titleNode.width) / 2 else start.roundToInt()
+            titleNode.placeRelative(titleX,
                 (if (curvedTitle) titleY.coerceAtLeast(0f) else
-                    titleY.coerceIn(0f, (height - titleNode.height * scale).coerceAtLeast(0f))).roundToInt()) {
-                scaleX = scale
-                scaleY = scale
-                transformOrigin = titleOrigin
-                clip = true
-            }
+                    titleY.coerceIn(0f, (height - titleNode.height * scale).coerceAtLeast(0f))).roundToInt())
         }
     }
-}
-
-private fun TextStyle.withTitleOverrides(
-    overrides: TextStyle,
-    density: Density,
-    defaultFamily: FontFamily?,
-): TextStyle {
-    val size = overrides.fontSize
-    val resized = if (size == TextUnit.Unspecified || size == fontSize) this else {
-        val resizedLineHeight = with(density) { (lineHeight.toPx() * size.toPx() / fontSize.toPx()).toSp() }
-        copy(fontSize = size, lineHeight = resizedLineHeight)
-    }
-    if (overrides == TextStyle.Default) return resized
-    // 已加载的 Typeface 固定了字重和斜体。单独改这两项时，交给 Compose 重新解析字体。
-    val family = if (overrides.fontFamily == null && fontFamily is LoadedFontFamily &&
-        (overrides.fontWeight != null || overrides.fontStyle != null)) FontFamily.SansSerif else overrides.fontFamily
-    // Compose 解析新字体时会应用系统字重补偿，传入未补偿的默认字重。
-    val weight = overrides.fontWeight ?: if (family != null && fontFamily == defaultFamily) FontWeight.Bold else null
-    return resized.merge(overrides.copy(fontSize = TextUnit.Unspecified, fontFamily = family, fontWeight = weight))
 }

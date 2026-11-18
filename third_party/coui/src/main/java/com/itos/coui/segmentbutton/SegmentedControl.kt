@@ -1,7 +1,10 @@
 package com.itos.coui.segmentbutton
 
 import android.graphics.Paint
+import android.view.ViewConfiguration
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.rememberSplineBasedDecay
+import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -56,10 +59,13 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -105,7 +111,7 @@ import kotlin.math.roundToInt
 /**
  * 受控胶囊分段选择器。默认在拖过新项目时提交，commitOnRelease 仅在有效 UP 后提交草稿。
  * backdrop 为空时使用普通填色，适合 Group；传入源时使用透明模糊，适合直接放在页面或多色背景上。
- * 源须是不含本控件的不透明 SDR 兄弟背景节点。containerColor 只用于普通填色，indicatorColor 用于两种外观。
+ * 源须是不含本控件的不透明 SDR 兄弟背景节点。containerColor 用于普通填色，containerMaterial 用于透明模糊。
  * renderer 仅用于透明模糊，须逐节点独立创建；宿主可在 remember 工厂中捕获构造失败后决定是否进入组件。
  * small 使用 32dp/2dp 紧凑预设；普通预设为 40dp/4dp。
  * Modifier 可覆盖尺寸，指示器、采样和输入均使用实际约束。取消不新增提交，已即时提交的选择由宿主保留。
@@ -126,11 +132,24 @@ fun SegmentedControl(
     textStyle: TextStyle = CouiSegmentedControlDefaults.textStyle(),
     containerColor: Color = CouiSegmentedControlDefaults.containerColor(dark),
     indicatorColor: Color = CouiSegmentedControlDefaults.indicatorColor(dark),
-    renderer: CouiFloatingRenderer? = if (backdrop != null) remember { CouiFloatingRenderer.standalone() } else null,
+    // SleepDown may provide its own shell or reuse only the indicator in the HD navigation pill.
+    containerSurfaceEnabled: Boolean = true,
+    surfaceModifier: Modifier? = null,
+    renderer: CouiFloatingRenderer? = if (backdrop != null && containerSurfaceEnabled)
+        remember { CouiFloatingRenderer.standalone() } else null,
+    // Custom material owns only drawing; the rail still owns geometry, input and selection.
+    indicatorModifier: Modifier? = null,
+    indicatorPressScale: (Float) -> Float = { it },
+    flingOnRelease: Boolean = false,
+    containerMaterial: com.itos.coui.effect.CouiFloatingMaterial? = null,
 ) {
     require(labels.isNotEmpty() && selectedIndex in labels.indices) { "分段标签不能为空，选中下标必须在范围内" }
-    require(backdrop == null || renderer != null) { "透明模糊需要独立的单主体 renderer" }
+    val floating = containerSurfaceEnabled && backdrop != null
+    require(!floating || renderer != null) { "透明模糊需要独立的单主体 renderer" }
     val density = LocalDensity.current
+    val context = LocalContext.current
+    val flingDecay = if (commitOnRelease && flingOnRelease) rememberSplineBasedDecay<Float>() else null
+    val minimumFlingVelocity = remember(context) { ViewConfiguration.get(context).scaledMinimumFlingVelocity }
     val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val current = rememberUpdatedState(selectedIndex)
     val submit = rememberUpdatedState(onSelected)
@@ -139,20 +158,20 @@ fun SegmentedControl(
     var lightCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
     var inputCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
     val motion = remember { CouiSegmentMotion() }
-    val touch = rememberCouiTouchMotion(enabled)
+    val touch = rememberCouiTouchMotion(enabled && containerSurfaceEnabled)
     val press = rememberCouiPressMotion()
     val indicatorPress = rememberCouiPressMotion()
     val labelPresses = labels.indices.map { key(it) { rememberCouiPressMotion() } }
-    val contourEnabled = backdrop != null && LocalCouiContourGlowEnabled.current
+    val contourEnabled = floating && LocalCouiContourGlowEnabled.current
     val contour = remember(contourEnabled) { if (contourEnabled) CouiContour(style = CouiContourStyle.Button) else null }
     val edgePaint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }
     val indicatorShape = remember { CouiShape(999.dp, 2f) }
     val indicatorDrawing = remember(density, rtl) { SegmentIndicatorDrawing() }
-    val contentLayer = if (backdrop != null) rememberGraphicsLayer() else null
-    val material = remember(dark) { CouiSegmentedControlDefaults.material(dark) }
+    val contentLayer = if (floating) rememberGraphicsLayer() else null
+    val material = containerMaterial ?: remember(dark) { CouiSegmentedControlDefaults.material(dark) }
     val labelColor = textStyle.color.takeOrElse { CouiTheme.colorSchemeFor(dark).onSurface }
     val shadow = remember { CouiFloatingShadow(0f, Color.Transparent, 0f, 0f, 0f, Color.Transparent, Rect.Zero, 0f) }
-    val (lightInput, light) = if (backdrop != null) {
+    val (lightInput, light) = if (floating || containerSurfaceEnabled && surfaceModifier != null) {
         rememberCouiSpotlight(enabled, SpotlightPreset.OpaqueMedium2, dark,
             noise = CouiSegmentedControlDefaults.spotlightNoise(dark),
             dither = CouiSegmentedControlDefaults.spotlightDither(dark),
@@ -195,8 +214,8 @@ fun SegmentedControl(
         }
         LaunchedEffect(session.preview, geometry) { motion.select(session.preview, geometry, density.density) }
         var bounds by remember { mutableStateOf(IntSize.Zero) }
-        val surface = if (backdrop != null) {
-            Modifier.couiFloatingSurface(backdrop, checkNotNull(renderer), material, shadow, CouiCapsuleShape,
+        val surface = if (floating) {
+            Modifier.couiFloatingSurface(checkNotNull(backdrop), checkNotNull(renderer), material, shadow, CouiCapsuleShape,
                 checkNotNull(contentLayer), contourEnabled, foregroundComposition = true, beforeContent = { clip ->
                     withTransform({
                         translate(touch.translationX.value, touch.translationY.value)
@@ -204,7 +223,7 @@ fun SegmentedControl(
                             touch.scaleY.value + press.scale.value - 1f, center)
                     }) {
                         clipPath(clip) {
-                            drawSegmentIndicator(motion.rect(geometry, indicatorPress.scale.value), geometry.height,
+                            drawSegmentIndicator(motion.rect(geometry, indicatorPressScale(indicatorPress.scale.value)), geometry.height,
                                 indicatorShape, indicatorDrawing, contour, edgePaint, dark, indicatorColor)
                             // 直接混合已绘制材质，不能先写进透明内容层。
                             light?.invoke(this)
@@ -230,49 +249,66 @@ fun SegmentedControl(
             val content = if (contentLayer != null) {
                 Modifier.drawWithContent { contentLayer.record { this@drawWithContent.drawContent() } }
             } else {
-                Modifier.drawWithCache {
+                (if (containerSurfaceEnabled) surfaceModifier ?: Modifier else Modifier).drawWithCache {
                     val background = Path().apply { addOutline(indicatorShape.createOutline(size, layoutDirection, this@drawWithCache)) }
                     onDrawWithContent {
                         // 原厂 Path 分支的容器裁剪持续覆盖指示器及其径向投影。
                         clipPath(background) {
-                            drawRect(containerColor)
-                            drawSegmentIndicator(motion.rect(geometry, indicatorPress.scale.value), geometry.height,
+                            if (containerSurfaceEnabled && surfaceModifier == null) drawRect(containerColor)
+                            if (indicatorModifier == null) drawSegmentIndicator(
+                                motion.rect(geometry, indicatorPressScale(indicatorPress.scale.value)), geometry.height,
                                 indicatorShape, indicatorDrawing, null, edgePaint, dark, indicatorColor)
+                            light?.invoke(this)
                         }
                         drawContent()
                     }
                 }
             }
             Box(Modifier.fillMaxSize().graphicsLayer {
-                translationX = touch.translationX.value; translationY = touch.translationY.value
-                scaleX = touch.scaleX.value + press.scale.value - 1f
-                scaleY = touch.scaleY.value + press.scale.value - 1f
+                if (containerSurfaceEnabled) {
+                    translationX = touch.translationX.value; translationY = touch.translationY.value
+                    scaleX = touch.scaleX.value + press.scale.value - 1f
+                    scaleY = touch.scaleY.value + press.scale.value - 1f
+                }
             }.onGloballyPositioned { lightCoordinates = it }
-                .then(content).clip(if (backdrop != null) CouiCapsuleShape else indicatorShape)) {
+                .then(content).clip(if (floating) CouiCapsuleShape else indicatorShape)) {
+                if (indicatorModifier != null) {
+                    Box(Modifier.layout { measurable, constraints ->
+                        val rect = motion.rect(geometry, indicatorPressScale(indicatorPress.scale.value))
+                        val child = measurable.measure(Constraints.fixed(
+                            rect.width.roundToInt().coerceAtLeast(0), rect.height.roundToInt().coerceAtLeast(0)))
+                        layout(constraints.maxWidth, constraints.maxHeight) {
+                            child.place(rect.left.roundToInt(), rect.top.roundToInt())
+                        }
+                    }.then(indicatorModifier))
+                }
                 Row(Modifier.fillMaxSize().padding(horizontal = with(density) { padding.toDp() })
                     .onGloballyPositioned { inputCoordinates = it }
-                    .pointerInput(geometry, labels, enabled, commitOnRelease) {
+                    .pointerInput(geometry, labels, enabled, commitOnRelease, containerSurfaceEnabled, flingDecay) {
                         if (!enabled) return@pointerInput
                         awaitEachGesture {
                             val down = awaitFirstDown()
                             val coordinates = inputCoordinates?.takeIf { it.isAttached } ?: return@awaitEachGesture
                             val start = coordinates.localToWindow(down.position)
                             // 输入只有一个 owner，自身消费横拖不会误触发公共观察器的“父级接管”。
-                            touch.begin(start, bounds)
-                            press.press(bounds)
+                            if (containerSurfaceEnabled) {
+                                touch.begin(start, bounds)
+                                press.press(bounds)
+                            }
                             session.begin(current.value)
                             val downPosition = down.position + Offset(padding.toFloat(), 0f)
-                            val indicator = motion.rect(geometry, indicatorPress.scale.value).inflate(10f)
-                            val dragging = geometry.hit(downPosition.x) == current.value || indicator.contains(downPosition)
+                            val indicator = motion.rect(geometry, indicatorPressScale(indicatorPress.scale.value)).inflate(10f)
+                            val startTab = geometry.hit(downPosition.x)
+                            var dragging = startTab == current.value || indicator.contains(downPosition)
+                            val indicatorSize = IntSize(motion.indicatorWidth.roundToInt(), geometry.indicatorHeight.roundToInt())
                             if (dragging) {
                                 motion.beginDrag()
-                                indicatorPress.press(IntSize(motion.indicatorWidth.roundToInt(), geometry.indicatorHeight.roundToInt()))
+                                indicatorPress.press(indicatorSize)
                             }
-                            var pressedLabel = geometry.hit(downPosition.x)
+                            var pressedLabel = startTab
                             pressedLabel?.let { labelPresses[it].press(IntSize(geometry.widths[it], geometry.indicatorHeight.roundToInt())) }
                             // 原厂只在拖动时从每项两侧扣掉切换距离，普通点按使用完整项目。
                             val switchDistance = CouiSegmentedControlDefaults.switchDistance.toPx().toInt().toFloat()
-                            val hitInset = if (dragging) switchDistance else 0f
                             var rubberOrigin = down.position.x
                             var ownsDrag = false
                             var completed = false
@@ -289,7 +325,14 @@ fun SegmentedControl(
                                     if (change.isConsumed) break
                                     if (!ownsDrag) {
                                         if (abs(delta.y) > viewConfiguration.touchSlop && abs(delta.y) > abs(delta.x)) break
-                                        ownsDrag = dragging && change.pressed && abs(delta.x) > viewConfiguration.touchSlop
+                                        // The HD rail previews from either tab and commits only on UP.
+                                        ownsDrag = change.pressed && abs(delta.x) > viewConfiguration.touchSlop &&
+                                            (dragging || commitOnRelease && startTab != null)
+                                        if (ownsDrag && !dragging) {
+                                            dragging = true
+                                            motion.beginDrag()
+                                            indicatorPress.press(indicatorSize)
+                                        }
                                     }
                                     if (ownsDrag) {
                                         // 沿底栏在 Initial 阶段接管；已开始滑选后，纵向偏移不再交回页面。
@@ -299,8 +342,17 @@ fun SegmentedControl(
                                         if (awaitPointerEvent(pass).changes.any { it.id == down.id && it.isConsumed }) break
                                     }
                                     tracker.add(change, coordinates)
-                                    if (change.pressed) touch.move(windowPosition)
-                                    val target = geometry.hit(change.position.x + padding, hitInset)
+                                    if (change.pressed && containerSurfaceEnabled) touch.move(windowPosition)
+                                    val x = change.position.x + padding
+                                    val hitInset = if (dragging && (!commitOnRelease || ownsDrag)) switchDistance else 0f
+                                    val target = if (commitOnRelease && ownsDrag) {
+                                        val slop = viewConfiguration.touchSlop
+                                        if (change.position.y in -slop..(size.height + slop)) {
+                                            geometry.hit(x, hitInset) ?: if (x < geometry.padding || x >= geometry.width - geometry.padding) {
+                                                if ((x < geometry.width / 2f) != rtl) 0 else labels.lastIndex
+                                            } else null
+                                        } else null
+                                    } else geometry.hit(x, hitInset)
                                     if (dragging && change.pressed) {
                                         if (target != null && target != session.preview) {
                                             session.select(target, commitOnRelease) { submit.value(it) }
@@ -318,8 +370,16 @@ fun SegmentedControl(
                                         pressedLabel = target
                                     }
                                     if (!change.pressed) {
-                                        if (target != null) session.select(target, commitOnRelease) { submit.value(it) }
-                                        completed = target != null
+                                        val slop = viewConfiguration.touchSlop
+                                        val releaseTarget = if (ownsDrag && flingDecay != null &&
+                                            change.position.y in -slop..(size.height + slop)) {
+                                            val velocity = tracker.velocityPixelsPerSecond()
+                                            val end = if (abs(velocity.x) >= minimumFlingVelocity && abs(velocity.x) > abs(velocity.y))
+                                                flingDecay.calculateTargetValue(x, velocity.x) else x
+                                            geometry.hit(end) ?: if ((end < geometry.width / 2f) != rtl) 0 else labels.lastIndex
+                                        } else target
+                                        if (releaseTarget != null) session.select(releaseTarget, commitOnRelease) { submit.value(it) }
+                                        completed = releaseTarget != null
                                         touch.release(tracker.releaseVelocity())
                                         change.consume()
                                         break

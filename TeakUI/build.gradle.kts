@@ -43,7 +43,7 @@ dependencies {
     api(libs.miuix.icons)
     api(libs.kyant.shapes)
     api(project(":third_party:coui"))
-    api(project(":third_party:coui-icons"))
+    // 图标已并入 coui-kit
 
     implementation(libs.coroutines.android)
     implementation(libs.androidx.activity.compose)

@@ -28,6 +28,8 @@ import androidx.compose.ui.platform.LocalDensity
 import com.itos.coui.theme.CouiTheme
 import com.itos.coui.theme.ProvideCouiContent
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.itos.coui.backdrop.CouiBackdrop
@@ -67,6 +69,11 @@ fun Fab(
     shadow: CouiFloatingShadow? = null,
     foregroundComposition: Boolean = false,
     contentColor: Color = CouiFabDefaults.contentColor,
+    enabled: Boolean = true,
+    spotlightPreset: SpotlightPreset = SpotlightPreset.OpaqueSmall1,
+    spotlightColor: Color = Color.White,
+    appearanceOffset: () -> Offset = { Offset.Zero },
+    contentLabel: String? = null,
     content: @Composable () -> Unit,
 ) {
     val contour = LocalCouiContourGlowEnabled.current
@@ -76,13 +83,14 @@ fun Fab(
     val resolvedMaterial = material ?: CouiFabDefaults.material(colors.accent, dark)
     val resolvedShadow = shadow ?: CouiFabDefaults.shadow(resolvedMaterial.firstColor, density, contour)
     val contentLayer = rememberGraphicsLayer()
-    val motion = rememberCouiTouchMotion(true)
+    val motion = rememberCouiTouchMotion(enabled)
     val press = rememberCouiPressMotion()
     val interactionSource = remember { MutableInteractionSource() }
     val (lightInput, drawLight) = rememberCouiSpotlight(
-        interactive = true,
-        preset = SpotlightPreset.OpaqueSmall1,
+        interactive = enabled,
+        preset = spotlightPreset,
         dark = dark,
+        color = spotlightColor,
     )
     var boundsSize by remember { mutableStateOf(IntSize.Zero) }
     Box(
@@ -90,9 +98,10 @@ fun Fab(
             .couiFloatingSurface(backdrop, renderer, resolvedMaterial, resolvedShadow, shape,
                 contentLayer, contour, foregroundComposition = foregroundComposition) {
                 CouiFloatingSurface(
-                    Rect(Offset(motion.translationX.value, motion.translationY.value),
+                    Rect(appearanceOffset() + Offset(motion.translationX.value, motion.translationY.value),
                         Size(boundsSize.width.toFloat(), boundsSize.height.toFloat())),
-                    motion.scaleX.value + press.scale.value - 1f, motion.scaleY.value + press.scale.value - 1f,
+                    motion.scaleX.value + press.scale.value - 1f,
+                    motion.scaleY.value + press.scale.value - 1f,
                     cornerWeight = couiShape?.cornerWeight ?: 2f,
                     cornerRadius = couiShape?.radius?.value?.times(density),
                 )
@@ -100,18 +109,21 @@ fun Fab(
     ) {
         Box(
             Modifier.fillMaxSize().graphicsLayer {
-                translationX = motion.translationX.value
-                translationY = motion.translationY.value
+                val offset = appearanceOffset()
+                translationX = offset.x + motion.translationX.value
+                translationY = offset.y + motion.translationY.value
                 scaleX = motion.scaleX.value + press.scale.value - 1f
                 scaleY = motion.scaleY.value + press.scale.value - 1f
-            }.couiTouchMotion(motion, true, cancelOnConsumedMove = false, consumeDrag = true)
-                .couiPressMotion(press).then(lightInput)
+            }.couiTouchMotion(motion, enabled, cancelOnConsumedMove = false, consumeDrag = true)
+                .couiPressMotion(press, enabled).then(lightInput)
                 .drawWithContent { contentLayer.record { this@drawWithContent.drawContent() } }
                 .clip(shape).drawBehind { drawLight?.invoke(this) }
-                .couiFabFeedback(dark, interactionSource)
-                .clickable(
+                .then(if (enabled && contentLabel != null) Modifier.semantics {
+                    contentDescription = contentLabel
+                } else Modifier)
+                .then(if (enabled) Modifier.couiFabFeedback(dark, interactionSource).clickable(
                     interactionSource = interactionSource, indication = null, role = Role.Button, onClick = onClick,
-                ),
+                ) else Modifier),
             contentAlignment = Alignment.Center,
         ) {
             ProvideCouiContent(color = contentColor, content = content)

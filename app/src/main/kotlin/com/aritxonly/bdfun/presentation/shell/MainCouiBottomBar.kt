@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.unit.dp
 import com.aritxonly.teak.common.coui.TeakCouiBarItem
 import com.aritxonly.teak.common.coui.TeakCouiBottomBar
 import com.itos.coui.backdrop.CouiBackdrop
@@ -28,7 +29,7 @@ internal fun BoxScope.MainCouiBottomBar(
 ) {
     if (destinations.isEmpty()) return
     // 与 demo 一致：绘制器先建、失败就别用库底栏（不让首次绘制抛异常闪退）。
-    val renderer = remember { runCatching { CouiFloatingRenderer() }.getOrNull() } ?: return
+    val renderer = remember { runCatching { CouiFloatingRenderer.standalone() }.getOrNull() } ?: return
     val items = destinations.map { destination ->
         val glyph = couiTabGlyph(destination.key, destination.icon)
         TeakCouiBarItem(key = destination.key, label = destination.label, icon = glyph, selectedIcon = glyph)
@@ -40,14 +41,32 @@ internal fun BoxScope.MainCouiBottomBar(
             .fillMaxWidth()
             .drawWithContent { runCatching { drawContent() } },
     ) {
-        TeakCouiBottomBar(
-            items = items,
-            selectedKey = selectedKey,
-            onSelect = onSelect,
-            backdrop = backdrop,
-            renderer = renderer,
-            dark = dark,
-            onSearch = onSearch,
-        )
+        androidx.compose.foundation.layout.Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            TeakCouiBottomBar(
+                items = items,
+                selectedKey = selectedKey,
+                onSelect = onSelect,
+                backdrop = backdrop,
+                renderer = renderer,
+                dark = dark,
+                modifier = Modifier.weight(1f),
+            )
+            if (onSearch != null) {
+                com.itos.coui.floatingactionbutton.Fab(
+                    backdrop = backdrop,
+                    onClick = onSearch,
+                    dark = dark,
+                ) {
+                    androidx.compose.material3.Icon(
+                        com.itos.coui.icons.CouiIcons.Outlined.Search,
+                        contentDescription = "搜索",
+                    )
+                }
+            }
+        }
     }
 }

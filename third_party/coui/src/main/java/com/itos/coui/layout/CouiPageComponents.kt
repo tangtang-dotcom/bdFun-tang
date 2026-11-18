@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -79,18 +80,21 @@ fun Group(
     footer: String? = null,
     headerActions: @Composable RowScope.() -> Unit = {},
     colors: CouiPageColors = CouiPageDefaults.themeColors(),
+    horizontalMargin: androidx.compose.ui.unit.Dp = CouiPageDefaults.horizontalMargin,
+    topSpacing: androidx.compose.ui.unit.Dp? = null,
+    shape: Shape = CouiPageDefaults.shape,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val topSpacing = if (title.isNullOrEmpty()) CouiPageDefaults.groupSpacing else CouiPageDefaults.categoryTopSpacing
-    Column(modifier.fillMaxWidth().padding(top = topSpacing)) {
+    val groupTopSpacing = topSpacing ?: if (title.isNullOrEmpty()) CouiPageDefaults.groupSpacing else CouiPageDefaults.categoryTopSpacing
+    Column(modifier.fillMaxWidth().padding(top = groupTopSpacing)) {
         if (!title.isNullOrEmpty()) Row(Modifier.padding(horizontal = 32.dp, vertical = 8.dp).heightIn(min = 16.dp),
             verticalAlignment = Alignment.CenterVertically) {
             Text(text = title, kind = CouiTextKind.GroupTitle, color = colors.summary, modifier =
                 Modifier.weight(1f).semantics { heading() }, textAlign = TextAlign.Start)
             headerActions()
         }
-        Column(Modifier.padding(horizontal = CouiPageDefaults.horizontalMargin).fillMaxWidth()
-            .clip(CouiPageDefaults.shape).background(colors.card), content = content)
+        Column(Modifier.padding(horizontal = horizontalMargin).fillMaxWidth()
+            .clip(shape).background(colors.card), content = content)
         if (!footer.isNullOrEmpty()) Footer(text = footer, color = colors.summary)
     }
 }
@@ -112,7 +116,7 @@ fun Divider(modifier: Modifier = Modifier,
 @Composable
 fun Footer(modifier: Modifier = Modifier, text: String,
     color: Color = CouiTheme.colorScheme.onSurfaceVariant) {
-    Text(text = text, kind = CouiTextKind.GroupFooter, color = color, modifier =
+    Text(text = text, kind = CouiTextKind.Description, color = color, modifier =
         modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 8.dp), textAlign = TextAlign.Start)
 }
 

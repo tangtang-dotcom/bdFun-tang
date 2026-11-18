@@ -1,6 +1,5 @@
 package com.itos.coui.search
 
-import android.graphics.Typeface
 import android.os.Build
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -46,7 +45,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -61,7 +59,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.os.trace
 import com.itos.coui.backdrop.CouiBackdrop
 import com.itos.coui.backdrop.LocalCouiBackdrop
 import com.itos.coui.effect.CouiFloatingRenderer
@@ -80,7 +78,6 @@ import com.itos.coui.motion.couiPressMotion
 import com.itos.coui.motion.couiTouchMotion
 import com.itos.coui.motion.rememberCouiTouchMotion
 import com.itos.coui.text.CouiTextKind
-import com.itos.coui.text.couiTextStyle
 import com.itos.coui.text.rememberCouiTextStyle
 import com.itos.coui.topappbar.CouiTopAppBarButtonDefaults
 import com.itos.coui.topappbar.LocalCouiToolbarBackdrop
@@ -109,6 +106,7 @@ fun SearchBar(
     shadowProgress: Float = 0f,
     colors: CouiSearchBarColors = CouiSearchBarDefaults.colors(dark),
     enabled: Boolean = true,
+    onAction: (() -> Unit)? = null,
 ) {
     val density = LocalDensity.current
     // 设置的搜索位于 AppBarBlurOverlay 之后；采样完成渐进处理的背景，不包含标题/搜索。
@@ -116,17 +114,7 @@ fun SearchBar(
     val layoutDirection = LocalLayoutDirection.current
     val rtl = layoutDirection == LayoutDirection.Rtl
     val textStyle = rememberCouiTextStyle(CouiTextKind.Search)
-    val configuration = LocalConfiguration.current
-    val cancelStyle = remember(configuration, density) {
-        val fontScale = configuration.fontScale
-        val pixels = with(density) { 14.sp.toPx().roundToInt() }
-        val base = (pixels / fontScale).roundToInt()
-        val size = base * if (fontScale < 1.15f) 1f else 1.15f
-        val weight = 500
-        val typeface = Typeface.create(Typeface.create("sans-serif-medium", Typeface.NORMAL), weight, false)
-        val lineSpacing = if (Build.VERSION.SDK_INT >= 35) 1.2245f else 1.1f
-        couiTextStyle(typeface, weight, size, lineSpacing, includeFontPadding = true, density = density)
-    }
+    val cancelStyle = rememberCouiTextStyle(CouiTextKind.SearchCancel)
     val textMeasurer = rememberTextMeasurer()
     val cancelWidth = remember(cancelText, cancelStyle, density, layoutDirection, textMeasurer) { with(density) {
         (textMeasurer.measure(cancelText, cancelStyle, maxLines = 1).size.width +
@@ -138,13 +126,14 @@ fun SearchBar(
     val shape = CouiSearchBarDefaults.shape
     val bodyLayer = rememberGraphicsLayer()
     val cancelLayer = rememberGraphicsLayer()
-    val renderer = if (Build.VERSION.SDK_INT >= 34) remember { CouiFloatingRenderer.pair() } else null
+    val renderer = if (Build.VERSION.SDK_INT >= 34) remember {
+        trace("COUI Search.createRenderer") { CouiFloatingRenderer.pair() }
+    } else null
     val bodySource = remember { MutableInteractionSource() }
     val cancelSource = remember { MutableInteractionSource() }
     val press = rememberCouiPressMotion()
     val touch = rememberCouiTouchMotion(enabled && state.expanded && !state.running)
-    // 输入胶囊的跟手位移与宽度动画可同时运行。
-    val bodyTouch = rememberCouiTouchMotion(enabled)
+    val bodyTouch = rememberCouiTouchMotion(enabled && !state.expanded && !state.running)
     val bodyPress = rememberCouiPressMotion()
     val (bodyLightInput, bodyLight) = rememberCouiSpotlight(enabled, SpotlightPreset.OpaqueMedium2, dark)
     val (cancelLightInput, cancelLight) = rememberCouiSpotlight(enabled && state.expanded, SpotlightPreset.OpaqueMedium2, dark)
@@ -161,9 +150,16 @@ fun SearchBar(
             focus.clearFocus()
         }
     }
-    val cancelSearch = { if (enabled && state.expanded) { releaseInput(); onExpandedChange(false) } }
+    val cancelSearch = {
+        if (enabled && state.expanded) {
+            releaseInput()
+            if (onAction != null) onAction() else onExpandedChange(false)
+        }
+    }
     LaunchedEffect(state.expanded, enabled) {
-        if (enabled && state.expanded) { if (requester.requestFocus()) keyboard?.show() }
+        if (enabled && state.expanded) {
+            trace("COUI Search.requestIme") { if (requester.requestFocus()) keyboard?.show() }
+        }
         else releaseInput()
     }
     fun bodySurface(): CouiFloatingSurface {
@@ -193,13 +189,16 @@ fun SearchBar(
     var normalShadow by remember { mutableFloatStateOf(shadowProgress) }
     if (!state.active) SideEffect { normalShadow = shadowProgress }
     // 首页在搜索弹簧期间暂停滚动投影回调；不能用搜索主动折叠产生的 offset 提前点亮投影。
-    val retainedShadow = if (state.active) normalShadow else shadowProgress
-    val keepScrollShadow = if (state.active) retainedShadow >= 1f || (state.expanded && retainedShadow > .5f)
-        else retainedShadow > .5f
-    val drop = if (keepScrollShadow) retainedShadow.coerceIn(0f, 1f)
-        else ((state.widthProgress - .8f) / .2f).coerceIn(0f, 1f)
-    val baseShadow = CouiTopAppBarButtonDefaults.shadow(dark, true, density.density, contour, search = true, alphaScale = drop)
-    val shadow = baseShadow.copy(causticColor = baseShadow.causticColor.copy(alpha = baseShadow.causticColor.alpha * drop))
+    val shadow = remember(dark, density, contour) {
+        CouiTopAppBarButtonDefaults.shadow(dark, true, density.density, contour, search = true)
+    }
+    val cancelBlurEffects = if (Build.VERSION.SDK_INT >= 31) remember {
+        List(5) { step ->
+            val radius = CouiSearchBarDefaults.cancelContentBlurRadius * step / 4f
+            if (step == 0) null else android.graphics.RenderEffect.createBlurEffect(radius, radius,
+                android.graphics.Shader.TileMode.DECAL).asComposeRenderEffect()
+        }
+    } else null
     val surfaceModifier = if (Build.VERSION.SDK_INT >= 34 && renderer != null) Modifier.couiFloatingPair(
         surfaceBackdrop, renderer, listOf(CouiTopAppBarButtonDefaults.systemMaterial(dark, true).copy(index = 1,
             blurRadius = CouiSearchBarDefaults.blurRadius, extension = with(density) { 4.dp.roundToPx() }, themeTint = themeTint),
@@ -211,6 +210,12 @@ fun SearchBar(
         drawOrder = listOf(1, 0),
         // 双胶囊只叠前景，不以整块 Src 回填擦掉下方渐进背景或兄弟投影。
         foregroundComposition = true,
+        shadowAlpha = {
+            val retainedShadow = if (state.active) normalShadow else shadowProgress
+            val keepScrollShadow = if (state.active) retainedShadow >= 1f || (state.expanded && retainedShadow > .5f)
+                else retainedShadow > .5f
+            if (keepScrollShadow) retainedShadow else (state.widthProgress - .8f) / .2f
+        },
         beforeContent = { index, path ->
             val node = if (index == 0) bodySurface() else cancelSurface()
             val draw = if (index == 0) bodyLight else cancelLight
@@ -232,11 +237,13 @@ fun SearchBar(
             translationY = bodyTouch.translationY.value
             scaleX = node.scaleX
             scaleY = node.scaleY
-        }.couiTouchMotion(bodyTouch, enabled)
+        }.couiTouchMotion(bodyTouch, enabled && !state.expanded && !state.running)
             .couiPressMotion(bodyPress, enabled && !state.expanded && !state.running)
             .then(bodyLightInput).then(recordBody).clip(shape).couiToolbarFeedback(dark, bodySource, enabled && !state.expanded)
             .then(if (!state.expanded) Modifier.semantics { contentDescription = placeholder }
-                .clickable(bodySource, null, enabled = enabled, role = Role.Button) { onExpandedChange(true) } else Modifier)) {
+                .clickable(bodySource, null, enabled = enabled, role = Role.Button) {
+                    trace("COUI Search.expand") { onExpandedChange(true) }
+                } else Modifier)) {
             // 装饰也属于输入本体，完整胶囊的触摸与语义不能穿过 padding 命中下层取消。
             BasicTextField(query, { if (enabled && state.expanded) onQueryChange(it) }, Modifier.fillMaxSize().focusRequester(requester)
                 .onFocusChanged { ownsFocus = it.hasFocus }
@@ -289,12 +296,11 @@ fun SearchBar(
             .then(cancelLightInput).then(recordCancel).clip(shape).couiToolbarFeedback(dark, cancelSource, enabled && state.expanded)
             .couiMovingActionClick(cancelSource, enabled && state.expanded, state.running, cancelSearch),
             contentAlignment = Alignment.Center) {
-            val textAlpha = (foreground.alpha * 255f * state.cancelProgress.coerceIn(0f, 1f)).roundToInt() / 255f
-            val blur = (1f - state.cancelProgress).coerceAtLeast(0f) * CouiSearchBarDefaults.cancelContentBlurRadius
             BasicText(cancelText, Modifier.graphicsLayer {
-                renderEffect = if (blur > 0f) android.graphics.RenderEffect.createBlurEffect(blur, blur,
-                    android.graphics.Shader.TileMode.DECAL).asComposeRenderEffect() else null
-            }, style = cancelStyle.copy(color = foreground.copy(alpha = textAlpha)), maxLines = 1)
+                val progress = state.cancelProgress.coerceIn(0f, 1f)
+                alpha = progress
+                renderEffect = cancelBlurEffects?.get(((1f - progress) * 4f).roundToInt())
+            }, style = cancelStyle.copy(color = foreground), maxLines = 1)
         }
     }) { children, constraints ->
         val width = (constraints.maxWidth - (cancelWidth + gap) * state.widthProgress).roundToInt().coerceAtLeast(1)

@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
@@ -12,8 +13,17 @@ import com.itos.coui.shape.CouiShape
 import com.itos.coui.effect.CouiMaterialBlendMode
 import com.itos.coui.theme.CouiTheme
 
-/** 普通警告窗口的位置；大屏策略由宿主决定，不探测厂商私有设备特征。 */
+/** 普通警告窗口的位置。 */
 enum class CouiDialogPlacement { Bottom, Center }
+
+@Composable
+internal fun isWideDialogHost(): Boolean = LocalConfiguration.current.run {
+    maxOf(screenWidthDp, screenHeightDp) >= 840 && minOf(screenWidthDp, screenHeightDp) >= 480
+}
+
+@Composable
+internal fun adaptiveDialogPlacement(): CouiDialogPlacement =
+    if (isWideDialogHost()) CouiDialogPlacement.Center else CouiDialogPlacement.Bottom
 
 @Immutable
 data class CouiDialogColors(
@@ -31,7 +41,7 @@ data class CouiDialogColors(
 /**
  * 弹窗材质。
  *
- * 在 API 33 及以上，按窗口遮罩强度压暗宿主窗口源，再执行 Fast Kawase、亮度混色和 blendMode。
+ * 有宿主窗口源且 API 33 时，源先按项目 Fast Kawase 模糊，再执行亮度混色和 blendMode。
  * 缺少窗口源或平台不支持时明确拒绝，避免用不同的窗口高斯与 SrcOver 叠色冒充同一材质。
  */
 @Immutable
@@ -57,6 +67,7 @@ object CouiDialogDefaults {
     val maxWidth = 392.dp
     val maxHeight = 632.dp
     val landscapeMaxHeight = 306.dp
+    internal val wideCenterMaxHeight = 470.dp
     val horizontalMargin = 16.dp
     val bottomMargin = 32.dp
     internal val bottomMarginWithNavigationBar = 60.dp
@@ -71,6 +82,10 @@ object CouiDialogDefaults {
         // getEffectiveBottomMargin 的非正调整量仍回到基础留白。
         if (adjusted > 0) adjusted else base
     }
+
+    /** 全屏输入窗口直接占据导航区；IME 高度已含导航区，动画期间只补尚未覆盖的部分。 */
+    internal fun inputBottomPaddingPx(navigationBarHeight: Int, imeOffset: Float, density: Density): Float =
+        with(density) { bottomMargin.toPx() } + (navigationBarHeight - imeOffset).coerceAtLeast(0f)
     val contentPadding = 24.dp
     val titleTop = 24.dp
     val titleBottom = 6.dp

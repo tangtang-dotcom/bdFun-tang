@@ -13,6 +13,7 @@ import androidx.compose.foundation.gestures.stopScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,18 +46,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
@@ -77,6 +82,8 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
+import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.unit.toOffset
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.window.SecureFlagPolicy
@@ -127,6 +134,8 @@ data class CouiMenuItem<T>(
     val dividerBefore: Boolean = false,
     val iconTint: Color? = null,
     val children: List<CouiMenuItem<T>> = emptyList(),
+    val iconPainter: Painter? = null,
+    val textColor: Color? = null,
 )
 
 /**
@@ -157,6 +166,8 @@ private fun <T> CouiMenuContent(
     headerText: String? = null,
     headerTextAlign: TextAlign = TextAlign.Center,
     themeTintEnabled: Boolean = true,
+    onDismissFinished: () -> Unit = {},
+    onMenuPositioned: (Rect) -> Unit = {},
 ) {
     require(items.all { item -> item.children.all { it.children.isEmpty() } }) {
         "Menu 只支持两级菜单"
@@ -165,11 +176,13 @@ private fun <T> CouiMenuContent(
         CouiMenuWithSubMenu(
             expanded, onDismissRequest, items, onItemClick, modifier, offset, properties,
             anchor, headerText, headerTextAlign, themeTintEnabled,
+            onDismissFinished, onMenuPositioned,
         )
         return
     }
     val selection = remember { CouiMenuSelection() }
     val motion = rememberCouiMenuMotion(expanded)
+    MenuDismissCompletion(expanded, motion, onDismissFinished)
     val touchMotion = rememberCouiTouchMotion(expanded)
     val menuShape = LocalCouiMenuStyle.current.shape
     val menuBackdrop = LocalCouiMenuBackdrop.current
@@ -197,6 +210,7 @@ private fun <T> CouiMenuContent(
         modifier = modifier.then(material.drawing).then(material.input)
             .widthIn(min = CouiMenuMinWidth, max = CouiMenuMaxWidth),
         properties = properties,
+        onMenuPositioned = onMenuPositioned,
     ) { scrollState ->
         CouiMenuList(items = items, expanded = expanded, onItemClick = onItemClick,
             selection = selection, scrollState = scrollState, headerText = headerText, headerTextAlign = headerTextAlign)
@@ -329,10 +343,11 @@ internal fun <T> CouiMenuList(
                                     break
                                 }
                                 val change = event.changes.firstOrNull { it.id == down.id }
-                                if (change == null || !change.pressed) {
-                                    if (change == null) pendingIndex = null
-                                    pointerPressed = false
-                                } else if (!canSlideSelect) {
+                                if (change == null) {
+                                    pendingIndex = null
+                                    break
+                                }
+                                if (!canSlideSelect) {
                                     // 厂商可滚动菜单超过 touch slop 后交给滚动, 不切换滑选项。
                                     if (scrollState.isScrollInProgress ||
                                         kotlin.math.abs(change.position.y - down.position.y) > viewConfiguration.touchSlop
@@ -360,6 +375,8 @@ internal fun <T> CouiMenuList(
                                     // 对应厂商 cancelLastItemSelect, 防止原项点击与滑选各提交一次。
                                     if (movedBetweenItems || pendingIndex == null) change.consume()
                                 }
+                                // UP 也核对最终命中，不能把最后一个 MOVE 的旧目标当作抬手位置。
+                                if (!change.pressed) pointerPressed = false
                             }
                             if (movedBetweenItems) {
                                 pendingIndex?.let { index -> currentOnItemClick(items[index]) }
@@ -388,6 +405,7 @@ internal fun <T> CouiMenuList(
             )
         }
         Box {
+            val indicator: @Composable () -> Unit = {
             key(pressedIndicatorSession) {
                 CouiMenuPressedIndicator(
                     itemTop = pressedIndicatorIndex?.let { index ->
@@ -401,6 +419,8 @@ internal fun <T> CouiMenuList(
                     }
                 )
             }
+            }
+            if (!LocalCouiMenuStyle.current.pressMaskOnForeground) indicator()
             Column {
                 items.forEachIndexed { index, item ->
                     if (item.dividerBefore) CouiMenuDivider()
@@ -418,6 +438,7 @@ internal fun <T> CouiMenuList(
                     )
                 }
             }
+            if (LocalCouiMenuStyle.current.pressMaskOnForeground) indicator()
         }
     }
 }
@@ -467,6 +488,7 @@ internal fun CouiMenuPopup(
     scrollState: ScrollState = rememberScrollState(),
     scrollBar: CouiMenuScrollBar = remember(scrollState) { CouiMenuScrollBar(scrollState) },
     scrollEnabled: Boolean = true,
+    onMenuPositioned: (Rect) -> Unit = {},
     content: @Composable ColumnScope.(ScrollState) -> Unit,
 ) {
     LaunchedEffect(expanded, scrollState) {
@@ -479,24 +501,37 @@ internal fun CouiMenuPopup(
     val shadow = rememberCouiMenuShadow(shape, motion, touchMotion, transitionProgress)
 
     val density = LocalDensity.current
-    val materialPositionProvider = remember(offset, density) { CouiMenuPositionProvider(offset, density) }
+    val hostView = LocalView.current
+    val placement = LocalCouiMenuStyle.current.placement
+    val contentBounds = LocalCouiMenuVisibleBounds.current
+    val materialPositionProvider = remember(offset, density, placement, hostView) {
+        CouiMenuPositionProvider(offset, density, placement) { couiMenuVisibleWindowBounds(hostView) }
+    }
     val touchOffsetY = with(LocalDensity.current) { offset.y.roundToPx() }
-    val positionProvider = remember(materialPositionProvider, motion, anchor, touchOffsetY) {
+    val positionProvider = remember(materialPositionProvider, motion, anchor, touchOffsetY, contentBounds) {
         CouiMenuMotionPositionProvider(
             materialPositionProvider, motion,
             anchorPosition = { anchor?.positionInWindow },
-            visibleWindowBounds = { anchor?.visibleWindowBounds },
+            visibleWindowBounds = { contentBounds?.invoke() ?: anchor?.visibleWindowBounds },
             touchOffsetY = touchOffsetY,
+            contentBounds = contentBounds,
         )
     }
     val currentOnOutsideRequest by rememberUpdatedState(onOutsideRequest)
-    val hostView = LocalView.current
+    val popupOrigin = positionProvider.popupOriginInHostWindow
+    val menuSize = positionProvider.menuSize
+    val menuPosition = positionProvider.menuPosition
+    SideEffect {
+        if (popupOrigin != null && menuSize != null) {
+            onMenuPositioned(Rect((popupOrigin + menuPosition).toOffset(), menuSize.toSize()))
+        }
+    }
     Popup(
         popupPositionProvider = positionProvider,
         onDismissRequest = onDismissRequest,
         properties = properties.withMenuInput(expanded),
     ) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier.fillMaxSize().onGloballyPositioned { coordinates ->
                 val hostOnScreen = IntArray(2)
                 val hostInWindow = IntArray(2)
@@ -511,6 +546,11 @@ internal fun CouiMenuPopup(
             }.then(rootModifier),
             contentAlignment = AbsoluteAlignment.TopLeft,
         ) {
+            val menuHeightLimit = if (placement == CouiMenuPlacement.Default && contentBounds == null) Modifier else {
+                val visibleHeight = (contentBounds?.invoke() ?: couiMenuVisibleWindowBounds(hostView))?.height
+                val available = minOf(maxHeight, visibleHeight?.let { with(density) { it.toDp() } } ?: maxHeight)
+                Modifier.heightIn(max = (available - 48.dp).coerceAtLeast(1.dp))
+            }
             // 背景是菜单的兄弟节点, 仅菜单外的按下命中它, 不截获菜单拖动。
             Spacer(
                 Modifier.matchParentSize().pointerInput(expanded, properties.dismissOnClickOutside) {
@@ -549,6 +589,7 @@ internal fun CouiMenuPopup(
                         .background(containerColor, shape)
                         .clip(shape)
                         .then(modifier)
+                        .then(menuHeightLimit)
                         .width(IntrinsicSize.Max)
                         .then(couiMenuScrollBar(scrollBar, expanded, scrollEnabled,
                             dark = LocalCouiMenuStyle.current.isDark,
@@ -612,7 +653,7 @@ private fun CouiMenuPressedIndicator(
 }
 
 /** 展开时保留调用方的输入配置; 收起动画保留窗口, 但立即释放触摸和焦点。 */
-private fun PopupProperties.withMenuInput(expanded: Boolean): PopupProperties {
+internal fun PopupProperties.withMenuInput(expanded: Boolean): PopupProperties {
     var flags = WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
     if (!expanded || !focusable) {
         flags = flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
@@ -636,8 +677,8 @@ private fun PopupProperties.withMenuInput(expanded: Boolean): PopupProperties {
         usePlatformDefaultWidth = false,
         windowType = windowType,
         windowToken = windowToken,
-        // 注：blurBehindRadius / scrimAlpha 是更高版本 androidx.compose.ui 的 PopupProperties 参数，
-        // 本仓库跟随 org.jetbrains.compose 1.12.2，这里省略；菜单自身的模糊由 COUI 材质绘制。
+        // blurBehindRadius = blurBehindRadius,
+
     )
 }
 
@@ -650,7 +691,7 @@ private fun <T> CouiMenuRow(
 ) {
     val clickInteractionSource = remember { MutableInteractionSource() }
     val selectedColor = LocalCouiMenuStyle.current.colors.primary
-    val onSurfaceColor = LocalCouiMenuStyle.current.colors.onSurface
+    val onSurfaceColor = item.textColor ?: LocalCouiMenuStyle.current.colors.onSurface
     val textColor = when {
         !item.enabled -> onSurfaceColor.copy(alpha = 0.38f)
         item.selected -> selectedColor
@@ -711,7 +752,12 @@ private fun <T> CouiMenuRow(
             )
             Spacer(modifier = Modifier.width(CouiMenuItemIconSpacing))
         }
-        item.icon?.let { icon ->
+        if (item.iconPainter != null) {
+            Icon(painter = item.iconPainter, contentDescription = null,
+                modifier = Modifier.size(CouiMenuItemIconSize),
+                tint = if (item.enabled) item.iconTint ?: textColor else textColor)
+            Spacer(Modifier.width(CouiMenuItemIconSpacing))
+        } else item.icon?.let { icon ->
             Icon(
                 imageVector = icon,
                 contentDescription = null,
@@ -774,6 +820,8 @@ fun <T> Menu(
     headerText: String? = null,
     headerTextAlign: TextAlign = TextAlign.Center,
     onSpotlightDiagnostic: ((SpotlightDiagnostic) -> Unit)? = null,
+    onDismissFinished: () -> Unit = {},
+    onMenuPositioned: (Rect) -> Unit = {},
 ) {
     CompositionLocalProvider(
         LocalCouiMenuStyle provides style,
@@ -782,6 +830,7 @@ fun <T> Menu(
         CouiMenuContent(
             expanded, onDismissRequest, items, onItemClick, modifier,
             offset, properties, anchor, headerText, headerTextAlign, style.themeTint.alpha > 0f,
+            onDismissFinished, onMenuPositioned,
         )
     }
 }

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.unit.LayoutDirection
 import com.itos.coui.theme.CouiTheme
+import com.itos.coui.theme.LocalCouiMaterialEnabled
 import com.itos.coui.backdrop.ProvideCouiBackdrop
 import com.itos.coui.backdrop.couiBackdrop
 import com.itos.coui.backdrop.rememberCouiBackdrop
@@ -56,13 +57,15 @@ fun Scaffold(
     containerColor: Color = CouiTheme.colorScheme.background,
     windowInsets: WindowInsets = WindowInsets.systemBars.union(WindowInsets.displayCutout),
     floatingActionButton: (@Composable BoxScope.() -> Unit)? = null,
+    isolateBodyBackdrop: Boolean = true,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    val backdrop = rememberCouiBackdrop()
+    val backdrop = rememberCouiBackdrop(isolateContent = isolateBodyBackdrop)
+    val materialEnabled = LocalCouiMaterialEnabled.current
     val remainingInsets = remember(windowInsets) { MutableWindowInsets(windowInsets) }
     val contentPadding = remember { ScaffoldPadding() }
-    val body: @Composable () -> Unit = remember(content, backdrop, containerColor) { {
-        Box(Modifier.fillMaxSize().couiBackdrop(backdrop).background(containerColor)) {
+    val body: @Composable () -> Unit = remember(content, backdrop, containerColor, materialEnabled) { {
+        Box(Modifier.fillMaxSize().then(if (materialEnabled) Modifier.couiBackdrop(backdrop) else Modifier).background(containerColor)) {
             content(contentPadding)
         }
     } }

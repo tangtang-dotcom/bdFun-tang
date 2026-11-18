@@ -31,13 +31,33 @@ enum class CouiShadowOutline { Oval, SmoothCapsule, RoundRect }
 /** 原 Skia 网格、A8 表与厂商 inverse clip 的公开 API 承载; 每个主体仅保留当前两路资源。 */
 @RequiresApi(34)
 class CouiShadowRenderer(surfaceCount: Int = 1) {
-    private val specifications = Array(4) { index ->
-        MeshSpecification.make(arrayOf(
-            MeshSpecification.Attribute(MeshSpecification.TYPE_FLOAT2, 0, "position"),
-            MeshSpecification.Attribute(MeshSpecification.TYPE_FLOAT3, 8, "shadow")), 20,
-            arrayOf(MeshSpecification.Varying(MeshSpecification.TYPE_FLOAT3, "shadow")),
-            ShadowVertexShader, shadowFragmentShader(fast = index < 2, oval = index % 2 == 0))
+    companion object {
+        private var meshUnavailable = false
+        // Each Mesh supplies its own uniforms. The compiled vertex/fragment layouts can be shared.
+        private val sharedSpecifications by lazy {
+            Array(4) { index ->
+                MeshSpecification.make(arrayOf(
+                    MeshSpecification.Attribute(MeshSpecification.TYPE_FLOAT2, 0, "position"),
+                    MeshSpecification.Attribute(MeshSpecification.TYPE_FLOAT3, 8, "shadow")), 20,
+                    arrayOf(MeshSpecification.Varying(MeshSpecification.TYPE_FLOAT3, "shadow")),
+                    ShadowVertexShader, shadowFragmentShader(fast = index < 2, oval = index % 2 == 0))
+            }
+        }
+
+        /** 宿主兼容入口：Mesh 初始化失败不能使导航或选择菜单退出进程。 */
+        @Synchronized
+        internal fun createOrNull(surfaceCount: Int = 1): CouiShadowRenderer? {
+            if (meshUnavailable) return null
+            return try { CouiShadowRenderer(surfaceCount) }
+            catch (failure: IllegalArgumentException) {
+                meshUnavailable = true
+                android.util.Log.w("SleepDownCOUI", "COUI Mesh shadow initialization failed; retaining component content", failure)
+                null
+            }
+        }
     }
+
+    private val specifications = sharedSpecifications
     private val lut = Bitmap.createBitmap(128, 1, Bitmap.Config.ALPHA_8).apply {
         val bytes = ByteBuffer.allocate(rowBytes)
         repeat(128) { i ->

@@ -134,8 +134,6 @@ fun NavigationBar(
     selectedColor: Color = (if (dark) Color.White else Color.Black).copy(alpha = 230f / 255f),
     unselectedColor: Color = (if (dark) Color.White else Color.Black).copy(alpha = 184f / 255f),
     onSelection: (Int) -> Unit,
-    // 宿主补丁：true 时材质用 SrcOver 只叠前景（不会有黑底，但会丢掉背景采样/模糊）。
-    foregroundComposition: Boolean = false,
 ) {
     require(items.isNotEmpty() && selectedIndex in items.indices)
     require(!leftVisible || (leftIcon != null && leftDescription != null)) {
@@ -160,9 +158,9 @@ fun NavigationBar(
     val contour = LocalCouiContourGlowEnabled.current
     val material = remember(dark, lightColor, themeTint) {
         CouiFloatingMaterial(
-            firstColor = if (dark) Color(0x80666666) else Color(0xB3666666),
+            firstColor = if (dark) Color(0x80666666) else Color(0xA3666666),
             firstBlendMode = if (dark) BlendMode.OVERLAY else BlendMode.COLOR_DODGE,
-            secondColor = if (dark) Color(0xB3262626) else Color(0x99F5F5F5),
+            secondColor = if (dark) Color(0xB3262626) else Color(0x80F0F0F0),
             edgeAlpha = if (dark) 0.8f else 0.25f,
             innerGlowAlpha = if (dark) 0.03f else 0.1f,
             lightColor = lightColor,
@@ -254,8 +252,7 @@ fun NavigationBar(
             Row(
                 modifier = Modifier.fillMaxWidth().height(56.dp)
                     .onGloballyPositioned { rowCoordinates = it }
-                    .couiFloatingSurfaces(backdrop, renderer, materials, shadows, shapes, contentLayers, contour,
-                    foregroundComposition = foregroundComposition) {
+                    .couiFloatingSurfaces(backdrop, renderer, materials, shadows, shapes, contentLayers, contour) {
                         val left = leftSurface()
                         val menu = menuSurface()
                         val right = rightSurface()

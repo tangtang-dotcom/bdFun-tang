@@ -13,7 +13,7 @@ import com.itos.coui.icons.CouiIcons
 @Composable
 internal fun couiTabGlyph(key: String, fallback: ImageVector): ImageVector = when (key) {
     "home" -> CouiIcons.Filled.Grid
-    "dynamics" -> CouiIcons.Filled.Album
+    "dynamics" -> CouiIcons.Components
     "mine" -> CouiIcons.Filled.UserCircle
     else -> fallback
 }

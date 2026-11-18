@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -58,7 +60,7 @@ fun Dialog(
     message: String? = null,
     dismissAction: CouiDialogAction? = null,
     neutralAction: CouiDialogAction? = null,
-    placement: CouiDialogPlacement = CouiDialogPlacement.Bottom,
+    placement: CouiDialogPlacement = adaptiveDialogPlacement(),
     colors: CouiDialogColors = CouiDialogDefaults.themeColors(dark),
     shape: Shape = CouiDialogDefaults.shape,
     cornerRadius: Dp = Dp.Unspecified,
@@ -66,9 +68,10 @@ fun Dialog(
     backdrop: CouiBackdrop? = null,
     properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
     visible: Boolean? = null,
+    onDismissFinished: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
-    CouiDialogWindow(modifier, onDismissRequest, colors, dark, placement, shape, cornerRadius, properties, material, backdrop, visible) {
+    CouiDialogWindow(modifier, onDismissRequest, colors, dark, placement, shape, cornerRadius, properties, material, backdrop, visible, onDismissFinished) {
         val configuration = LocalConfiguration.current
         var messageLines by remember(message) { mutableIntStateOf(1) }
         var stacked by remember { mutableIntStateOf(if (neutralAction != null) 1 else 0) }
@@ -76,13 +79,7 @@ fun Dialog(
         Column(Modifier.fillMaxWidth()) {
             // 对应正文/标题的滚动区与独立 buttonPanel；操作不随长文滚出窗口。
             Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) {
-                if (!title.isNullOrEmpty()) Box(Modifier.fillMaxWidth().padding(
-                    start = CouiDialogDefaults.contentPadding, end = CouiDialogDefaults.contentPadding,
-                    top = CouiDialogDefaults.titleTop, bottom = CouiDialogDefaults.titleBottom)) {
-                    DialogText(text = title, kind = DialogTextKind.Title, color = colors.title, modifier = Modifier.fillMaxWidth()
-                        .heightIn(max = CouiDialogDefaults.titleMaxHeight(configuration.screenHeightDp))
-                        .verticalScroll(rememberScrollState()))
-                }
+                if (!title.isNullOrEmpty()) DialogHeading(title, colors)
                 if (!message.isNullOrEmpty()) DialogText(text = message, kind = DialogTextKind.Message, color = colors.message, modifier =
                     Modifier.fillMaxWidth().padding(horizontal = CouiDialogDefaults.contentPadding)
                         .padding(top = if (title.isNullOrEmpty() && !tall) CouiDialogDefaults.messageTopWithoutTitle else 0.dp,
@@ -100,7 +97,40 @@ fun Dialog(
 }
 
 @Composable
-private fun DialogActions(confirm: CouiDialogAction, dismiss: CouiDialogAction?, neutral: CouiDialogAction?,
+fun DialogHeading(title: String, colors: CouiDialogColors = CouiDialogDefaults.themeColors(),
+    trailing: (@Composable () -> Unit)? = null) {
+    val titleHeight = CouiDialogDefaults.titleMaxHeight(LocalConfiguration.current.screenHeightDp)
+    Layout(modifier = Modifier.fillMaxWidth().padding(start = CouiDialogDefaults.contentPadding,
+        end = CouiDialogDefaults.contentPadding, top = CouiDialogDefaults.titleTop,
+        bottom = CouiDialogDefaults.titleBottom), content = {
+        DialogText(text = title, kind = DialogTextKind.Title, color = colors.title,
+            modifier = Modifier.heightIn(max = titleHeight).verticalScroll(rememberScrollState()))
+        if (trailing != null) Box { trailing() }
+    }) { measurables, constraints ->
+        val width = constraints.maxWidth
+        val action = measurables.getOrNull(1)?.measure(constraints.copy(minWidth = 0,
+            maxWidth = width / 2, minHeight = 0))
+        val inset = action?.width ?: 0
+        val titleWidth = width - 2 * inset
+        val heading = measurables[0].measure(constraints.copy(minWidth = titleWidth, maxWidth = titleWidth, minHeight = 0))
+        val height = constraints.constrainHeight(maxOf(heading.height, action?.height ?: 0))
+        layout(width, height) {
+            heading.placeRelative(inset, (height - heading.height) / 2)
+            action?.placeRelative(width - inset, (height - action.height) / 2)
+        }
+    }
+}
+
+@Composable
+fun DialogActionBar(confirmAction: CouiDialogAction, dismissAction: CouiDialogAction? = null,
+    neutralAction: CouiDialogAction? = null, dark: Boolean = com.itos.coui.theme.CouiTheme.isDark,
+    colors: CouiDialogColors = CouiDialogDefaults.themeColors(dark), material: Boolean = false,
+    modifier: Modifier = Modifier) {
+    Box(modifier) { DialogActions(confirmAction, dismissAction, neutralAction, colors, dark, material) { } }
+}
+
+@Composable
+internal fun DialogActions(confirm: CouiDialogAction, dismiss: CouiDialogAction?, neutral: CouiDialogAction?,
     colors: CouiDialogColors, dark: Boolean, material: Boolean, onStacked: (Boolean) -> Unit) {
     val horizontal = listOfNotNull(dismiss, neutral, confirm)
     val vertical = listOfNotNull(neutral, confirm, dismiss)

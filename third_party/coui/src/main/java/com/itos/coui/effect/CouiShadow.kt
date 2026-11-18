@@ -76,12 +76,12 @@ private data class ShadowElement(
 
 @RequiresApi(34)
 private class ShadowNode(var parameters: ShadowElement) : Modifier.Node(), DrawModifierNode {
-    private val renderer = CouiShadowRenderer()
+    private val renderer = CouiShadowRenderer.createOrNull()
 
     override fun ContentDrawScope.draw() {
         val (style, outline, radius, clipping) = parameters
         drawIntoCanvas { canvas ->
-            renderer.draw(
+            renderer?.draw(
                 canvas = canvas.nativeCanvas,
                 slot = 0,
                 width = size.width,

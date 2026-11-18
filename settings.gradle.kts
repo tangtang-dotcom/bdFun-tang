@@ -21,7 +21,7 @@ include(":app")
 include(":core:model")
 include(":TeakUI")
 include(":third_party:coui")
-include(":third_party:coui-icons")
+// 图标已并入 coui-kit（com.itos.coui.icons），不再单列模块
 include(":danmaku-engine")
 
 // Miuix 使用本地源码构建（Apache-2.0）。

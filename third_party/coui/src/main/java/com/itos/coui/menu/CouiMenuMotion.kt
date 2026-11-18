@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -47,6 +48,17 @@ internal fun rememberCouiMenuMotion(expanded: Boolean): CouiMenuMotion {
         }
     }
     return motion
+}
+
+/** 以实际菜单弹簧完成为交接点，快速重开会取消本次关闭回调。 */
+@Composable
+internal fun MenuDismissCompletion(expanded: Boolean, motion: CouiMenuMotion, onFinished: () -> Unit) {
+    var mounted by remember { mutableStateOf(expanded) }
+    val finished by rememberUpdatedState(onFinished)
+    LaunchedEffect(expanded, motion.visible) {
+        if (expanded) mounted = true
+        else if (mounted && !motion.visible) { mounted = false; finished() }
+    }
 }
 
 internal class CouiMenuMotion(private val inspecting: Boolean) {
@@ -112,6 +124,7 @@ internal class CouiMenuMotionPositionProvider(
     private val anchorPosition: () -> Offset?,
     private val visibleWindowBounds: () -> IntRect?,
     private val touchOffsetY: Int,
+    private val contentBounds: (() -> IntRect?)? = null,
 ) : PopupPositionProvider {
     var menuSize by mutableStateOf<IntSize?>(null)
     var popupOriginInHostWindow by mutableStateOf<IntOffset?>(null)
@@ -133,7 +146,7 @@ internal class CouiMenuMotionPositionProvider(
         val defaultPosition = delegate.calculatePosition(
             positioningAnchor, windowSize, layoutDirection, contentSize,
         )
-        val position = if (touchPosition != null) {
+        val candidate = if (touchPosition != null) {
             val visibleBounds = visibleWindowBounds() ?: IntRect(IntOffset.Zero, windowSize)
             val below = positioningAnchor.top + touchOffsetY
             val above = below - contentSize.height
@@ -148,6 +161,10 @@ internal class CouiMenuMotionPositionProvider(
         } else {
             defaultPosition
         }
+        val position = contentBounds?.invoke()?.let { frame ->
+            IntOffset(candidate.x.coerceIn(frame.left, (frame.right - contentSize.width).coerceAtLeast(frame.left)),
+                candidate.y.coerceIn(frame.top, (frame.bottom - contentSize.height).coerceAtLeast(frame.top)))
+        } ?: candidate
         val menuCenter = Offset(
             position.x + contentSize.width / 2f,
             position.y + contentSize.height / 2f,
