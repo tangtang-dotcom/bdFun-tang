@@ -34,12 +34,27 @@ internal data class BangumiRankUiState(
 )
 
 /**
- * 番剧页「排行榜」状态。
+ * 番剧/影视页「排行榜」状态。
  *
- * 目录是两个 index（番剧 1 / 国创 4），首屏只取前 3 个榜，其余等滚到再取，
- * 避免一次打十几个请求。单榜失败只影响那一节，不整页报错。
+ * 目录是若干 index（番剧 1 / 国创 4；影视 2/5/3/7），首屏只取前 3 个榜，
+ * 其余等滚到再取，避免一次打十几个请求。单榜失败只影响那一节，不整页报错。
  */
-internal class BangumiRankStateHolder(private val repository: PgcRankRepository) {
+/** 影视榜的一节：从某个 index 的榜单里挑一条，换成更直观的大类标题。 */
+internal data class BangumiRankSectionSpec(
+    val title: String,
+    val indexId: Int,
+    /** null 表示取该 index 的第一条榜；否则取标题包含该文案的榜。 */
+    val tabTitlePart: String? = null,
+)
+
+internal class BangumiRankStateHolder(
+    private val repository: PgcRankRepository,
+    private val indexIds: List<Int> = listOf(1, 4),
+    private val seasonTypes: List<Int> = listOf(1, 4),
+    private val mergedTitle: String = "热门动画榜",
+    /** 影视：按策划好的大类挑榜，避免细分榜过多或过少；番剧保持原有逐榜展开。 */
+    private val sectionSpecs: List<BangumiRankSectionSpec> = emptyList(),
+) {
 
     private val mutableState = MutableStateFlow(BangumiRankUiState())
     val state: StateFlow<BangumiRankUiState> = mutableState.asStateFlow()
@@ -122,29 +137,27 @@ internal class BangumiRankStateHolder(private val repository: PgcRankRepository)
         val current = token
         mutableState.update { it.copy(loading = true, error = null) }
         try {
-            val bangumi = repository.tabs(PGC_INDEX_BANGUMI)
-            val guochuang = repository.tabs(PGC_INDEX_GUOCHUANG)
+            val results = indexIds.map { repository.tabs(it) }
             if (current != token) return
 
-            val bangumiTabs = if (bangumi is Outcome.Success) bangumi.value else emptyList()
-            val guochuangTabs = if (guochuang is Outcome.Success) guochuang.value else emptyList()
-            val failure = when {
-                bangumi is Outcome.Failure -> bangumi.error
-                guochuang is Outcome.Failure -> guochuang.error
-                else -> null
+            val tabLists = results.map { result ->
+                if (result is Outcome.Success) result.value else emptyList()
             }
-            if (bangumiTabs.isEmpty() && guochuangTabs.isEmpty()) {
+            val failure = results.firstNotNullOfOrNull { result ->
+                (result as? Outcome.Failure)?.error
+            }
+            if (tabLists.all { it.isEmpty() }) {
                 mutableState.update {
                     it.copy(sections = emptyList(), error = failure?.readable() ?: "暂无榜单")
                 }
                 return
             }
-            mutableState.update { it.copy(sections = buildSections(bangumiTabs, guochuangTabs)) }
+            mutableState.update { it.copy(sections = buildSections(tabLists)) }
         } finally {
             if (current == token) mutableState.update { it.copy(loading = false) }
         }
 
-        // 大会员对照表：两个 season_type 各一次；拿不到就当没有会员内容，不影响榜单。
+        // 大会员对照表：每个 season_type 各一次；拿不到就当没有会员内容，不影响榜单。
         vipSeasons = loadVipSeasons()
         if (current != token) return
 
@@ -156,7 +169,7 @@ internal class BangumiRankStateHolder(private val repository: PgcRankRepository)
 
     private suspend fun loadVipSeasons(): Set<Long> {
         val result = HashSet<Long>()
-        listOf(PGC_SEASON_TYPE_BANGUMI, PGC_SEASON_TYPE_GUOCHUANG).forEach { seasonType ->
+        seasonTypes.forEach { seasonType ->
             when (val vip = repository.vipSeasons(seasonType)) {
                 is Outcome.Success -> result += vip.value
                 is Outcome.Failure -> Unit
@@ -165,27 +178,36 @@ internal class BangumiRankStateHolder(private val repository: PgcRankRepository)
         return result
     }
 
-    private fun buildSections(
-        bangumi: List<BangumiRankTab>,
-        guochuang: List<BangumiRankTab>,
-    ): List<BangumiRankSection> {
-        val result = ArrayList<BangumiRankSection>(bangumi.size + guochuang.size)
-        val hotBangumi = bangumi.firstOrNull()
-        val hotGuochuang = guochuang.firstOrNull()
-        if (hotBangumi != null || hotGuochuang != null) {
+    private fun buildSections(tabLists: List<List<BangumiRankTab>>): List<BangumiRankSection> {
+        if (sectionSpecs.isNotEmpty()) return buildSpecifiedSections(tabLists)
+        val result = ArrayList<BangumiRankSection>(tabLists.sumOf { it.size } + 1)
+        val hotTabs = tabLists.mapNotNull { it.firstOrNull() }
+        if (hotTabs.isNotEmpty()) {
             result += BangumiRankSection(
-                title = "热门动画榜",
-                tabs = listOfNotNull(hotBangumi, hotGuochuang),
+                title = mergedTitle,
+                tabs = hotTabs,
             )
         }
-        // 番剧和国创都有「搞笑/热血/奇幻」等同名榜；同名只保留先出现的那个，
+        // 各 index 都有「搞笑/热血/奇幻」等同名榜；同名只保留先出现的那个，
         // 否则页面上会出现第二个热血榜、奇幻榜、搞笑榜。
         val seen = HashSet<String>()
-        (bangumi.drop(1) + guochuang.drop(1)).forEach { tab ->
-            if (seen.add(tab.title)) result += BangumiRankSection(tab.title, listOf(tab))
+        tabLists.forEach { tabs ->
+            tabs.drop(1).forEach { tab ->
+                if (seen.add(tab.title)) result += BangumiRankSection(tab.title, listOf(tab))
+            }
         }
         return result
     }
+
+    /** 影视：按策划列表从各 index 挑榜；找不到就跳过，不整页失败。 */
+    private fun buildSpecifiedSections(tabLists: List<List<BangumiRankTab>>): List<BangumiRankSection> =
+        sectionSpecs.mapNotNull { spec ->
+            val listIndex = indexIds.indexOf(spec.indexId)
+            val tabs = tabLists.getOrNull(listIndex).orEmpty()
+            val tab = spec.tabTitlePart?.let { part -> tabs.firstOrNull { it.title.contains(part) } }
+                ?: tabs.firstOrNull()
+            tab?.let { BangumiRankSection(spec.title, listOf(it)) }
+        }
 
     private fun updateSection(index: Int, block: (BangumiRankSection) -> BangumiRankSection) {
         mutableState.update { current ->
@@ -198,10 +220,6 @@ internal class BangumiRankStateHolder(private val repository: PgcRankRepository)
     }
 
     private companion object {
-        const val PGC_INDEX_BANGUMI = 1
-        const val PGC_INDEX_GUOCHUANG = 4
-        const val PGC_SEASON_TYPE_BANGUMI = 1
-        const val PGC_SEASON_TYPE_GUOCHUANG = 4
         const val FIRST_SCREEN_SECTIONS = 3
     }
 }

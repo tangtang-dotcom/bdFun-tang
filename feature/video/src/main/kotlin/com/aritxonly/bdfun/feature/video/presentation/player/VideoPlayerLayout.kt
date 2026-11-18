@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -33,11 +34,12 @@ fun VideoPlayerLayout(
     Box(
         modifier = modifier
             .background(Color.Black)
+            .onGloballyPositioned { ui.danmakuHit.coordinates = it }
             .then(playerInteractionModifier(playback, ui, fullscreen, ports.page, ports.gestures, onToggleFullscreen)),
     ) {
         PlayerSurface(
             playback, media, presentation, ui, danmakuVisible, btLatencyMs,
-            sponsor.active,
+            sponsor.prompt,
             picture = ports.picture,
             slots = ports.surface,
         ) { segment ->
@@ -45,11 +47,14 @@ fun VideoPlayerLayout(
             sponsor.dismiss(segment)
         }
 
-        // 新视频/分 P 等真实首帧，换 CDN 和清晰度仍展示上一帧。
-        val renderedMediaKey by ui.renderedMediaKey
-        if (renderedMediaKey != "${media.bvid}:${fullscreenInfo.currentCid}") {
-            ports.cover(media.cover, Modifier.fillMaxSize().background(Color.Black))
+        // 自动跳过：进入片段即跳到结尾；不写 dismissed，用户拖回片段时会再次生效。
+        val autoSkip = sponsor.autoSkip
+        LaunchedEffect(autoSkip) {
+            autoSkip?.let { playback.seekTo(it.endMs) }
         }
+
+        // 新视频/分 P 首帧未出来时保持黑屏加载，不再先闪一下封面；
+        // 换 CDN 和清晰度仍由播放器保留上一帧。
 
         PlayerStatusOverlays(ui, fullscreen, ended, durationMs, ports.buffering)
 
@@ -72,9 +77,10 @@ fun VideoPlayerLayout(
         PlayerInlineControls(playback, observed, presentation, actions, fsActions, ui, ports)
         PlayerInlineAudio(playback, observed, presentation, ui, ports)
 
-        PlayerDanmakuInputOverlay(fullscreen, danmaku, ui, ports.danmakuSender)
+        PlayerDanmakuInputOverlay(fullscreen, danmaku, ui, ports.danmakuComposer)
 
         ports.inlineMore()
+        if (!presentation.pictureInPicture) ports.danmakuOverlays(this, danmakuVisible)
     }
 }
 

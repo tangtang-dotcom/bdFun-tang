@@ -27,12 +27,15 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
     if (TeakUiStyle.isCoui && couiBackdrop != null && android.os.Build.VERSION.SDK_INT >= 34) {
         // COUI 风格：底栏交给 COUI-Kit 的 CouiDockBar（材质 + 融球 + 跟手形变都是库自带的）。
         MainCouiBottomBar(
+            settings = settings,
+            visual = visual,
             destinations = destinations,
             selectedKey = selectedKey,
             dark = dark,
             backdrop = couiBackdrop,
             onSelect = { key -> tabItems.firstOrNull { it.key == key }?.let(onBarItem) },
-            onSearch = onBottomSearch,
+            onBottomSearch = onBottomSearch,
+            onOpenVideo = onOpenVideo,
         )
         return
     }
@@ -77,8 +80,10 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainBottomNavigation(
                     .navigationBarsPadding(),
             )
         } else {
-            MainFloatingNavigation(settings, tabItems, selectedKey, onBarItem, visual, onBottomSearch)
+            MainFloatingNavigation(settings, tabItems, selectedKey, onBarItem, visual, onBottomSearch, onOpenVideo)
         }
-        if (visual.discSlot > 0.01f) MainNavigationDisc(settings, visual, onOpenVideo)
+        // HyperOS 4 窄屏把唱片叠进搜索键，不再额外占 bottom-end 的位置。
+        val discStackedInSearch = settings.interfaceStyle == 2 && !wideNavigation && !TeakUiStyle.isClassic
+        if (!discStackedInSearch && visual.discSlot > 0.01f) MainNavigationDisc(settings, visual, onOpenVideo)
     }
 }

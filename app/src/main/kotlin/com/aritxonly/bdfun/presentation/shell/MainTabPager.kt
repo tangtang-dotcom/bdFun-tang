@@ -164,11 +164,15 @@ private fun HomeSectionContent(
             loggedIn = session != null,
             topBarHeight = topBarHeight,
         )
-        2 -> com.aritxonly.bdfun.presentation.pgc.BangumiPage(
+        2 -> HomeSectionPlaceholder(HomeSectionTitles[section], topBarHeight)
+        3 -> com.aritxonly.bdfun.presentation.pgc.BangumiPage(
             state = AppGraph.bangumiPageState,
             topBarHeight = topBarHeight,
         )
-        3, 4 -> HomeSectionPlaceholder(HomeSectionTitles[section], topBarHeight)
+        4 -> com.aritxonly.bdfun.presentation.pgc.CinemaPage(
+            state = AppGraph.cinemaPageState,
+            topBarHeight = topBarHeight,
+        )
         else -> HomeScreenRoute(
             state = homeFeed,
             onOpenVideo = { navigateToVideo(context, it) },
@@ -183,7 +187,8 @@ private fun HomeSectionContent(
 private fun MainMineTab(session: UserProfile?, settings: SettingsBindings, mineList: androidx.compose.foundation.lazy.LazyListState) {
     val context = androidx.compose.ui.platform.LocalContext.current
     MineScreen(
-        com.aritxonly.bdfun.ui.MineScreenRequest(session, settings.sentHistoryEntry, AppGraph.session.identity.revision),
+        com.aritxonly.bdfun.ui.MineScreenRequest(session, settings.sentHistoryEntry, AppGraph.session.identity.revision,
+            AppGraph.session.refreshing, AppGraph.session.identity.mid != null),
         com.aritxonly.bdfun.ui.MineNavigation(
             { navigateToLogin(context) }, { navigateToSettings(context) },
             { navigateToLibrary(context) }, { navigateToHistory(context) },
