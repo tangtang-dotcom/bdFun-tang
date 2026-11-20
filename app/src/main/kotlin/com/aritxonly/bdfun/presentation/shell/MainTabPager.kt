@@ -59,7 +59,7 @@ internal fun MainTabPager(
             overscrollEffect = null,
         ) { page ->
             when (page) {
-                0 -> androidx.compose.runtime.key(settings.homeChannels) { HomeSectionPager(
+                0 -> androidx.compose.runtime.key(settings.homeChannels, settings.homeChannelOrder) { HomeSectionPager(
                     homeSection = homeSection,
                     onSectionChange = onHomeSectionChange,
                     onSectionPositionChange = onHomeSectionPositionChange,
@@ -105,7 +105,9 @@ private fun HomeSectionPager(
     interactive: Boolean,
     context: android.content.Context,
 ) {
-    val channels = com.aritxonly.bdfun.core.domain.HomeChannelPolicy.visible(settings.homeChannels)
+    val channels = com.aritxonly.bdfun.core.domain.HomeChannelPolicy.ordered(
+    settings.homeChannels, settings.homeChannelOrder,
+)
     val latestSection by androidx.compose.runtime.rememberUpdatedState(homeSection)
     val latestOnSectionChange by androidx.compose.runtime.rememberUpdatedState(onSectionChange)
     val latestOnPositionChange by androidx.compose.runtime.rememberUpdatedState(onSectionPositionChange)
@@ -164,7 +166,10 @@ private fun HomeSectionContent(
             loggedIn = session != null,
             topBarHeight = topBarHeight,
         )
-        2 -> HomeSectionPlaceholder(HomeSectionTitles[section], topBarHeight)
+        2 -> com.aritxonly.bdfun.presentation.popular.PopularPage(
+            state = AppGraph.popularPageState,
+            topBarHeight = topBarHeight,
+        )
         3 -> com.aritxonly.bdfun.presentation.pgc.BangumiPage(
             state = AppGraph.bangumiPageState,
             topBarHeight = topBarHeight,

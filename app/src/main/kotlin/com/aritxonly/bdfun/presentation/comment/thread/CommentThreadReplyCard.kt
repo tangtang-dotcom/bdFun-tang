@@ -1,13 +1,10 @@
 package com.aritxonly.bdfun.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.aritxonly.bdfun.core.model.comment.CommentItem
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import androidx.compose.runtime.getValue
 
 @Composable
 internal fun CommentThreadReplyCard(
@@ -15,21 +12,11 @@ internal fun CommentThreadReplyCard(
     transient: CommentThreadPresentationStateHolder, callbacks: ThreadSheetCallbacks,
 ) {
     val likes = LocalVideoPageState.current.dependencies.comments.likes
-    val colors = MiuixTheme.colorScheme
-    val rowBackground by androidx.compose.animation.animateColorAsState(
-        targetValue = if (reply.rpid == transient.flashRpid) {
-            colors.onBackground.copy(alpha = 0.10f)
-        } else {
-            androidx.compose.ui.graphics.Color.Transparent
-        },
-        animationSpec = androidx.compose.animation.core.tween(120),
-        label = "thread-reply-flash",
-    )
-    // 与主评论区结构一致：平铺评论行，没有圆角卡片；只保留「刚发出的回复」那一下高亮。
+    // 与主评论区一致：平铺评论行，没有圆角卡片；高亮从楼中楼共享目标里判断。
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(rowBackground),
+            .commentFlash(reply.rpid),
     ) {
         CommentRow(
             item = reply.copy(

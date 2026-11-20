@@ -90,5 +90,43 @@ internal class CommentListStateHolder(private val repository: CommentContentRepo
         ) }
     }
 
+    /**
+     * 本地刚发出的评论钉在第一条；下一次 [reload]/[reset] 会用 API 结果整体替换，
+     * 因此刷新后自然回到服务端排序位置，不需要额外的去重状态。
+     */
+    fun prependLocal(item: CommentItem) {
+        if (closed) return
+        mutableState.update {
+            it.copy(
+                items = listOf(item) + it.items.filterNot { row -> row.rpid == item.rpid },
+                total = it.total + 1,
+            )
+        }
+    }
+
+    /**
+     * 主评论区里回复别人：先塞进对应根评论的折叠预览并让条数 +1。
+     * 找不到根评论（已翻页出去）时返回 false，调用方退回“重载 + 定位”。
+     */
+    fun addLocalPreviewReply(rootRpid: Long, reply: CommentItem): Boolean {
+        if (closed) return false
+        var found = false
+        mutableState.update { state ->
+            val items = state.items.map { item ->
+                if (item.rpid != rootRpid) item else {
+                    found = true
+                    item.copy(
+                        replyCount = item.replyCount + 1,
+                        extras = item.extras.copy(
+                            previewReplies = mergePreviewReplies(item.previewReplies, listOf(reply)),
+                        ),
+                    )
+                }
+            }
+            if (found) state.copy(items = items) else state
+        }
+        return found
+    }
+
     fun remove(rpid: Long) { if (closed) return; mutableState.update { it.copy(items = it.items.filterNot { item -> item.rpid == rpid }, total = (it.total - 1).coerceAtLeast(0)) } }
 }

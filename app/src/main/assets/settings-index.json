@@ -621,14 +621,6 @@
         "title": "首页推荐",
         "settings": [
           {
-            "pref_name": "home_channels",
-            "type": "action",
-            "title": "首页频道",
-            "subtitle": "选择首页显示的频道，推荐始终开启",
-            "storage": "none",
-            "default": ""
-          },
-          {
             "pref_name": "home_card_style",
             "type": "dropdown",
             "title": "首页卡片样式",
@@ -834,13 +826,6 @@
             "pref_name": "help",
             "type": "action",
             "title": "帮助中心",
-            "storage": "none",
-            "default": ""
-          },
-          {
-            "pref_name": "donation",
-            "type": "action",
-            "title": "捐赠",
             "storage": "none",
             "default": ""
           },

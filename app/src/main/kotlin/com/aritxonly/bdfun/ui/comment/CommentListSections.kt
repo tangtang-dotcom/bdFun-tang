@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.data.CommentItem
 import com.kyant.shapes.Capsule
 import top.yukonga.miuix.kmp.theme.MiuixTheme
-import androidx.compose.runtime.getValue
 
 @Composable
 internal fun CommentListTitle(bare: Boolean, title: String, total: Int) {
@@ -137,7 +136,6 @@ internal fun CommentListCard(
 ) {
     val colors = MiuixTheme.colorScheme
     val end = state.end
-    val highlightRpid = state.highlightRpid
     val disliked = state.disliked
                     val isFirst = index == 0
                     val isLast = index == lastIndex && end
@@ -148,23 +146,22 @@ internal fun CommentListCard(
                         bottomEnd = if (isLast) 16.dp else 0.dp,
                     )
                     val classicComment = com.aritxonly.teak.common.theme.TeakUiStyle.isClassic
-                    val flashColor by androidx.compose.animation.animateColorAsState(
-                        targetValue = if (item.rpid == highlightRpid) {
-                            colors.onBackground.copy(alpha = 0.10f)
-                        } else if (flatList) {
-                            androidx.compose.ui.graphics.Color.Transparent
-                        } else {
-                            colors.surfaceContainer
-                        },
-                        animationSpec = androidx.compose.animation.core.tween(90),
-                        label = "comment-focus-flash",
-                    )
+                    val baseColor = if (flatList) {
+                        androidx.compose.ui.graphics.Color.Transparent
+                    } else {
+                        colors.surfaceContainer
+                    }
+                    val flashShape = if (flatList || classicComment) {
+                        androidx.compose.ui.graphics.RectangleShape
+                    } else {
+                        shape
+                    }
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .then(
                                 if (flatList) {
-                                    Modifier.background(flashColor)
+                                    Modifier.background(baseColor)
                                 } else if (classicComment) {
                                     Modifier.drawBehind {
                                         val y = size.height - 1.dp.toPx() / 2f
@@ -176,9 +173,10 @@ internal fun CommentListCard(
                                         )
                                     }
                                 } else {
-                                    Modifier.clip(shape).background(flashColor)
+                                    Modifier.clip(shape).background(baseColor)
                                 },
-                            ),
+                            )
+                            .commentFlash(item.rpid, flashShape),
                     ) {
                         CommentCardRow(item, disliked[item.rpid] == true, actions)
                     }

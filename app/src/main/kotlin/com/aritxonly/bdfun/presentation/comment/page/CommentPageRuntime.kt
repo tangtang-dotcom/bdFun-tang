@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.aritxonly.bdfun.core.domain.CommentQuery
 import com.aritxonly.bdfun.core.model.comment.CommentItem
 import com.aritxonly.bdfun.feature.comment.application.CommentListStateHolder
+import com.aritxonly.bdfun.feature.comment.application.localCommentItem
 import com.aritxonly.bdfun.feature.comment.application.CommentActionsStateHolder
 import kotlinx.coroutines.*
 
@@ -23,6 +24,28 @@ internal class CommentPageRuntime(
     val scope: CoroutineScope,
     val context: Context,
 ) {
+    /** 刚发出的评论/回复先按本地内容显示；刷新后由 API 结果取代。 */
+    fun localComment(text: String, rpid: Long, root: Long = 0L, parent: Long = 0L): CommentItem =
+        localCommentItem(
+            rpid = rpid,
+            text = text,
+            profile = page.dependencies.comments.session.value,
+            oid = request.commentOid.toLongOrNull() ?: 0L,
+            root = root,
+            parent = parent,
+            nowMs = System.currentTimeMillis(),
+        )
+
+    /** 定位/发送成功后闪一下灰：与设置页按压同款，900ms 后清掉高亮。 */
+    fun flashComment(rpid: Long) {
+        ui.highlightRpid = rpid
+        ui.flashSeq++
+        scope.launch {
+            delay(900)
+            if (ui.highlightRpid == rpid) ui.highlightRpid = 0L
+        }
+    }
+
     fun startReply(target: CommentItem) {
         if (!actions.isActive) return
         val root = if (target.root > 0) target.root else target.rpid
