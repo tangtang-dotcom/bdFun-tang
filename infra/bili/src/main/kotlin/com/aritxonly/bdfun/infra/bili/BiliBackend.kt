@@ -53,6 +53,7 @@ open class BiliBackend(context: Context, debug: Boolean, log: (String, String) -
         api.pgcIndex(page, pageSize, seasonType)
     suspend fun pgcTimeline(types: Int) = api.pgcTimeline(types)
     suspend fun pgcSeason(seasonId: Long) = api.pgcSeason(seasonId)
+    suspend fun pgcVideoDetail(epId: Long, seasonId: Long = 0L) = api.pgcVideoDetail(epId, seasonId)
     suspend fun nav() = api.nav()
     suspend fun qrGenerate() = api.qrGenerate()
     suspend fun qrPoll(key: String) = api.qrPoll(key)
@@ -63,7 +64,12 @@ open class BiliBackend(context: Context, debug: Boolean, log: (String, String) -
     suspend fun ranking(rid: Int = 0) = api.ranking(rid)
     suspend fun view(bvid: String) = api.view(bvid)
     suspend fun viewByAid(aid: Long) = api.viewByAid(aid)
-    suspend fun playInfo( detail: VideoDetail, preferredQuality: Int, cid: Long = detail.cid, durationSec: Int = detail.duration, codecPreference: String = "auto", cdnService: String = "base", ) = api.playInfo(detail, preferredQuality, cid, durationSec, codecPreference, cdnService)
+    suspend fun playInfo( detail: VideoDetail, preferredQuality: Int, cid: Long = detail.cid, durationSec: Int = detail.duration, codecPreference: String = "auto", cdnService: String = "base", ) = if (detail.isPgc) {
+        // 番剧/影视走 PGC 专用 playurl；普通 /x/player/playurl 对 PGC 只给低清或直接失败。
+        api.pgcPlayInfo(detail, preferredQuality, cid, durationSec, codecPreference, cdnService)
+    } else {
+        api.playInfo(detail, preferredQuality, cid, durationSec, codecPreference, cdnService)
+    }
     suspend fun related(bvid: String) = api.related(bvid)
     suspend fun danmaku(cid: Long, durationSec: Int = 0) = api.danmaku(cid, durationSec)
     suspend fun sponsorSegments(bvid: String) = api.sponsorSegments(bvid)
@@ -71,8 +77,8 @@ open class BiliBackend(context: Context, debug: Boolean, log: (String, String) -
     suspend fun commentsByOid( oid: String, type: Int, page: Int, upMid: Long = 0, sort: Int = 2, ) = api.commentsByOid(oid, type, page, upMid, sort)
     suspend fun replies(aid: Long, root: Long, page: Int = 1, upMid: Long = 0) = api.replies(aid, root, page, upMid)
     suspend fun repliesByOid( oid: String, type: Int, root: Long, page: Int = 1, upMid: Long = 0, sortTime: Boolean = false, ) = api.repliesByOid(oid, type, root, page, upMid, sortTime)
-    suspend fun addComment( aid: Long, message: String, root: Long = 0, parent: Long = 0, pictures: String? = null, ) = api.addComment(aid, message, root, parent, pictures)
-    suspend fun addCommentByOid( oid: String, type: Int, message: String, root: Long = 0, parent: Long = 0, pictures: String? = null, ) = api.addCommentByOid(oid, type, message, root, parent, pictures)
+    suspend fun addComment( aid: Long, message: String, root: Long = 0, parent: Long = 0, pictures: String? = null, atNameToMid: Map<String, Long> = emptyMap(), ) = api.addComment(aid, message, root, parent, pictures, atNameToMid)
+    suspend fun addCommentByOid( oid: String, type: Int, message: String, root: Long = 0, parent: Long = 0, pictures: String? = null, atNameToMid: Map<String, Long> = emptyMap(), ) = api.addCommentByOid(oid, type, message, root, parent, pictures, atNameToMid)
     suspend fun uploadCommentImage(uri: android.net.Uri) = api.uploadCommentImage(uri)
     suspend fun sendDanmaku( cid: Long, bvid: String, text: String, progressMs: Long = 0L, mode: Int = 1, fontSize: Int = 25, color: Int = 0xFFFFFF, ) = api.sendDanmaku(cid, bvid, text, progressMs, mode, fontSize, color)
     suspend fun likeComment(aid: Long, rpid: Long, like: Boolean) = api.likeComment(aid, rpid, like)

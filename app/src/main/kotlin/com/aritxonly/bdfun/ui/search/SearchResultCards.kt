@@ -2,6 +2,8 @@ package com.aritxonly.bdfun.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,6 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.aritxonly.bdfun.data.SearchUser
 import com.aritxonly.bdfun.data.VideoItem
+import top.yukonga.miuix.kmp.basic.Checkbox
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Composable
@@ -78,25 +84,63 @@ internal fun SearchUserRow(user: SearchUser, onClick: () -> Unit) {
     }
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchResultRow(
     video: VideoItem,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    /** 收藏/历史/稍后再看复用这一行时，长按弹同款操作面板。 */
+    onLongClick: (() -> Unit)? = null,
+    /** 批量管理：null 表示不显示勾选，true/false 表示已选/未选。 */
+    selection: Boolean? = null,
 ) {
-    val colors = MiuixTheme.colorScheme
     val coverWidth = 150.dp
     val coverHeight = coverWidth * 9f / 16f
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(interactionSource = null, indication = null, onClick = onClick)
+            .then(
+                if (onLongClick == null) {
+                    Modifier.clickable(interactionSource = null, indication = null, onClick = onClick)
+                } else {
+                    Modifier.combinedClickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClick = onClick,
+                        onLongClick = onLongClick,
+                    )
+                },
+            )
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.Top,
     ) {
         SearchVideoCover(video, coverWidth, coverHeight)
         Spacer(Modifier.width(10.dp))
-        Column(modifier = Modifier.weight(1f).height(coverHeight)) {
+        // 高度只给下限：字号放大、两行标题时右列可撑高，UP 行不会被挤出容器裁掉。
+        SearchResultInfo(video, Modifier.weight(1f).heightIn(min = coverHeight))
+        // 批量管理勾选直接复用 Miuix 的 Checkbox（和选收藏夹的面板同款）。
+        if (selection != null) {
+            Checkbox(
+                state = if (selection) ToggleableState.On else ToggleableState.Off,
+                onClick = null,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 8.dp)
+                    .clearAndSetSemantics {},
+            )
+        }
+    }
+}
+
+/** 标题 + 播放/弹幕 + UP：右列高度不低于封面，标题与数据贴顶、UP 贴底。 */
+@Composable
+private fun SearchResultInfo(video: VideoItem, modifier: Modifier = Modifier) {
+    val colors = MiuixTheme.colorScheme
+    // 只给下限而不是写死高度：字号放大或两行标题时右列能自己撑高，
+    // 剩余空白交给 SpaceBetween 全落在数据行与 UP 行之间，避免 UP 行被挤出容器裁掉。
+    Column(modifier = modifier, verticalArrangement = Arrangement.SpaceBetween) {
+        Column {
             Text(
                 text = video.title,
                 color = colors.onBackground,
@@ -127,18 +171,17 @@ internal fun SearchResultRow(
                     fontSize = 10.sp,
                 )
             }
-            Spacer(Modifier.weight(1f))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                UpBadge()
-                Spacer(Modifier.width(5.dp))
-                Text(
-                    text = video.ownerName,
-                    color = colors.onBackgroundVariant,
-                    fontSize = 11.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            UpBadge()
+            Spacer(Modifier.width(5.dp))
+            Text(
+                text = video.ownerName,
+                color = colors.onBackgroundVariant,
+                fontSize = 11.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
