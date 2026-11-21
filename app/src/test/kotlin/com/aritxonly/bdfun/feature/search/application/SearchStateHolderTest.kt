@@ -193,4 +193,31 @@ class SearchStateHolderTest {
         assertEquals("new", source.requests.last().keyword)
         assertEquals(1, holder.state.value.results.size)
     }
+
+    @Test fun firstPageDropsDuplicateBvidsWithinTheSameResponse() = runBlocking {
+        val source = Fake()
+        // 同一页返回重复 bvid：LazyGrid 若用 bvid 作 key 会直接崩溃
+        source.videos = { Outcome.Success(listOf(video("a1"), video("a1"), video("a2"))) }
+        val holder = SearchStateHolder(source, wait = {})
+        holder.search("word", SearchFilterState())
+        assertEquals(listOf("a1", "a2"), holder.state.value.results.map { it.bvid })
+        assertTrue(holder.state.value.end) // end 依原始 3 条 < 20，不受去重影响
+    }
+
+    @Test fun loadMoreDropsOverlappingBvidsAcrossPagesSoLazyKeysStayUnique() = runBlocking {
+        val source = Fake()
+        val firstPage = (1..SEARCH_PAGE_SIZE).map { video("a$it") }
+        // 第二页含 3 个与首页重叠的 bvid + 17 个新 bvid，原始页满 20 条
+        val secondPage = listOf(video("a18"), video("a19"), video("a20")) +
+            (1..17).map { video("b$it") }
+        source.videos = { if (it.page == 1) Outcome.Success(firstPage) else Outcome.Success(secondPage) }
+        val holder = SearchStateHolder(source, wait = {})
+        holder.search("word", SearchFilterState())
+        holder.loadMore()
+        val bvids = holder.state.value.results.map { it.bvid }
+        assertEquals(bvids.size, bvids.toSet().size) // 全局无重复 bvid，唯一 key 成立
+        assertEquals(SEARCH_PAGE_SIZE + 17, bvids.size)
+        assertFalse(holder.state.value.end) // 第二页原始满 20，仍有下一页
+        assertFalse(holder.state.value.loadingMore)
+    }
 }

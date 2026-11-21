@@ -96,7 +96,10 @@ internal class SearchStateHolder(
             mutable.update { current -> when (result) {
                 is Outcome.Success -> {
                     lastRequest = request
-                    current.copy(results = result.value, loadedOnce = true,
+                    // 搜索接口同页内可能返回重复 bvid，先按 bvid 去重再落列表；否则
+                    // LazyGrid 用 "r"+bvid 作唯一 key，重复即抛 IllegalArgumentException 闪退。
+                    // end 仍用服务器原始页大小判断，不受去重影响。
+                    current.copy(results = result.value.distinctBy { it.bvid }, loadedOnce = true,
                         end = result.value.size < SEARCH_PAGE_SIZE)
                 }
                 is Outcome.Failure -> current.copy(error = when (val error = result.error) {
@@ -123,8 +126,13 @@ internal class SearchStateHolder(
                 is Outcome.Success -> {
                     lastRequest = next
                     mutable.update {
+                        // 跨页去重：B 站搜索排序非快照一致，同一 bvid 常同时出现在相邻两页。
+                        // 用已存在 bvid 集合过滤（seen.add 返回 false 同时覆盖同页内重复），
+                        // 保证结果列表 bvid 全局唯一，避免 LazyGrid key 冲突闪退。
+                        val seen = it.results.mapTo(HashSet()) { item -> item.bvid }
+                        val appended = result.value.filter { item -> seen.add(item.bvid) }
                         it.copy(
-                            results = it.results + result.value,
+                            results = it.results + appended,
                             loadingMore = false,
                             end = result.value.size < SEARCH_PAGE_SIZE,
                         )
