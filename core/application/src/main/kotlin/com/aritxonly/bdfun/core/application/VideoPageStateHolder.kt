@@ -27,8 +27,6 @@ data class VideoPageState(
     val commentThreadVisible get() = reply.commentThreadVisible
     val fullscreen get() = player.fullscreen
     val controlsVisible get() = player.controlsVisible
-    val danmakuPanelOpen get() = player.danmakuPanelOpen
-    val danmakuInteract get() = requests.danmakuInteract
     val orientationLocked get() = player.orientationLocked
     val replyName get() = reply.replyName
     val replyMid get() = reply.replyMid
@@ -49,7 +47,6 @@ data class VideoPageRequests(
     val consumedReplyFocus: Int = 0,
     val dismissReply: Int = 0,
     val consumedDismissReply: Int = 0,
-    val danmakuInteract: Int = 0,
 )
 
 data class VideoPagePlayerState(
@@ -59,7 +56,6 @@ data class VideoPagePlayerState(
     val danmakuProgressMs: Long = 0L,
     val fullscreen: Boolean = false,
     val controlsVisible: Boolean = false,
-    val danmakuPanelOpen: Boolean = false,
     val orientationLocked: Boolean = false,
 )
 
@@ -76,6 +72,8 @@ data class VideoPageReplyState(
 
 /** 每个详情页独占一份跨层状态，页面叠开时不覆盖旧页面的浮层与回复目标。 */
 class VideoPageStateHolder {
+    /** 明细页共享的分段弹幕窗口；由 AppContainer 装配，未登录/预览页可以为 null。 */
+    var danmakuFeed: DanmakuSegmentFeed? = null
     private val mutableState = MutableStateFlow(VideoPageState())
     val state = mutableState.asStateFlow()
     fun update(transform: (VideoPageState) -> VideoPageState) { mutableState.update(transform) }

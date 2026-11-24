@@ -28,11 +28,15 @@ import com.kyant.shapes.Capsule
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Composable
-internal fun GridVideoContent(video: VideoItem, showOwner: Boolean) {
+internal fun GridVideoContent(
+    video: VideoItem,
+    showOwner: Boolean,
+    onMoreClick: (() -> Unit)? = null,
+) {
     val colors = MiuixTheme.colorScheme
     val context = LocalContext.current
 
-    Column(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 7.dp, bottom = 8.dp)) {
+    Column(modifier = Modifier.padding(start = 8.dp, end = 4.dp, top = 7.dp, bottom = 8.dp)) {
         Text(
             text = video.title,
             color = colors.onBackground,
@@ -56,6 +60,8 @@ internal fun GridVideoContent(video: VideoItem, showOwner: Boolean) {
                 // UP 名称可点：进 UP 空间页（点击被这里消费，不会触发整卡进视频）
                 Row(
                     modifier = Modifier
+                        // 吃掉名字右侧剩余宽度，省略号才能贴在卡片最右，而不是紧挨 UP 名。
+                        .weight(1f)
                         .clip(Capsule())
                         .clickable(interactionSource = null, indication = null) {
                             navigateToSpace(
@@ -78,6 +84,13 @@ internal fun GridVideoContent(video: VideoItem, showOwner: Boolean) {
                         fontSize = 11.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                if (onMoreClick != null) {
+                    VideoCardMoreButton(
+                        onClick = onMoreClick,
+                        touchSize = 20.dp,
+                        iconSize = 14.dp,
                     )
                 }
             }

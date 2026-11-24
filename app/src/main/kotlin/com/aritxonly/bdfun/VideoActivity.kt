@@ -17,7 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
 /** 视频详情：独立 Activity；评论页留在本 Activity 内，避免播放器被销毁。 */
-class VideoActivity : ComponentActivity() {
+class VideoActivity : OneTakeExitActivity() {
     private val pageState by lazy { AppGraph.videoPageState(lifecycleScope) }
     private val VideoPageBus get() = pageState
     private val PlayerUiState get() = pageState.playerUi
@@ -131,6 +131,8 @@ class VideoActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        // 从后台/相关推荐返回：只有此前是自动暂停的才续播，用户手动暂停不会被恢复。
+        VideoPageBus.resumeIfPending()
         com.aritxonly.bdfun.ui.BackgroundPlayback.stopKeepAlive()
         // Split panes use the page theme under system bars; stacked/fullscreen video uses light icons.
         runCatching {
@@ -181,6 +183,29 @@ class VideoActivity : ComponentActivity() {
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: android.content.res.Configuration) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         pipMode = isInPictureInPictureMode
+        val pages = AppGraph.pictureInPicturePages
+        if (isInPictureInPictureMode) {
+            pages.enter(this) { closePictureInPicturePage(removeTask = false) }
+            return
+        }
+        pages.exit(this)
+        // 离开画中画时页面已 stop：用户点了小窗的关闭（展开回全屏时页面仍是 STARTED）。
+        // 关闭小窗应当停止播放并移除小窗所在的独立任务，而不是让它在后台继续响。
+        if (lifecycle.currentState == androidx.lifecycle.Lifecycle.State.CREATED) {
+            closePictureInPicturePage(removeTask = true)
+        }
+    }
+
+    /**
+     * 关闭画中画页面：先取消离开时登记的唱片交接并暂停，再结束页面。
+     * 不取消交接的话，页面销毁时播放器会被交给唱片，声音继续（关闭小窗后仍在播 / 与新视频叠在一起）。
+     * 被新视频页替换时只 finish：新页面可能与它同任务，不能连任务一起移除。
+     */
+    private fun closePictureInPicturePage(removeTask: Boolean) {
+        if (isFinishing || isDestroyed) return
+        com.aritxonly.bdfun.ui.BackgroundPlayback.cancelHandOff()
+        VideoPageBus.pauseFor(this)
+        if (removeTask) finishAndRemoveTask() else finish()
     }
 
     override fun onStop() {
@@ -194,6 +219,7 @@ class VideoActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        AppGraph.pictureInPicturePages.exit(this)
         // 只有真正退出这个视频页才清相关推荐；从相关推荐进另一个视频时
         // 这个 Activity 只是 stop、不会 finish，所以返回时不会重载。
         pageState.readCache.close(if (isFinishing) VideoPageBus.currentBvid else null)
@@ -252,6 +278,8 @@ class VideoActivity : ComponentActivity() {
         AppGraph.ensure(applicationContext)
         // 任何方式新开视频页，都先停掉后台播放器，避免两路声音。
         com.aritxonly.bdfun.ui.BackgroundPlayback.stopDetached()
+        // 同理：旧视频页若还在画中画小窗里，新视频页打开时把它关掉。
+        AppGraph.pictureInPicturePages.closeOthers(this)
         applyStatusBarStyle(AppGraph.settings.videoImmersiveStatusBar)
         if (android.os.Build.VERSION.SDK_INT >= 33 && !AppGraph.settings.notifAsked) {
             val granted = checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) ==

@@ -1,7 +1,6 @@
 package com.aritxonly.bdfun.ui
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.ImageBitmap
 import com.aritxonly.bdfun.core.application.VideoPageStateHolder
 import com.aritxonly.bdfun.core.application.PlaybackPauseRegistry
 import kotlinx.coroutines.*
@@ -18,8 +17,13 @@ internal class VideoPagePresentationState(
     val automaticQuality: com.aritxonly.bdfun.core.domain.AutomaticVideoQualitySelector,
     val settings: com.aritxonly.bdfun.core.domain.SettingsRepository,
     val dependencies: VideoPageDependencies,
-    private val holder: VideoPageStateHolder = VideoPageStateHolder(),
+    private val holder: VideoPageStateHolder = VideoPageStateHolder().also {
+        it.danmakuFeed = dependencies.danmakuFeed
+    },
 ) : PlayerPageHost, VideoDetailDanmakuHost, VideoPageOverlayHost {
+    /** 分段弹幕窗口：播放到新的一段时由播放器补齐。 */
+    val danmakuFeed: com.aritxonly.bdfun.core.application.DanmakuSegmentFeed?
+        get() = holder.danmakuFeed
     private var snapshot by mutableStateOf(holder.state.value)
     init { scope.launch(start = CoroutineStart.UNDISPATCHED) { holder.state.collect { snapshot = holder.state.value } } }
     private fun update(transform: (com.aritxonly.bdfun.core.application.VideoPageState) -> com.aritxonly.bdfun.core.application.VideoPageState) {
@@ -145,20 +149,6 @@ internal class VideoPagePresentationState(
                 controlsVisible = value,
             ),
         ) }
-    override var danmakuPanelOpen: Boolean
-        get() = snapshot.danmakuPanelOpen
-        set(value) = update { it.copy(
-            player = it.player.copy(
-                danmakuPanelOpen = value,
-            ),
-        ) }
-    override var danmakuInteract: Int
-        get() = snapshot.danmakuInteract
-        set(value) = update { it.copy(
-            requests = it.requests.copy(
-                danmakuInteract = value,
-            ),
-        ) }
     override var orientationLocked: Boolean
         get() = snapshot.orientationLocked
         set(value) = update { it.copy(
@@ -194,7 +184,6 @@ internal class VideoPagePresentationState(
                 replyParent = value,
             ),
         ) }
-    override var panelBackdrop by mutableStateOf<ImageBitmap?>(null)
     var commentSender: (suspend (String, String?) -> Boolean)? = null
     var pendingDanmakuAction by mutableStateOf<DanmakuActionRequest?>(null)
     override var danmakuOwnerMid by mutableLongStateOf(0L)
@@ -214,6 +203,13 @@ internal class VideoPagePresentationState(
     override fun unregisterPause(hook: (Boolean) -> Unit) = pauses.unregister(hook)
     fun pauseFor(owner: Any) = pauses.pauseFor(owner)
     fun pauseAll(allowResume: Boolean = true) = pauses.pauseAll(allowResume)
+    private var pendingResume: (() -> Unit)? = null
+    override fun setPendingResume(action: (() -> Unit)?) { pendingResume = action }
+    override fun resumeIfPending() {
+        val action = pendingResume ?: return
+        pendingResume = null
+        runCatching { action() }
+    }
 
     class Orientation(private val page: VideoPagePresentationState) {
         var locked: Boolean

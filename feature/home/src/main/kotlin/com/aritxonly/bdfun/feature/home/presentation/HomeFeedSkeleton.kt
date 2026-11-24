@@ -1,22 +1,19 @@
 package com.aritxonly.bdfun.feature.home.presentation
 
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.runtime.Composable
-import com.aritxonly.teak.common.skeleton.TeakSkeletonVideoCard
-import com.aritxonly.teak.common.skeleton.rememberTeakSkeletonSweep
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.aritxonly.teak.common.chrome.TeakLoadingArea
 
 /**
- * 首页/推荐首屏骨架：按真实双列视频卡的尺寸摆 8 张。
- * 骨架直接进网格，数据到了原位替换，不会先出现一个转圈再整页跳一下。
+ * 首页/推荐首屏加载：Miuix 加载动画放在屏幕正中。
+ *
+ * 这个 item 本身已经处在列表的顶部 contentPadding 之后，如果再按「窗口减顶栏」
+ * 去算高度，图标会整体再低一截；把顶部 padding 抵消掉，中心才真正落在屏幕中线。
  */
-internal fun LazyGridScope.homeFeedSkeletonItems() {
-    items(count = 8, key = { "home-skeleton-$it" }) {
-        HomeFeedSkeletonCard()
+internal fun LazyGridScope.homeFeedSkeletonItems(extraTopInset: Dp = 0.dp) {
+    item(key = "home-loading", span = { GridItemSpan(maxLineSpan) }) {
+        TeakLoadingArea(extraTopInset = extraTopInset)
     }
-}
-
-@Composable
-private fun HomeFeedSkeletonCard() {
-    TeakSkeletonVideoCard(progress = rememberTeakSkeletonSweep())
 }

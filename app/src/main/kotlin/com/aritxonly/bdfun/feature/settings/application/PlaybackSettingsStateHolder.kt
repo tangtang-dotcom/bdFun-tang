@@ -1,6 +1,6 @@
 package com.aritxonly.bdfun.feature.settings.application
 
-import com.aritxonly.bdfun.core.model.settings.AUTO_CDN_ID
+import com.aritxonly.bdfun.core.model.settings.BASE_CDN_ID
 import com.aritxonly.bdfun.core.domain.*
 import com.aritxonly.bdfun.core.model.settings.*
 
@@ -31,8 +31,9 @@ internal class PlaybackSettingsStateHolder(
 
     private val codecPreferenceState = stateCell("codecPreferenceState", prefs.getString("codec_preference", "auto") ?: "auto")
 
+    // 默认用「原地址」：自动测速要下载多个节点的 1MB 样本，不能作为默认行为。
     private val cdnServiceState = stateCell("cdnServiceState",
-        prefs.getString("cdn_service", AUTO_CDN_ID) ?: AUTO_CDN_ID,
+        prefs.getString("cdn_service", BASE_CDN_ID) ?: BASE_CDN_ID,
     )
 
     /** 蓝牙耳机延迟补偿：检测到蓝牙输出时，让弹幕按设定延迟对齐。 */
@@ -63,6 +64,9 @@ internal class PlaybackSettingsStateHolder(
     /** 播放结束后是否自动连播（默认开，需记住用户关闭状态）。 */
 
     private val autoPlayNextState = stateCell("autoPlayNextState", prefs.getBoolean("auto_play_next", true))
+
+    /** 全屏循环播放：0 不循环 / 1 单集循环 / 2 列表循环。 */
+    private val loopModeState = stateCell("loopModeState", prefs.getInt("loop_mode", 0))
 
     /** 动态页视频滚到屏幕中心附近时是否自动静音预览播放。 */
 
@@ -213,6 +217,14 @@ internal class PlaybackSettingsStateHolder(
         set(value) {
             autoPlayNextState.value = value
             prefs.edit().putBoolean("auto_play_next", value).apply()
+        }
+
+    override var loopMode: Int
+        get() = loopModeState.value.coerceIn(0, 2)
+        set(value) {
+            val mode = value.coerceIn(0, 2)
+            loopModeState.value = mode
+            prefs.edit().putInt("loop_mode", mode).apply()
         }
 
     override var dynamicAutoPlay: Boolean

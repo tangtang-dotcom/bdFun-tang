@@ -56,7 +56,7 @@ fun VideoPlayerLayout(
         // 新视频/分 P 首帧未出来时保持黑屏加载，不再先闪一下封面；
         // 换 CDN 和清晰度仍由播放器保留上一帧。
 
-        PlayerStatusOverlays(ui, fullscreen, ended, durationMs, ports.buffering)
+        PlayerStatusOverlays(ui, fullscreen, ended, durationMs, ports.picture.playIcon, ports.buffering)
 
         BindPlayerOverlayBackHandling(ui, fullscreen)
 
@@ -68,14 +68,15 @@ fun VideoPlayerLayout(
             media, presentation, ui, fsActions, playing, positionMs, durationMs, bufferedMs, ports,
         )
 
-        PlayerLockOverlay(ui, fullscreen, ports.page)
-
+// 听视频会把视频轨关掉，整屏只剩一块听视频界面，没有能看的画面，锁按钮也没有意义。
+        val audioOnly by ui.fsAudioOnly
+        if (!audioOnly) PlayerLockOverlay(ui, fullscreen, ports.page)
         PlayerScrubOverlay(ui, fullscreen, positionMs, durationMs, bufferedMs)
 
         PlayerSubtitleLayer(fullscreenInfo, fullscreen, ui, positionMs)
 
         PlayerInlineControls(playback, observed, presentation, actions, fsActions, ui, ports)
-        PlayerInlineAudio(playback, observed, presentation, ui, ports)
+        PlayerInlineAudio(playback, observed, presentation, fsActions, ui, ports)
 
         PlayerDanmakuInputOverlay(fullscreen, danmaku, ui, ports.danmakuComposer)
 

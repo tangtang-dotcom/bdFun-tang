@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritxonly.bdfun.R
@@ -43,79 +43,121 @@ private val WeChatGreen = Color(0xFF07C160)
 
 @Composable
 fun DonationScreen() {
-    val colors = MiuixTheme.colorScheme
     var method by remember { mutableIntStateOf(0) }
-    var dragTotal by remember { mutableFloatStateOf(0f) }
 
     TeakSettingsPage(title = "捐赠") {
         item(key = "methods") {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                DonationMethodChip(
-                    text = "支付宝",
-                    selected = method == 0,
-                    accent = AlipayBlue,
-                    modifier = Modifier.weight(1f),
-                ) { method = 0 }
-                DonationMethodChip(
-                    text = "微信",
-                    selected = method == 1,
-                    accent = WeChatGreen,
-                    modifier = Modifier.weight(1f),
-                ) { method = 1 }
-            }
-        }
-
-        item(key = "qr") {
-            TeakSettingsCard {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(14.dp)
-                        .pointerInput(method) {
-                            detectHorizontalDragGestures(
-                                onDragStart = { dragTotal = 0f },
-                                onDragEnd = {
-                                    if (abs(dragTotal) > 70f) method = 1 - method
-                                    dragTotal = 0f
-                                },
-                                onHorizontalDrag = { change, amount ->
-                                    change.consume()
-                                    dragTotal += amount
-                                },
-                            )
-                        },
-                    contentAlignment = Alignment.Center,
+            Column(Modifier.fillMaxWidth().padding(top = 10.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Image(
-                        painter = painterResource(
-                            if (method == 0) R.drawable.donation_alipay else R.drawable.donation_qr,
-                        ),
-                        contentDescription = if (method == 0) "支付宝捐赠二维码" else "微信捐赠二维码",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(colors.surfaceContainer),
-                    )
+                    DonationMethodChip(
+                        text = "微信",
+                        selected = method == 0,
+                        accent = WeChatGreen,
+                        modifier = Modifier.weight(1f),
+                    ) { method = 0 }
+                    DonationMethodChip(
+                        text = "支付宝",
+                        selected = method == 1,
+                        accent = AlipayBlue,
+                        modifier = Modifier.weight(1f),
+                    ) { method = 1 }
                 }
             }
         }
 
-        item(key = "thanks") {
-            Text(
-                text = "制作本App花费了非常多的时间与Tokens，现在作者意识到这使本不富裕的作者雪上加霜。" +
-                    "如果喜欢可以投喂作者支持作者继续更新维护。",
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
-                color = colors.onBackground,
-                fontSize = 14.sp,
-                lineHeight = 22.sp,
-            )
+        item(key = "qr") {
+            DonationQrCard(method = method, onToggle = { method = 1 - method })
         }
 
         item(key = "space") { Spacer(Modifier.height(24.dp)) }
+    }
+}
+
+/** 收款码卡片：左右滑动可在微信/支付宝之间切换。 */
+@Composable
+private fun DonationQrCard(method: Int, onToggle: () -> Unit) {
+    var dragTotal by remember { mutableFloatStateOf(0f) }
+    TeakSettingsCard {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp)
+                .pointerInput(method) {
+                    detectHorizontalDragGestures(
+                        onDragStart = { dragTotal = 0f },
+                        onDragEnd = {
+                            if (abs(dragTotal) > 70f) onToggle()
+                            dragTotal = 0f
+                        },
+                        onHorizontalDrag = { change, amount ->
+                            change.consume()
+                            dragTotal += amount
+                        },
+                    )
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            if (method == 0) {
+                // 微信：两位作者的收款码左右并排，各自在二维码下面写名字。
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                ) {
+                    DonationQr(
+                        image = R.drawable.donation_qr,
+                        name = "绮锡Teak",
+                        description = "绮锡Teak 微信收款码",
+                        modifier = Modifier.weight(1f),
+                    )
+                    DonationQr(
+                        image = R.drawable.donation_qr_partner,
+                        name = "音唯AritxOnly",
+                        description = "音唯AritxOnly 微信收款码",
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            } else {
+                DonationQr(
+                    image = R.drawable.donation_alipay,
+                    name = "绮锡Teak",
+                    description = "绮锡Teak 支付宝收款码",
+                    modifier = Modifier.fillMaxWidth(0.72f),
+                )
+            }
+        }
+    }
+}
+
+/** 一张收款码 + 下面一行的作者名字；不加圆角矩形底色，就是干净的二维码。 */
+@Composable
+private fun DonationQr(
+    image: Int,
+    name: String,
+    description: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = painterResource(image),
+            contentDescription = description,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f),
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = name,
+            color = MiuixTheme.colorScheme.onBackgroundVariant,
+            fontSize = 12.sp,
+            maxLines = 1,
+        )
     }
 }
 
@@ -133,11 +175,6 @@ private fun DonationMethodChip(
             .height(42.dp)
             .clip(Capsule())
             .background(if (selected) accent else colors.surfaceContainerHigh)
-            .border(
-                width = 1.dp,
-                color = if (selected) Color.White.copy(alpha = 0.55f) else Color.White.copy(alpha = 0.28f),
-                shape = Capsule(),
-            )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
@@ -145,7 +182,6 @@ private fun DonationMethodChip(
             text = text,
             color = if (selected) Color.White else colors.onBackgroundVariant,
             fontSize = 14.sp,
-            fontWeight = if (selected) FontWeight.Normal else FontWeight.Normal,
         )
     }
 }

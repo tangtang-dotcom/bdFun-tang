@@ -33,6 +33,9 @@ class Media3PlaybackController(
     private val diagnostics = diagnosticLog?.let { PlaybackDiagnostics(appContext, it) }
     private val mutableState = MutableStateFlow(PlaybackSnapshot())
     override val state = mutableState.asStateFlow()
+    override val currentMediaUrl: String?
+        get() = lastSource?.let { it.castUrl?.takeIf(String::isNotBlank) ?: it.videoUrl }
+            ?.takeIf { it.isNotBlank() }
     private val listeners = CopyOnWriteArrayList<PlaybackController.Listener>()
     private var released = false
     private var lastSource: PlaybackSource? = null
@@ -64,6 +67,8 @@ class Media3PlaybackController(
         diagnostics?.let(player::addAnalyticsListener)
     }
 
+    override fun currentPositionMs(): Long = if (released) 0L else player.currentPosition
+
     override fun refresh(): PlaybackSnapshot {
         if (released) return mutableState.value
         diagnostics?.sample(player)
@@ -77,10 +82,13 @@ class Media3PlaybackController(
         buffering.configure(owner, enabled)
         buffering.sample(android.os.SystemClock.elapsedRealtime(), player.isPlaying,
             phase == PlaybackPhase.Buffering, phase == PlaybackPhase.Ended)
-        mutableState.value = reducePlaybackSnapshot(mutableState.value,
+        val videoSize = player.videoSize
+        // 值没变就不重新发布：暂停/缓冲时 refresher 仍可安全调用，但不会无意义地惊动观察者。
+        val next = reducePlaybackSnapshot(mutableState.value,
             phase, player.isPlaying, player.playWhenReady, player.currentPosition,
             player.bufferedPosition, player.duration, player.playbackParameters.speed,
-        )
+        ).copy(videoWidth = videoSize.width.coerceAtLeast(0), videoHeight = videoSize.height.coerceAtLeast(0))
+        if (next != mutableState.value) mutableState.value = next
         return mutableState.value
     }
 
@@ -124,9 +132,18 @@ class Media3PlaybackController(
             if (released || revision != sourceRevision) return@launch
             val current = refresh()
             val source = lastSource ?: return@launch
-            // 重试属于传输层，页面退出交接后台后也有效；位置/暂停/倍速在执行时读取。
-            prepareSource(source.copy(resumePositionMs = current.positionMs,
-                autoPlay = current.playWhenReady, speed = current.speed), recovering = true)
+            if (retryCount <= 1) {
+                // 第一次重试只在同一媒体源内恢复：已经缓冲的片段和解码器都留着，
+                // 网络抖一下不用整条重搭，恢复更快。
+                player.seekTo(current.positionMs)
+                player.playWhenReady = current.playWhenReady
+                player.prepare()
+                refresh()
+            } else {
+                // 再不行才换一次新地址重搭（和原来一致）。
+                prepareSource(source.copy(resumePositionMs = current.positionMs,
+                    autoPlay = current.playWhenReady, speed = current.speed), recovering = true)
+            }
         }
         return true
     }

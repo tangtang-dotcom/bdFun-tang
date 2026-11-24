@@ -81,6 +81,7 @@ class SettingsRoundTripTest(private val case: SettingCase<*>) {
             SettingCase("discBreathCoverColor", false, true, { it.discBreathCoverColor }, { s, v -> s.discBreathCoverColor = v }),
             SettingCase("autoPlay", true, false, { it.autoPlay }, { s, v -> s.autoPlay = v }),
             SettingCase("autoPlayNext", true, false, { it.autoPlayNext }, { s, v -> s.autoPlayNext = v }),
+            SettingCase("loopMode", 0, 2, { it.loopMode }, { s, v -> s.loopMode = v }),
             SettingCase("dynamicAutoPlay", true, false, { it.dynamicAutoPlay }, { s, v -> s.dynamicAutoPlay = v }),
             SettingCase("dynamicAutoPlayMuted", true, false, { it.dynamicAutoPlayMuted }, { s, v -> s.dynamicAutoPlayMuted = v }),
             SettingCase("dynamicAutoPlayQuality", 64, 80, { it.dynamicAutoPlayQuality }, { s, v -> s.dynamicAutoPlayQuality = v }),
@@ -89,6 +90,8 @@ class SettingsRoundTripTest(private val case: SettingCase<*>) {
             SettingCase("showIpLocation", true, false, { it.showIpLocation }, { s, v -> s.showIpLocation = v }),
             SettingCase("showViewerCount", true, false, { it.showViewerCount }, { s, v -> s.showViewerCount = v }),
             SettingCase("showHotSearch", true, false, { it.showHotSearch }, { s, v -> s.showHotSearch = v }),
+            SettingCase("showSearchHistory", true, false, { it.showSearchHistory }, { s, v -> s.showSearchHistory = v }),
+            SettingCase("showSearchDiscovery", true, false, { it.showSearchDiscovery }, { s, v -> s.showSearchDiscovery = v }),
             SettingCase("autoCheckUpdate", true, false, { it.autoCheckUpdate }, { s, v -> s.autoCheckUpdate = v }),
             SettingCase("onboardingAcked", false, true, { it.onboardingAcked }, { s, v -> s.onboardingAcked = v }),
             SettingCase("termsAckedVersion", "", "saved-value", { it.termsAckedVersion }, { s, v -> s.termsAckedVersion = v }),
@@ -109,10 +112,13 @@ class SettingsRoundTripTest(private val case: SettingCase<*>) {
             SettingCase("videoInteraction", true, false, { it.videoInteraction }, { s, v -> s.videoInteraction = v }),
             SettingCase("bluetoothLatencyMs", 100, 0, { it.bluetoothLatencyMs }, { s, v -> s.bluetoothLatencyMs = v }),
             SettingCase("sentHistoryEntry", true, false, { it.sentHistoryEntry }, { s, v -> s.sentHistoryEntry = v }),
+            SettingCase("commentAiBlockEnabled", false, true, { it.commentAiBlockEnabled }, { s, v -> s.commentAiBlockEnabled = v }),
+            SettingCase("commentAiBlockStrength", 2, 3, { it.commentAiBlockStrength }, { s, v -> s.commentAiBlockStrength = v }),
+            SettingCase("commentAiBlockReplyMode", 0, 1, { it.commentAiBlockReplyMode }, { s, v -> s.commentAiBlockReplyMode = v }),
             SettingCase("fontScale", 1f, 1.2f, { it.fontScale }, { s, v -> s.fontScale = v }),
             SettingCase("decoderMode", 0, 1, { it.decoderMode }, { s, v -> s.decoderMode = v }),
             SettingCase("codecPreference", "auto", "avc", { it.codecPreference }, { s, v -> s.codecPreference = v }),
-            SettingCase("cdnService", "auto", "base", { it.cdnService }, { s, v -> s.cdnService = v }),
+            SettingCase("cdnService", "base", "auto", { it.cdnService }, { s, v -> s.cdnService = v }),
             )
             val setters = SettingsRepository::class.java.methods
                 .filter { it.name.startsWith("set") && it.parameterCount == 1 }

@@ -26,9 +26,12 @@ data class FeedItem(
     val orig get() = attachments.orig
     val authorVip get() = author.authorVip
     val isCollection get() = attachments.isCollection
+    val isCharge get() = attachments.isCharge
     val pgcCover get() = attachments.pgcCover
     val pgcTitle get() = attachments.pgcTitle
     val pgcLabel get() = attachments.pgcLabel
+    val pgcSeasonId get() = attachments.pgcSeasonId
+    val pgcEpId get() = attachments.pgcEpId
     val moduleTag get() = attachments.moduleTag
     val liveRecommendation get() = attachments.liveRecommendation
     val ipLocation get() = author.ipLocation
@@ -58,10 +61,15 @@ data class FeedAttachments(
     val orig: FeedItem? = null,
     /** 合集 / UGC 合集视频，封面上显示「合集」小胶囊。 */
     val isCollection: Boolean = false,
+    /** 包月充电专属视频，封面上显示黄色「充电」小胶囊。 */
+    val isCharge: Boolean = false,
     /** 番剧 / 电影 / 纪录片等 PGC 内容（动态 PGC 卡）。 */
     val pgcCover: String = "",
     val pgcTitle: String = "",
     val pgcLabel: String = "",
+    /** 番剧 / 影视入口：动态 PGC 卡只带 season_id / ep_id 进详情页。 */
+    val pgcSeasonId: Long = 0L,
+    val pgcEpId: Long = 0L,
     val moduleTag: String = "",
     val liveRecommendation: FeedLiveRecommendation? = null,
 )

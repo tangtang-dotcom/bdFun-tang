@@ -263,6 +263,8 @@ fun TeakSettingsDropdownRow(
     panelWidth: androidx.compose.ui.unit.Dp = 220.dp,
     /** 关闭时右侧显示的文字；为空时用当前选项。用于 CDN 这种“收起不显示测速”的场景。 */
     closedValue: String? = null,
+    /** 展开瞬间的回调，用于 CDN 这类“打开选择框才测速”的场景。 */
+    onOpen: (() -> Unit)? = null,
 ) {
     if (options.isEmpty()) return
     // COUI 风格：整段照搬 COUI 库自带的设置下拉（Menu + CouiMenuAnchor + CouiMenuMotion），
@@ -288,6 +290,7 @@ fun TeakSettingsDropdownRow(
             summary = description.takeIf { it.isNotBlank() },
             showValue = true,
             renderInRootScaffold = true,
+            onExpandedChange = { if (it) onOpen?.invoke() },
             onSelectedIndexChange = onSelected,
         )
         return
@@ -306,6 +309,7 @@ fun TeakSettingsDropdownRow(
         showValue = true,
         renderInRootScaffold = false,
         onExpandedChange = { expanded ->
+            if (expanded) onOpen?.invoke()
             if (TeakDebugLog.enabled) {
                 TeakDebugLog.record(
                     "MENU",

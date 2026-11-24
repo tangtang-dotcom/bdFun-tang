@@ -50,6 +50,8 @@ interface PlaybackSettings {
     var discBreathCoverColor: Boolean
     var autoPlay: Boolean
     var autoPlayNext: Boolean
+    /** 全屏循环播放：0 不循环 / 1 单集循环 / 2 列表循环。换视频、重进页面都要沿用上次的选择。 */
+    var loopMode: Int
     var dynamicAutoPlay: Boolean
     var dynamicAutoPlayMuted: Boolean
     var dynamicAutoPlayQuality: Int
@@ -102,6 +104,12 @@ interface DanmakuSettings {
 interface MessageSettings {
     var showIpLocation: Boolean
     var sentHistoryEntry: Boolean
+    /** 评论区 AI 人格账号（「大肥鱼」类）屏蔽总开关；默认关闭，不改变现有阅读体验。 */
+    var commentAiBlockEnabled: Boolean
+    /** 屏蔽强度：1 小杯 / 2 标准 / 3 杀戮 / 4 只屏蔽 @（取值对齐上游脚本的 tier）。 */
+    var commentAiBlockStrength: Int
+    /** 楼中楼处理：0 只删命中的楼中楼 / 1 整楼删除 / 2 不管楼中楼。 */
+    var commentAiBlockReplyMode: Int
 }
 
 interface GeneralSettings {
@@ -111,6 +119,10 @@ interface GeneralSettings {
     var recommendWeb: Boolean
     var showViewerCount: Boolean
     var showHotSearch: Boolean
+    /** 搜索首页是否展示「搜索记录」板块。 */
+    var showSearchHistory: Boolean
+    /** 搜索首页是否展示「搜索发现」板块（与热搜是两个独立开关）。 */
+    var showSearchDiscovery: Boolean
     var autoCheckUpdate: Boolean
     var onboardingAcked: Boolean
     var termsAckedVersion: String

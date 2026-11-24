@@ -78,8 +78,10 @@ internal class AppContainer(
             com.aritxonly.bdfun.feature.video.application.VideoReadCacheOwner(it.user?.mid, it.revision)
         }
     }
-    val automaticVideoQuality = AutomaticVideoQualitySelector(
-        com.aritxonly.bdfun.infra.playback.AndroidNetworkBandwidthSource(context))
+    val automaticVideoQuality = run {
+        val network = com.aritxonly.bdfun.infra.playback.AndroidNetworkBandwidthSource(context)
+        AutomaticVideoQualitySelector(network, network)
+    }
     val playbackProgress: PlaybackProgressRepository = com.aritxonly.bdfun.infra.storage.AndroidPlaybackProgressRepository(context)
     val playbackTrackingRepository = com.aritxonly.bdfun.infra.bili.BiliPlaybackTrackingRepository(api)
     val videoEntryRepository: VideoEntryRepository = com.aritxonly.bdfun.infra.bili.BiliVideoEntryRepository(api::view, api::viewByAid)
@@ -122,6 +124,7 @@ internal class AppContainer(
     val playbackQueue = com.aritxonly.bdfun.core.application.PlaybackQueueStateHolder()
     val mediaControls = com.aritxonly.bdfun.core.application.MediaControlsRegistry()
     val playbackPauses = com.aritxonly.bdfun.core.application.PlaybackPauseRegistry()
+    val pictureInPicturePages = com.aritxonly.bdfun.core.application.PictureInPicturePageRegistry()
     private val emoteImages by lazy { context?.let(::createEmoteImageLoader) }
     private val emoteStore = com.aritxonly.bdfun.core.application.EmoteStore(
         com.aritxonly.bdfun.infra.bili.BiliEmoteRepository(api),
@@ -209,13 +212,17 @@ internal class AppContainer(
     private val dynamicRepository by lazy {
         BiliFeedPageRepository({ type, offset, mid -> api.dynamicPage(type, offset, mid) }, api::dynamicPortal, api::dynamicUpList, api::likeFeed)
     }
-    private data class FeedSlot(val job: Job, val view: FeedState)
-    private val dynamicSlot = SessionResourceSlot({ sessionController.identity }, {
-        val job = SupervisorJob(presentationScope.coroutineContext[Job])
-        val scope = CoroutineScope(presentationScope.coroutineContext + job)
-        FeedSlot(job, FeedState(FeedStateHolder(dynamicRepository), scope))
-    }, { it.view.close(); it.job.cancel() })
-    val dynamicFeedState: FeedState get() = dynamicSlot.get().view
+    private val dynamicFeedSlots by lazy {
+        DynamicFeedSlots(
+            dynamicRepository,
+            { sessionController.identity },
+            { sessionController.identity.mid != null },
+            presentationScope,
+        )
+    }
+    /** 动态页每个 Tab 独立列表状态；UP/直播 portal 只在「全部」加载后共享。 */
+    fun dynamicFeedStateFor(type: String): FeedState = dynamicFeedSlots.stateFor(type)
+    val dynamicFeedState: FeedState get() = dynamicFeedSlots.stateFor("all")
     private val commentImageRepository by lazy { com.aritxonly.bdfun.infra.bili.BiliCommentImageRepository(api) }
     private val inlineVideoRepository by lazy {
         com.aritxonly.bdfun.infra.bili.BiliInlineVideoRepository(api::view) { detail, preferences ->
@@ -321,6 +328,9 @@ internal class AppContainer(
             videoEntryRepository, videoRepository, videoPlaybackRepository, videoMetadataRepository,
             videoActionsRepository, playbackTrackingRepository, playbackTrackingRepository)
     }
+    val danmakuSegmentFeed by lazy {
+        com.aritxonly.bdfun.core.application.DanmakuSegmentFeed { cid, index -> api.danmakuSegment(cid, index) }
+    }
     val videoPageDependencies by lazy {
         com.aritxonly.bdfun.ui.VideoPageDependencies(videoStateFactory, playbackProgress,
             { checkNotNull(videoCache) { "视频下载存储尚未初始化" } },
@@ -328,10 +338,17 @@ internal class AppContainer(
             backgroundPlayback, playbackQueue, ::createPlaybackController, LogCollector::record,
             com.aritxonly.bdfun.ui.CommentDependencies(
                 com.aritxonly.bdfun.feature.comment.application.CommentStateFactory(
-                    commentContentRepository, commentImageRepository, commentLikesStore),
-                session, commentLikes, commentLikesStore.generationState))
+                    commentContentRepository, commentImageRepository, commentLikesStore, ::commentAiBlockConfig),
+                session, commentLikes, commentLikesStore.generationState),
+            danmakuSegmentFeed)
     }
-    fun close() { closed = true; homeSlot.close(); dynamicSlot.close(); videoReadCache.close(); settings.close(); presentationScope.cancel() }
+    fun close() { closed = true; homeSlot.close(); dynamicFeedSlots.close(); videoReadCache.close(); settings.close(); presentationScope.cancel() }
+    /** 评论屏蔽设置每次拉取时现读，用户改完下一次刷新/翻页就生效。 */
+    private fun commentAiBlockConfig() = com.aritxonly.bdfun.core.domain.CommentAiBlockConfig(
+        enabled = settings.repository.message.commentAiBlockEnabled,
+        strength = settings.repository.message.commentAiBlockStrength,
+        replyMode = settings.repository.message.commentAiBlockReplyMode,
+    )
     val sentHistory: SentHistoryStore? = context?.let { SentHistoryStore(it.applicationContext) }
 
     init {
@@ -347,7 +364,7 @@ internal class AppContainer(
                     emoteStore.clear()
                     linkTitles.clear()
                     playbackQueue.clear()
-                    dynamicSlot.clearStale()
+                    dynamicFeedSlots.clearStale()
                     homeSlot.clearStale()
                     previousIdentity = state.identity
                 }

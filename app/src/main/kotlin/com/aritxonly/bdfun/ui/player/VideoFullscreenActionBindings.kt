@@ -14,6 +14,7 @@ import android.content.Context
 import android.util.Rational
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.aritxonly.bdfun.cast.CastRequestState
 import com.aritxonly.bdfun.core.application.PlaybackController
 import com.aritxonly.bdfun.data.Quality
 import com.aritxonly.bdfun.data.VideoPage
@@ -27,6 +28,8 @@ internal class VideoFullscreenActionBindings(
     private val actions: VideoPlayerActions,
     private val ui: VideoPlayerUiStateHolder,
     private val VideoPageBus: VideoPagePresentationState,
+    /** 杜比视界走直通表面，缩放/镜像/色觉辅助都作用不到画面，需要挡一下并提示。 */
+    private val dolbyVision: () -> Boolean = { false },
 ) {
     private val settings get() = VideoPageBus.settings
     private val activity = context as? Activity
@@ -169,7 +172,12 @@ internal class VideoFullscreenActionBindings(
     }
 
     private val onCast: () -> Unit = {
-        context.showToast("当前没有可用的投屏设备")
+        val mediaUrl = playback.currentMediaUrl
+        if (mediaUrl.isNullOrBlank()) {
+            context.showToast("当前没有可投屏的视频")
+        } else {
+            CastRequestState.request(mediaUrl)
+        }
     }
 
     private val onAudioOnlyChanged: (Boolean) -> Unit = { enabled ->
@@ -185,11 +193,15 @@ internal class VideoFullscreenActionBindings(
 
     private val onLoopModeChanged: (Int) -> Unit = { fsLoopMode = it }
 
-    private val onMirrorChanged: (Boolean) -> Unit = { fsMirror = it }
+    private val onMirrorChanged: (Boolean) -> Unit = {
+        if (dolbyVision()) context.showToast("杜比视界播放时暂不支持镜像翻转") else fsMirror = it
+    }
 
     private val onResizeModeChanged: (Int) -> Unit = { fsResizeMode = it }
 
-    private val onColorAssistChanged: (Int) -> Unit = { fsColorAssist = it }
+    private val onColorAssistChanged: (Int) -> Unit = {
+        if (dolbyVision()) context.showToast("杜比视界播放时暂不支持色觉辅助") else fsColorAssist = it
+    }
 
     private val onSleepAtChanged: (Long) -> Unit = { fsSleepAt = it }
 

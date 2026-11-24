@@ -1,7 +1,6 @@
 package com.aritxonly.bdfun
 
 import com.aritxonly.bdfun.navigation.createRouteIntent
-import com.aritxonly.bdfun.core.model.settings.AUTO_CDN_ID
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
@@ -11,7 +10,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import com.aritxonly.bdfun.data.SettingsStore
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -23,9 +21,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
-        // App 退到后台 / 系统内存紧张时释放图片内存缓存；首页列表本身保留。
-        if (level >= android.content.ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+        // 只是退到后台不清图片缓存：否则回到前台整屏图片都要重新解码、先白一屏。
+        // 真正内存紧张时才收缩列表缩略图；只有系统明确要回收时才清 Coil 内存缓存。
+        val critical = level >= android.content.ComponentCallbacks2.TRIM_MEMORY_COMPLETE ||
+            level == android.content.ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL
+        if (critical) {
             coil.Coil.imageLoader(this).memoryCache?.clear()
+            com.aritxonly.bdfun.ui.PhotoThumbCache.trim((16 * 1024 * 1024) / 3)
+        } else if (level >= android.content.ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
+            com.aritxonly.bdfun.ui.PhotoThumbCache.trim(8 * 1024 * 1024)
         }
     }
 
@@ -45,12 +49,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        // 自动 CDN 在冷启动先沿用上次结果，同时在后台重新测速；不阻塞首屏和播放。
-        if (settings.cdnService == AUTO_CDN_ID) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                AppGraph.refreshAutomaticCdn()
-            }
-        }
+        // 自动 CDN 测速只在用户打开 CDN 选择框时进行（与 PiliPlus 一致），
+        // 冷启动不再静默下载十几个节点的测速样本。
         if (savedInstanceState == null) checkUpdateOnStartup()
         handleIntent(intent)
         setContent {

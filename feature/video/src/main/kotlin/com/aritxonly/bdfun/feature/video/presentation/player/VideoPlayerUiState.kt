@@ -12,9 +12,11 @@ import androidx.compose.ui.geometry.Offset
 import kotlinx.coroutines.Job
 
 /** 原 remember(Unit) 的瞬时 UI/资源引用；状态对象与播放器组合同生命周期。 */
-class VideoPlayerUiStateHolder(initialSpeed: Float, initialAutoPlayNext: Boolean, initialFullscreen: Boolean) {
+class VideoPlayerUiStateHolder(
+    initialSpeed: Float, initialAutoPlayNext: Boolean, initialLoopMode: Int, initialFullscreen: Boolean,
+) {
     val danmakuHit = PlayerDanmakuHit()
-    val resumeOnReturn = mutableStateOf(false)
+
     val showBuffering = mutableStateOf(false)
     val usingFallback = mutableStateOf(false)
     val usingOriginal = mutableStateOf(false)
@@ -30,7 +32,7 @@ class VideoPlayerUiStateHolder(initialSpeed: Float, initialAutoPlayNext: Boolean
     val fsAudioOnly = mutableStateOf(false)
     val halfMoreOpen = mutableStateOf(false)
     val fsAutoPlayNext = mutableStateOf(initialAutoPlayNext)
-    val fsLoopMode = mutableIntStateOf(0)
+    val fsLoopMode = mutableIntStateOf(initialLoopMode.coerceIn(0, 2))
     val fsMirror = mutableStateOf(false)
     val fsResizeMode = mutableIntStateOf(0)
     val fsColorAssist = mutableIntStateOf(0)
@@ -45,7 +47,14 @@ class VideoPlayerUiStateHolder(initialSpeed: Float, initialAutoPlayNext: Boolean
     val videoRotation = mutableFloatStateOf(0f)
     val videoOffset = mutableStateOf(Offset.Zero)
     val frameMs = mutableLongStateOf(0L)
+    /** 常显进度条用的位置/总长：每秒采一次，只在绘制阶段读取，不触发播放器重组。 */
+    val progressPositionMs = mutableLongStateOf(0L)
+    val progressDurationMs = mutableLongStateOf(0L)
     val preparedMediaKey = mutableStateOf<String?>(null)
+    /** 上一次起播用的画面地址：退出听视频后靠它判断要不要按当前档位重新 prepare。 */
+    val preparedVideoUrl = mutableStateOf<String?>(null)
+    /** 上一次起播用的音轨地址：听视频里档位来回换不影响音轨，靠它判断能不能不重新起播。 */
+    val preparedAudioUrl = mutableStateOf<String?>(null)
     val renderedMediaKey = mutableStateOf<String?>(null)
     val interactionTick = mutableIntStateOf(0)
     val volumeTip = mutableStateOf<Float?>(null)

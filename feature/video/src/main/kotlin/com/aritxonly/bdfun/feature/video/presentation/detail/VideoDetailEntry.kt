@@ -5,7 +5,10 @@ import com.aritxonly.bdfun.feature.video.presentation.observeVideoFeatureState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 
 @Composable
 fun VideoDetailEntry(
@@ -20,11 +23,20 @@ fun VideoDetailEntry(
     LaunchedEffect(selection.bvid) { ports.publishBvid(selection.bvid) }
     val playing by holders.ui.playing
     val qualities = detail.playInfo?.qualities.orEmpty()
-    val quality = if (selection.autoQuality) {
+    val selectedQuality = if (selection.autoQuality) {
         ports.automaticQuality.select(qualities)
     } else {
         qualities.firstOrNull { it.id == selection.quality } ?: qualities.firstOrNull()
     }
+    // 半屏只起 720P：小窗里 4K/HDR 没有意义，还会白拉高码率。
+    // 这个限制只在首次进入时生效：一旦进过全屏，回到半屏就保持全屏时选中的清晰度，
+    // 否则每次退出全屏都会重新降到 720P（用户看到的是画面突然变糊）。
+    var enteredFullscreen by remember(selection.bvid) { mutableStateOf(false) }
+    LaunchedEffect(presentation.fullscreen) {
+        if (presentation.fullscreen) enteredFullscreen = true
+    }
+    val quality = if (presentation.fullscreen || enteredFullscreen) selectedQuality
+        else com.aritxonly.bdfun.core.domain.capInlineQuality(selectedQuality, qualities)
     // 用当前清晰度的真实宽高比判断竖屏视频；读不到就按原来的 16:9 处理。
     val videoAspectRatio = quality?.let { q ->
         if (q.width > 0 && q.height > 0) q.width.toFloat() / q.height.toFloat() else null

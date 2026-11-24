@@ -28,6 +28,8 @@ object AppGraph {
         get() = checkNotNull(container?.sentHistory) { "AppGraph 尚未使用 Context 初始化" }
 
     val dynamicFeedState get() = checkNotNull(container) { "AppGraph 尚未初始化" }.dynamicFeedState
+    internal fun dynamicFeedStateFor(type: String) =
+        checkNotNull(container) { "AppGraph 尚未初始化" }.dynamicFeedStateFor(type)
     internal val bangumiRankState get() = checkNotNull(container) { "AppGraph 尚未初始化" }.bangumiRankState
     internal fun bangumiRankBoardState(rankId: Long, oid: String, title: String) =
         checkNotNull(container) { "AppGraph 尚未初始化" }.bangumiRankBoardState(rankId, oid, title)
@@ -66,8 +68,10 @@ object AppGraph {
     internal fun createQrLogin() = checkNotNull(container) { "AppGraph 尚未初始化" }.createQrLogin()
     internal val richTextDependencies get() = checkNotNull(container) { "AppGraph 尚未初始化" }.richTextDependencies
     internal val mediaControls get() = checkNotNull(container) { "AppGraph 尚未初始化" }.mediaControls
+    internal val videoActions get() = checkNotNull(container) { "AppGraph 尚未初始化" }.videoActionsRepository
     internal val discDependencies get() = checkNotNull(container) { "AppGraph 尚未初始化" }.discDependencies
     internal val backgroundPlayback get() = checkNotNull(container) { "AppGraph 尚未初始化" }.backgroundPlayback
+    internal val pictureInPicturePages get() = checkNotNull(container) { "AppGraph 尚未初始化" }.pictureInPicturePages
     internal fun videoPageState(scope: kotlinx.coroutines.CoroutineScope) =
         checkNotNull(container) { "AppGraph 尚未初始化" }.let {
             com.aritxonly.bdfun.ui.VideoPagePresentationState(scope, it.playbackPauses,
@@ -87,12 +91,9 @@ object AppGraph {
     internal fun logout() = checkNotNull(container) { "AppGraph 尚未初始化" }.sessionController.logout()
 
     @Synchronized
-    fun init(api: BiliApi, settings: SettingsStore, context: Context? = null) {
-        container = com.aritxonly.bdfun.di.AppContainer(api, settings, context)
-    }
-
-    @Synchronized
     fun ensure(context: Context) {
+        com.aritxonly.bdfun.di.installAppImageLoader(context)
+        OneTakeExit.install(context)
         if (container == null) container = com.aritxonly.bdfun.di.AppContainer.create(context)
     }
 }

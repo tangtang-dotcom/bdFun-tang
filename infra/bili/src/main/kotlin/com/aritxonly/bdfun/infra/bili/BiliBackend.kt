@@ -72,6 +72,9 @@ open class BiliBackend(context: Context, debug: Boolean, log: (String, String) -
     }
     suspend fun related(bvid: String) = api.related(bvid)
     suspend fun danmaku(cid: Long, durationSec: Int = 0) = api.danmaku(cid, durationSec)
+
+    /** 单段弹幕：播放到新的一段时按需补齐（带 LRU 缓存）。 */
+    suspend fun danmakuSegment(cid: Long, index: Int) = api.danmakuSegment(cid, index)
     suspend fun sponsorSegments(bvid: String) = api.sponsorSegments(bvid)
     suspend fun comments( aid: Long, page: Int, upMid: Long = 0, sort: Int = 2, ) = api.comments(aid, page, upMid, sort)
     suspend fun commentsByOid( oid: String, type: Int, page: Int, upMid: Long = 0, sort: Int = 2, ) = api.commentsByOid(oid, type, page, upMid, sort)
@@ -138,8 +141,10 @@ open class BiliBackend(context: Context, debug: Boolean, log: (String, String) -
     suspend fun spaceShop(mid: Long) = api.spaceShop(mid)
     suspend fun searchSuggest(term: String) = api.searchSuggest(term)
     suspend fun hotKeywords() = api.hotKeywords()
+    suspend fun searchDiscovery() = api.searchDiscovery()
     suspend fun search( keyword: String, page: Int = 1, /** totalrank 默认 / click 播放多 / pubdate 新发布 / dm 弹幕多 */ order: String = "totalrank", /** 0 不限 / 1 0-10 分钟 / 2 10-30 / 3 30-60 / 4 60 以上 */ duration: Int = 0, pubtimeBegin: Long? = null, pubtimeEnd: Long? = null, ) = api.search(keyword, page, order, duration, pubtimeBegin, pubtimeEnd)
     suspend fun searchUsers(keyword: String, page: Int = 1) = api.searchUsers(keyword, page)
+    suspend fun searchPgc(keyword: String, bangumi: Boolean, page: Int = 1) = api.searchPgc(keyword, bangumi, page)
     suspend fun hotSearch() = api.hotSearch()
     suspend fun messages(type: Int, page: Int = 1) = api.messages(type, page)
     suspend fun messagesPage(type: Int, cursor: MessageCursor? = null) = api.messagesPage(type, cursor)
