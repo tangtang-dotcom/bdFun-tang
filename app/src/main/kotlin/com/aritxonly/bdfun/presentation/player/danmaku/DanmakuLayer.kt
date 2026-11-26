@@ -51,18 +51,25 @@ fun DanmakuLayer(items: List<BiliDanmakuItem>, positionMs: () -> Long, playing: 
         }
     }
     val merged = remember(items, feedRevision, cid, feed) {
-        if (feed == null) items else (feed.items(cid) + items)
-            .distinctBy { if (it.id > 0L) "id:${it.id}" else "${it.timeMs}:${it.mode}:${it.text}" }
-            .sortedBy { it.timeMs }
+        if (feed == null) items else mergeDanmaku(items, feed.items(cid))
     }
     val filtered = remember(merged, options.filters, matcher, moderation.recalled, page.cid) {
-        filterDanmaku(merged.filterNot { matcher.blocks(it) || (page.cid to it.id) in moderation.recalled }, options.filters)
+        val recalled = moderation.recalled
+        val kept = ArrayList<BiliDanmakuItem>(merged.size)
+        for (item in merged) {
+            if (matcher.blocks(item)) continue
+            if (recalled.isNotEmpty() && (page.cid to item.id) in recalled) continue
+            kept += item
+        }
+        filterDanmaku(kept, options.filters)
     }
     LaunchedEffect(hit, filtered) { hit.filteredSnapshot.value = filtered }
     DisposableEffect(hit) { onDispose { hit.filteredSnapshot.value = emptyList() } }
     val likeAction = rememberScrollingDanmakuLike(hit, page.cid)
     PrefetchScrollingDanmakuVotes(filtered, page.cid, positionMs, hit)
     val window = rememberDanmakuEngineWindow(filtered, likeAction)
+    // 只把本机发送的条目补进渲染器；服务端弹幕仍走正常时间线。
+    val selfItems = remember(merged) { merged.filter { it.self } }
     val config = danmakuEngineConfig(options.drawing, ui.viewSize, playbackSpeed)
     val masks = rememberDanmakuMasks(options.drawing.portraitGuard, ui.viewSize)
     val leadMs = hotDanmakuReservationLeadMs(
@@ -75,5 +82,27 @@ fun DanmakuLayer(items: List<BiliDanmakuItem>, positionMs: () -> Long, playing: 
         .onSizeChanged { ui.viewSize = it },
         update = { view -> view.alpha = options.drawing.opacity.coerceIn(0f, 1f) })
     BindDanmakuEngineEffects(renderView, window, masks, config, playing, positionMs, options.drawing.lowRefresh,
-        hotPresentation.reservedTopPx.toFloat())
+        hotPresentation.reservedTopPx.toFloat(), selfItems)
+}
+
+/** 合并分段弹幕与详情首屏弹幕：按 id 去重，无 id 的本地条目按内容去重后统一按时间排序。 */
+private fun mergeDanmaku(
+    items: List<BiliDanmakuItem>,
+    feedItems: List<BiliDanmakuItem>,
+): List<BiliDanmakuItem> {
+    val capacity = feedItems.size + items.size
+    val out = ArrayList<BiliDanmakuItem>(capacity)
+    val ids = HashSet<Long>(capacity)
+    val texts = HashSet<String>(capacity)
+    fun add(item: BiliDanmakuItem) {
+        if (item.id > 0L) {
+            if (ids.add(item.id)) out += item
+        } else if (texts.add("${item.timeMs}:${item.mode}:${item.text}")) {
+            out += item
+        }
+    }
+    for (item in feedItems) add(item)
+    for (item in items) add(item)
+    out.sortBy { it.timeMs }
+    return out
 }

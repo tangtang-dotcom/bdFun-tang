@@ -1,5 +1,6 @@
 package com.aritxonly.bdfun.ui
 
+import androidx.compose.runtime.remember
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -71,13 +72,46 @@ internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.videoResultRows
     showSelection: Boolean = false,
     selectedIds: Set<String> = emptySet(),
     enableOneTake: Boolean = true,
+    /**
+     * 点击后、跳转前执行的准备动作（例如把当前列表塞进播放队列）。
+     *
+     * 不能写进 [onOpenVideo]：一镜到底由系统动画自己启动 VideoActivity，
+     * [onOpenVideo] 只是动画失败时的兜底，正常路径永远不会执行。
+     */
+    onBeforeOpen: ((com.aritxonly.bdfun.data.VideoItem) -> Unit)? = null,
+    /** 页内标签切换动画：由页面传入 contentSwitchItem()，卡片读同一份进度一起滑入。 */
+    itemModifier: Modifier = Modifier,
+    /** 省略号 / 长按形变菜单：state 是本次锚点，point 非空表示从手指位置展开。 */
+    onVideoMorph: ((com.aritxonly.bdfun.data.VideoItem, com.aritxonly.teak.common.navigation.TeakMorphMenuState, androidx.compose.ui.geometry.Offset?) -> Unit)? = null,
 ) {
     // 搜索/热门接口会返回重复 bvid（同一稿件多个入口），只用 bvid 当 key 会直接崩 LazyGrid。
     itemsIndexed(items = videos, key = { index, video -> keyPrefix + index + "-" + video.bvid }) { _, video ->
         val oneTake = rememberOneTakeAnchor()
+        // 页面没显式接线时读取本地形变菜单：搜索、收藏、空间等共用这一行自动获得同一套效果。
+        val localMorph = LocalVideoCardMorphMenu.current
+        val morph: ((
+            com.aritxonly.bdfun.data.VideoItem,
+            com.aritxonly.teak.common.navigation.TeakMorphMenuState,
+            androidx.compose.ui.geometry.Offset?,
+        ) -> Unit)? = androidx.compose.runtime.remember(localMorph, onVideoMorph) {
+            onVideoMorph ?: localMorph?.let { handler ->
+                { item, state, point -> handler.show(item, state, point) }
+            }
+        }
+        val morphState = if (morph != null) {
+            androidx.compose.runtime.remember(video.bvid) {
+                com.aritxonly.teak.common.navigation.TeakMorphMenuState()
+            }
+        } else null
+        val pointMenuState = if (morph != null) {
+            androidx.compose.runtime.remember(video.bvid) {
+                com.aritxonly.teak.common.navigation.TeakMorphMenuState()
+            }
+        } else null
         val itemContext = LocalContext.current
         val cardRadiusPx = with(LocalDensity.current) { 10.dp.toPx() }
         val open = {
+            onBeforeOpen?.invoke(video)
             if (enableOneTake) {
                 oneTake.open(itemContext, video, cardRadiusPx) { onOpenVideo(video) }
             } else {
@@ -87,10 +121,16 @@ internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.videoResultRows
         SearchResultRow(
             video = video,
             onClick = open,
-            modifier = if (enableOneTake) oneTake.modifier else Modifier,
+            modifier = (if (enableOneTake) oneTake.modifier else Modifier).then(itemModifier),
             onLongClick = onLongPressVideo?.let { longPress -> { longPress(video) } },
-            onLongPressRect = onVideoMenu?.let { menu -> { rect -> menu(video, rect) } },
+            onLongPressRect = if (morph != null && pointMenuState != null) {
+                { rect -> morph(video, pointMenuState, androidx.compose.ui.geometry.Offset(rect.left, rect.top)) }
+            } else onVideoMenu?.let { menu -> { rect -> menu(video, rect) } },
             onMoreClick = onVideoMenu?.let { menu -> { rect -> menu(video, rect) } },
+            morphState = morphState,
+            onMorphOpen = if (morphState != null && morph != null) {
+                { morph(video, morphState, null) }
+            } else null,
             selection = if (showSelection) video.bvid in selectedIds else null,
         )
     }
@@ -261,11 +301,13 @@ private fun SearchPgcRow(item: SearchPgcItem) {
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
             )
             Spacer(Modifier.height(6.dp))
-            val meta = listOfNotNull(
-                item.typeName.takeIf { it.isNotBlank() },
-                item.score.takeIf { it.isNotBlank() }?.let { "评分 $it" },
-                item.areas.takeIf { it.isNotBlank() },
-            ).joinToString(" · ")
+            val meta = remember(item.typeName, item.score, item.areas) {
+                listOfNotNull(
+                    item.typeName.takeIf { it.isNotBlank() },
+                    item.score.takeIf { it.isNotBlank() }?.let { "评分 $it" },
+                    item.areas.takeIf { it.isNotBlank() },
+                ).joinToString(" · ")
+            }
             if (meta.isNotBlank()) {
                 Text(
                     text = meta,
@@ -275,10 +317,12 @@ private fun SearchPgcRow(item: SearchPgcItem) {
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
             }
-            val extra = listOfNotNull(
-                item.styles.takeIf { it.isNotBlank() },
-                item.indexShow.takeIf { it.isNotBlank() },
-            ).joinToString(" · ")
+            val extra = remember(item.styles, item.indexShow) {
+                listOfNotNull(
+                    item.styles.takeIf { it.isNotBlank() },
+                    item.indexShow.takeIf { it.isNotBlank() },
+                ).joinToString(" · ")
+            }
             if (extra.isNotBlank()) {
                 Spacer(Modifier.height(4.dp))
                 Text(

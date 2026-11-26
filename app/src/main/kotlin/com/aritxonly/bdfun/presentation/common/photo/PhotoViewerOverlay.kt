@@ -8,8 +8,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -42,6 +44,7 @@ import kotlin.math.max
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.Close
+import top.yukonga.miuix.kmp.icon.extended.RotateLeft
 import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 /**
@@ -63,6 +66,7 @@ internal fun PhotoViewerOverlay(
     // 看起来就是"点空白后菜单乱跳一下"。
     var menuAnchor by remember { mutableStateOf(Rect.Zero) }
     var menuUrl by remember { mutableStateOf("") }
+    val menuState = remember { com.aritxonly.teak.common.navigation.TeakMorphMenuState() }
     val menuScope = rememberCoroutineScope()
 
     fun save(urls: List<String>) {
@@ -100,10 +104,20 @@ internal fun PhotoViewerOverlay(
     }
 
     val images = request.images
+    // 退场也要继续录图片层：否则一关菜单就停掉 viewerBackdrop，
+    // 玻璃面板会在回弹动画第一帧直接变成透明/纯色，看起来像"面板瞬间没了"。
+    val dismissMenu: () -> Unit = {
+        menuState.close()
+        scope.launch {
+            kotlinx.coroutines.delay(1200)
+            view.menuVisible = false
+        }
+    }
     PhotoImageMenu(
         visible = view.menuVisible,
         anchor = menuAnchor,
-        onDismiss = { view.menuVisible = false },
+        state = menuState,
+        onDismiss = dismissMenu,
         onSaveCurrent = { save(listOf(menuUrl)) },
         onSaveAll = { save(images) },
         // 图片举报接口还没接，先如实提示，不做假成功。
@@ -113,33 +127,85 @@ internal fun PhotoViewerOverlay(
 
 private val PhotoDangerRed = Color(0xFFE5484D)
 
-/** 长按图片弹出的菜单：和长按评论同一个玻璃菜单（TeakGlassMenu），不是设置页那种 Dropdown。 */
+/** 长按图片弹出的菜单：和视频卡片同一套玻璃形变动画，从手指位置展开。 */
 @Composable
 private fun PhotoImageMenu(
     visible: Boolean,
     anchor: Rect,
+    state: com.aritxonly.teak.common.navigation.TeakMorphMenuState,
     onDismiss: () -> Unit,
     onSaveCurrent: () -> Unit,
     onSaveAll: () -> Unit,
     onReport: () -> Unit,
 ) {
-    val colors = MiuixTheme.colorScheme
-    TeakGlassMenu(
-        visible = visible,
-        onDismiss = onDismiss,
-        anchorInWindow = anchor,
-        minWidth = 168.dp,
-        maxWidth = 216.dp,
-        maxHeight = 420.dp,
+    var mounted by remember { mutableStateOf(visible) }
+    if (visible) mounted = true
+    LaunchedEffect(visible) {
+        if (visible) {
+            // 先以关闭态组合一帧，再张开，Miuix 才能播形变入场。
+            androidx.compose.runtime.withFrameNanos { }
+            state.openWithAnchorCopy(false)
+        } else if (mounted) {
+            state.close()
+            kotlinx.coroutines.delay(1200)
+            mounted = false
+        }
+    }
+    if (!mounted) return
+    // 图片查看器本身是铺满窗口的录制层，玻璃菜单必须放进独立窗口，
+    // 否则形变面板会被自己的 Backdrop 采样，出现 RenderNode 递归。
+    androidx.compose.ui.window.Dialog(
+        onDismissRequest = onDismiss,
+        properties = androidx.compose.ui.window.DialogProperties(
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false,
+            dismissOnClickOutside = false,
+        ),
     ) {
-        CommentMenuRow("保存该图片", MenuGlyphKind.Copy, colors.onBackground) {
-            onDismiss(); onSaveCurrent()
+        val view = androidx.compose.ui.platform.LocalView.current
+        val dialogWindow = (view.parent as? androidx.compose.ui.window.DialogWindowProvider)?.window
+        androidx.compose.runtime.SideEffect {
+            dialogWindow?.setDimAmount(0f)
+            dialogWindow?.setBackgroundDrawable(
+                android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT),
+            )
+            dialogWindow?.setWindowAnimations(0)
         }
-        CommentMenuRow("保存全部图片", MenuGlyphKind.Copy, colors.onBackground) {
-            onDismiss(); onSaveAll()
-        }
-        CommentMenuRow("举报", MenuGlyphKind.Report, PhotoDangerRed) {
-            onDismiss(); onReport()
+        Box(Modifier.fillMaxSize()) {
+            com.aritxonly.teak.common.navigation.TeakMorphPointAnchor(
+                state,
+                androidx.compose.ui.geometry.Offset(anchor.left, anchor.top),
+            )
+            com.aritxonly.teak.common.navigation.TeakMorphMenuHost(
+                state,
+                onDismiss = onDismiss,
+                minWidth = 168.dp,
+                maxWidth = 216.dp,
+                maxHeight = 420.dp,
+            ) { close ->
+                top.yukonga.miuix.kmp.glass.GlassPopupItem(
+                    text = "保存该图片",
+                    onClick = {
+                        close { onSaveCurrent() }
+                        onDismiss()
+                    },
+                )
+                top.yukonga.miuix.kmp.glass.GlassPopupItem(
+                    text = "保存全部图片",
+                    onClick = {
+                        close { onSaveAll() }
+                        onDismiss()
+                    },
+                )
+                top.yukonga.miuix.kmp.glass.GlassPopupItem(
+                    text = "举报",
+                    contentColor = PhotoDangerRed,
+                    onClick = {
+                        close { onReport() }
+                        onDismiss()
+                    },
+                )
+            }
         }
     }
 }
@@ -170,9 +236,42 @@ private fun PhotoViewerChrome(
         Box(Modifier.align(Alignment.TopCenter).fillMaxWidth()) {
             PhotoViewerTopBar(onDismiss)
         }
-        request.footer?.let { footer ->
-            Box(Modifier.align(Alignment.BottomCenter)) { footer(onDismiss) }
+        // 底部中间是手动旋转键（Miuix 图标），下面接发起方自己的操作区。
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .then(if (request.footer == null) Modifier.navigationBarsPadding() else Modifier),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            PhotoViewerRotateButton(onClick = {
+                view.rotationQuarter = (view.rotationQuarter + 1) % 4
+            })
+            request.footer?.let { footer ->
+                Box(Modifier.fillMaxWidth()) { footer(onDismiss) }
+            }
         }
+    }
+}
+
+/** 底部旋转键：黑底上一枚白色 Miuix 旋转图标，点一次顺时针转 90°。 */
+@Composable
+private fun PhotoViewerRotateButton(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .padding(bottom = 10.dp)
+            .size(44.dp)
+            .clip(CircleShape)
+            .background(Color.Black.copy(alpha = 0.28f))
+            .clickable(interactionSource = null, indication = null, onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = MiuixIcons.RotateLeft,
+            contentDescription = "旋转图片",
+            tint = Color.White,
+            modifier = Modifier.size(23.dp),
+        )
     }
 }
 

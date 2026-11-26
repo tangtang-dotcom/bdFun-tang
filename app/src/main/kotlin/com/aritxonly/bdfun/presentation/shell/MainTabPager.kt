@@ -10,8 +10,10 @@ import com.aritxonly.bdfun.navigateToLibrary
 import com.aritxonly.bdfun.navigateToHistory
 import com.aritxonly.bdfun.navigateToFeed
 import com.aritxonly.bdfun.navigateToCache
+import com.aritxonly.teak.common.navigation.TeakPageSwitchSpec
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -132,7 +134,11 @@ private fun HomeSectionPager(
         if (sectionPager.currentPage != target || sectionPager.currentPageOffsetFraction != 0f) {
             programmatic = true
             try {
-                sectionPager.animateScrollToPage(target)
+                // 和小米文件管理同一条：350ms 三次方减速，点 tab 与手滑一致。
+                sectionPager.animateScrollToPage(
+                    target,
+                    animationSpec = TeakPageSwitchSpec(),
+                )
             } finally {
                 programmatic = false
             }
@@ -161,6 +167,9 @@ private fun HomeSectionPager(
         HomeSectionContent(section, homeFeed, session, settings, topBarHeight, interactive, context)
     }
 }
+
+/** 页面切换统一使用文件管理同款弹簧；保留常量给动态页引用。 */
+internal const val MainPageTransitionMs = 400
 
 @Composable
 private fun HomeSectionContent(

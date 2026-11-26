@@ -63,8 +63,13 @@ internal fun androidx.compose.foundation.layout.BoxScope.MainShellNavigation(
                 }
             }
         } else {
-            // 主 tab 不能左右滑，但点底栏切换仍保留横向滑动转场。
-            appScope.launch { tabPagerState.animateScrollToPage(index) }
+            // 主 tab 不能左右滑；点底栏切换仍保留横向滑动，但用先快后慢的缓动。
+            appScope.launch {
+                tabPagerState.animateScrollToPage(
+                    index,
+                    animationSpec = com.aritxonly.teak.common.navigation.TeakPageSwitchSpec(),
+                )
+            }
         }
     }
     MainBottomNavigation(

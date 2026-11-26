@@ -124,12 +124,22 @@ internal fun GradeStarRow(
                     ) { onClick(option.value) },
                 contentAlignment = Alignment.Center,
             ) {
-                AppGlyph(
-                    icon = if (filled) MiuixIcons.FavoritesFill else MiuixIcons.Favorites,
-                    tint = if (filled) GradeStarColor else Color.White.copy(alpha = 0.55f),
-                    size = 23.dp,
-                    contentDescription = option.label,
-                )
+                // 评分用星星，不用收藏/喜欢的心形；实心星星表示已选中。
+                if (filled) {
+                    AppGlyph(
+                        icon = com.aritxonly.bdfun.R.drawable.fs_star,
+                        tint = GradeStarColor,
+                        size = 23.dp,
+                        contentDescription = option.label,
+                    )
+                } else {
+                    AppGlyph(
+                        icon = com.aritxonly.teak.common.icons.LucideIcons.Star,
+                        tint = Color.White.copy(alpha = 0.55f),
+                        size = 23.dp,
+                        contentDescription = option.label,
+                    )
+                }
             }
         }
     }
@@ -137,37 +147,6 @@ internal fun GradeStarRow(
 
 /** 评分选中的黄色。 */
 private val GradeStarColor = Color(0xFFFFC63C)
-
-@Composable
-internal fun RowScope.CapsuleOption(
-    label: String,
-    selected: Boolean,
-    enabled: Boolean,
-    onClick: () -> Unit,
-) {
-    val shape = Capsule()
-    Box(
-        modifier = Modifier
-            .weight(1f)
-            .clip(shape)
-            .border(
-                width = 1.dp,
-                color = Color.White.copy(alpha = if (selected) 0.95f else 0.42f),
-                shape = shape,
-            )
-            .clickable(enabled = enabled, interactionSource = null, indication = null, onClick = onClick)
-            .padding(horizontal = 8.dp, vertical = 6.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = if (selected) "✓ $label" else label,
-            color = Color.White.copy(alpha = if (enabled || selected) 0.92f else 0.45f),
-            fontSize = 11.5.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
 
 @Composable
 internal fun CapsuleButton(label: String, enabled: Boolean, onClick: () -> Unit) {
